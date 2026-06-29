@@ -1,26 +1,114 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>晨间新闻速览</title>
-<style>body{font-family:system-ui,-apple-system,sans-serif;max-width:640px;margin:40px auto;padding:0 20px;color:#1a1d23;background:#f8f9fa;line-height:1.6}</style>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📰 晨间新闻速览</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#f8f9fa;--surface:#fff;--surface-alt:#f2f3f5;--border:#e8eaed;--border-light:#f0f1f3;--text:#1a1d23;--text-secondary:#5a5f6b;--text-tertiary:#8a8f98;--blue:#0066cc;--blue-light:#e8f0fe;--blue-bg:#f0f5ff;--green:#059669;--green-bg:#ecfdf5;--radius:10px;--shadow:0 1px 4px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.03);--font-sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  body{font-family:var(--font-sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6}
+  .container{max-width:640px;margin:0 auto;padding:0}
+
+  .hero{background:var(--surface);border-bottom:1px solid var(--border);padding:48px 20px 40px;text-align:center}
+  .hero-icon{font-size:40px;margin-bottom:8px}
+  .hero-title{font-size:28px;font-weight:600;letter-spacing:-.5px;margin-bottom:4px}
+  .hero-sub{font-size:14px;color:var(--text-secondary)}
+  .hero-info{margin-top:16px;display:flex;justify-content:center;gap:20px;font-size:12px;color:var(--text-tertiary)}
+  .hero-info span{display:flex;align-items:center;gap:4px}
+
+  .section{padding:24px 20px}
+  .sec-label{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+  .sec-label::after{content:'';flex:1;height:1px;background:var(--border);margin-left:8px}
+
+  .archive{display:flex;flex-direction:column;gap:8px}
+  .a-item{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow);text-decoration:none;color:inherit;transition:all .2s}
+  .a-item:hover{border-color:var(--blue);box-shadow:0 2px 12px rgba(0,102,204,.1)}
+  .a-left{display:flex;align-items:center;gap:12px}
+  .a-date{font-size:16px;font-weight:600}
+  .a-dow{font-size:12px;color:var(--text-tertiary)}
+  .a-tag{font-size:10px;font-weight:500;color:var(--blue);background:var(--blue-light);padding:2px 10px;border-radius:20px}
+  .a-arrow{color:var(--text-tertiary);font-size:16px}
+  .a-item:hover .a-arrow{color:var(--blue)}
+
+  .empty{text-align:center;padding:40px 20px;color:var(--text-tertiary);font-size:13px}
+  .empty-icon{font-size:32px;margin-bottom:8px}
+
+  .stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;box-shadow:var(--shadow)}
+  .stat-num{font-size:22px;font-weight:700;font-family:var(--font-mono);color:var(--blue)}
+  .stat-label{font-size:11px;color:var(--text-tertiary);margin-top:2px}
+
+  .cover{background:var(--surface-alt);border-radius:var(--radius);padding:16px 20px;margin-top:14px;font-size:12px;color:var(--text-secondary);line-height:1.6}
+  .cover strong{color:var(--text)}
+
+  .footer{text-align:center;padding:20px 20px 32px;font-size:10px;color:var(--text-tertiary);line-height:1.7;border-top:1px solid var(--border-light)}
+  .footer a{color:var(--blue);text-decoration:none}
+
+  @media(max-width:480px){
+    .hero{padding:36px 16px 28px}.hero-title{font-size:22px}
+    .section{padding:16px 14px}
+    .stats{gap:6px}.stat{padding:12px 8px}.stat-num{font-size:18px}
+    .a-item{padding:12px 14px}.a-date{font-size:14px}
+  }
+</style>
 </head>
 <body>
-<h1>📰 晨间新闻速览</h1>
-<p>每日早8点自动更新，覆盖隔夜美股、宏观政策、持仓相关新闻、加密货币行情。</p>
-<ul>
-<li>📊 隔夜美股收盘 & 龙头股表现</li>
-<li>🔴 直接影响持仓的新闻</li>
-<li>🌍 宏观 & 政策要闻</li>
-<li>🔬 科技 & 行业动态</li>
-<li>₿ 加密货币（BTC/ETH/BNB/SOL/XRP）</li>
-<li>🎯 今日关注 & 综合判断</li>
-</ul>
-<p>最新一期：<a href="briefing.html">2026-06-30</a></p>
-<hr>
-<p style="color:#8a8f98;font-size:12px">
-数据源：RSS · CoinGecko · Google Finance · web_search<br>
-每日工作日早8:00 CST 自动生成 · 非高峰时段运行<br>
-⚠️ 仅供参考，不构成投资建议
-</p>
+<div class="container">
+
+<div class="hero">
+  <div class="hero-icon">📰</div>
+  <div class="hero-title">晨间新闻速览</div>
+  <div class="hero-sub">每日早8:00自动生成 · 隔夜美股 · 持仓影响 · 宏观政策 · 加密货币</div>
+  <div class="hero-info">
+    <span>📡 RSS 19源</span>
+    <span>📊 CoinGecko</span>
+    <span>🏛 Google Finance</span>
+    <span>🌐 非高峰运行</span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-label">📅 历史速览</div>
+  <div id="archiveList"></div>
+</div>
+
+<div class="footer">
+  数据源：RSS 19源 · CoinGecko API · Google Finance · web_search<br>
+  工作日早8:00 CST 自动生成 · 非高峰时段运行 · <a href="https://github.com/eason-byte/daily-briefing">GitHub</a><br>
+  <a href="https://19930808.xyz">19930808.xyz</a> · ⚠️ 仅供参考，不构成投资建议
+</div>
+</div>
+
+<script>
+// Scan the repo for briefing files and build archive list
+// Files are named YYYY-MM-DD.html
+// This runs client-side, so we need to know what files exist.
+// The build process writes a JS variable with the file list.
+
+const BRIEFINGS = [{"date": "2026-06-30", "dow": "周二", "desc": "美股三大指数全线反弹，科技股领涨扭转上周颓势。Alphabet正式加入道指大涨近5%，特斯拉涨超7%。黄金回调约1.5%"}];
+
+(function(){
+  const list = document.getElementById('archiveList');
+  if (!BRIEFINGS.length) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>暂无速览记录<br><span style="font-size:11px">明日早8点开始自动生成</span></div>';
+    return;
+  }
+  list.innerHTML = BRIEFINGS.sort((a,b)=>b.date.localeCompare(a.date)).map(b => 
+    `<a class="a-item" href="${b.date}.html">
+      <div class="a-left">
+        <div>
+          <div class="a-date">${b.date}</div>
+          <div class="a-dow">${b.dow}</div>
+        </div>
+      </div>
+      <div style="flex:1;margin:0 12px;font-size:12px;color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${b.desc || ''}</div>
+      <span class="a-tag">最新</span>
+      <span class="a-arrow">→</span>
+    </a>`
+  ).join('');
+})();
+</script>
 </body>
 </html>
