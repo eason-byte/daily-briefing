@@ -87,7 +87,7 @@
 // This runs client-side, so we need to know what files exist.
 // The build process writes a JS variable with the file list.
 
-const BRIEFINGS = [{"date": "2026-06-30", "dow": "周二", "desc": "道指首破52,000历史新高，纳指+2.07%终结五连跌。A股医药60+涨停+半导体批量20cm双主线爆发。阳光电源触发站上MA20信号。小米逼近52周新低。日元暴跌至162创40年低点。"},{"date": "2026-06-30", "dow": "周二", "desc": "道指首破52,000历史新高，纳指+2.07%终结五连跌。A股新能源冲高回落、医药+半导体双主线。阳光电源触发站上MA20买入条件。小米距52周新低21.30仅0.22港元。龙源电力H破前低。"}];
+const BRIEFINGS = [{"date": "2026-06-30", "dow": "周二", "desc": "道指首破52,000历史新高，纳指+2.07%终结五连跌。A股新能源冲高回落、医药+半导体双主线。阳光电源触发站上MA20买入条件。小米距52周新低21.30仅0.22港元。龙源电力H破前低。"}];
 
 (function(){
   const list = document.getElementById('archiveList');
@@ -95,7 +95,15 @@ const BRIEFINGS = [{"date": "2026-06-30", "dow": "周二", "desc": "道指首破
     list.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>暂无速览记录<br><span style="font-size:11px">明日早8点开始自动生成</span></div>';
     return;
   }
-  list.innerHTML = BRIEFINGS.sort((a,b)=>b.date.localeCompare(a.date)).map(b => 
+  // Deduplicate: keep only the latest entry per date
+  const seen = {};
+  const unique = BRIEFINGS.filter(b => {
+    if (seen[b.date]) return false;
+    seen[b.date] = true;
+    return true;
+  });
+  // Wrap items in archive container for gap spacing
+  list.innerHTML = '<div class="archive">' + unique.sort((a,b)=>b.date.localeCompare(a.date)).map(b => 
     `<a class="a-item" href="${b.date}.html">
       <div class="a-left">
         <div>
@@ -107,7 +115,7 @@ const BRIEFINGS = [{"date": "2026-06-30", "dow": "周二", "desc": "道指首破
       <span class="a-tag">最新</span>
       <span class="a-arrow">→</span>
     </a>`
-  ).join('');
+  ).join('') + '</div>';
 })();
 </script>
 </body>
