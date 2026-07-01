@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📊 双战法选股 · 2026年6月30日</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#0d1117;--surface:#161b22;--surface-alt:#1c2333;--border:#30363d;--border-light:#21262d;--text:#e6edf3;--text-secondary:#8b949e;--text-tertiary:#6e7681;--accent:#58a6ff;--accent-bg:#0d419d33;--green:#3fb950;--green-bg:#1b3a1f;--red:#f85149;--red-bg:#3d1416;--amber:#d29922;--amber-bg:#2d1f00;--purple:#a371f7;--purple-bg:#2a1a4a;--teal:#56d4dd;--teal-bg:#1d3b3d;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,.3),0 4px 12px rgba(0,0,0,.15);--font-sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  body{font-family:var(--font-sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.7;min-height:100vh}
+  .container{max-width:720px;margin:0 auto;padding:0}
+
+  /* Header */
+  .header{background:linear-gradient(135deg,#161b22 0%,#1c2333 50%,#111 100%);border-bottom:1px solid var(--border);padding:22px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;position:relative;overflow:hidden}
+  .header::before{content:'';position:absolute;top:-50%;left:-30%;width:160%;height:200%;background:radial-gradient(ellipse at 30% 50%,var(--accent-bg) 0%,transparent 50%),radial-gradient(ellipse at 70% 50%,var(--purple-bg) 0%,transparent 50%);opacity:.2;pointer-events:none}
+  .h-left{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+  .h-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--accent),var(--purple));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff}
+  .h-title{font-size:18px;font-weight:700;letter-spacing:-.3px}
+  .h-meta{font-size:12px;color:var(--text-tertiary);margin-top:2px}
+  .h-badge{font-size:11px;font-weight:500;color:var(--accent);background:var(--accent-bg);padding:4px 16px;border-radius:20px;letter-spacing:.3px;position:relative;z-index:1}
+  .h-home{font-size:20px;text-decoration:none;margin-left:8px;position:relative;z-index:1;transition:opacity .15s}
+  .h-home:hover{opacity:.7}
+
+  /* Section base */
+  .section{padding:24px 22px}
+  .section+.section{border-top:1px solid var(--border-light)}
+  .sec-label{font-size:12px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+  .sec-label::after{content:'';flex:1;height:1px;background:var(--border);margin-left:8px}
+  .section-alt{background:var(--surface-alt)}
+
+  /* Analysis tables */
+  .at{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin-bottom:14px}
+  .at th{text-align:left;padding:10px 14px;font-weight:600;color:var(--text-secondary);background:var(--surface-alt);border-bottom:1px solid var(--border);font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+  .at th:first-child{border-radius:8px 0 0 0}
+  .at th:last-child{border-radius:0 8px 0 0}
+  .at td{padding:10px 14px;border-bottom:1px solid var(--border-light);color:var(--text)}
+  .at tr:last-child td:first-child{border-radius:0 0 0 8px}
+  .at tr:last-child td:last-child{border-radius:0 0 8px 0}
+  .at tr:last-child td{border-bottom:none}
+
+  /* Dragon candidate card */
+  .dragon-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin-bottom:14px;box-shadow:var(--shadow);border-left:3px solid var(--purple)}
+  .dragon-card.dc-hot{border-left-color:var(--red)}
+  .dc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px}
+  .dc-name{font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .dc-name .dc-tag{font-size:10px;font-weight:600;padding:2px 10px;border-radius:20px;background:var(--accent-bg);color:var(--accent)}
+  .dc-name .dc-tag.dc-hot-tag{background:var(--red-bg);color:var(--red)}
+  .dc-score{font-size:12px;color:var(--text-tertiary)}
+  .dc-body{margin-top:6px}
+  .dc-detail{font-size:13px;color:var(--text-secondary);line-height:1.7;padding:8px 12px;background:var(--surface-alt);border-radius:6px;margin-top:8px;border-left:2px solid var(--border)}
+  .dc-buy{font-size:13px;padding:10px 14px;border-radius:6px;margin-top:10px;background:var(--green-bg);border-left:3px solid var(--green);color:var(--green)}
+
+  /* Callout box */
+  .callout{padding:14px 18px;border-radius:var(--radius);margin:10px 0;font-size:13px;line-height:1.6}
+  .callout.info{background:var(--accent-bg);border-left:3px solid var(--accent);color:var(--accent)}
+  .callout.success{background:var(--green-bg);border-left:3px solid var(--green);color:var(--green)}
+  .callout.warn{background:var(--amber-bg);border-left:3px solid var(--amber);color:var(--amber)}
+  .callout.danger{background:var(--red-bg);border-left:3px solid var(--red);color:var(--red)}
+  .callout.neutral{background:var(--surface-alt);border-left:3px solid var(--text-tertiary);color:var(--text-secondary)}
+
+  /* Signal tag */
+  .sig{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
+  .sig.g{background:var(--green)}
+  .sig.r{background:var(--red)}
+  .sig.y{background:var(--amber)}
+  .sig.b{background:var(--accent)}
+
+  /* Star rating */
+  .stars{font-size:14px;letter-spacing:1px;color:var(--amber)}
+
+  /* Risk list */
+  .risk-list{list-style:none;padding:0}
+  .risk-list li{padding:8px 0 8px 24px;position:relative;font-size:13px;color:var(--text-secondary);border-bottom:1px solid var(--border-light)}
+  .risk-list li:last-child{border-bottom:none}
+  .risk-list li::before{content:'⚠️';position:absolute;left:0;top:8px;font-size:12px}
+
+  /* Strategy table */
+  .st{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin:10px 0 14px}
+  .st td{padding:10px 14px;border-bottom:1px solid var(--border-light);color:var(--text-secondary)}
+  .st td:first-child{font-weight:600;color:var(--text);white-space:nowrap;width:110px}
+  .st tr:last-child td{border-bottom:none}
+
+  /* Main conclusion callout */
+  .conclusion-box{text-align:center;padding:28px 22px;background:linear-gradient(135deg,var(--surface-alt),var(--surface));border:1px solid var(--border);border-radius:var(--radius);margin:16px 0;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .conclusion-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--purple),var(--teal))}
+  .conclusion-text{font-size:18px;font-weight:700;color:var(--text);line-height:1.6;margin-bottom:6px}
+  .conclusion-sub{font-size:13px;color:var(--text-secondary);line-height:1.7}
+
+  /* Position table */
+  .pos-table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin:10px 0}
+  .pos-table td{padding:10px 14px;border-bottom:1px solid var(--border-light);color:var(--text)}
+  .pos-table td:first-child{font-weight:600;white-space:nowrap;width:120px}
+  .pos-table tr:last-child td{border-bottom:none}
+  .pos-table .amt{font-family:var(--font-mono);color:var(--accent);font-weight:600}
+
+  /* Footer */
+  .footer{text-align:center;padding:24px 22px 36px;font-size:11px;color:var(--text-tertiary);line-height:1.8;border-top:1px solid var(--border-light)}
+  .footer a{color:var(--accent);text-decoration:none}.footer a:hover{text-decoration:underline}
+
+  /* Responsive */
+  @media(max-width:480px){
+    .section{padding:18px 14px}
+    .header{padding:14px 14px}
+    .h-title{font-size:16px}
+    .at{font-size:12px}.at td,.at th{padding:8px 10px}
+    .dragon-card{padding:14px 14px}
+    .dc-name{font-size:15px}
+    .conclusion-text{font-size:16px}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="h-left">
+    <div class="h-icon">📊</div>
+    <div>
+      <div class="h-title">双战法选股分析</div>
+      <div class="h-meta">2026年6月30日 · 周二 · 收盘后</div>
+    </div>
+  </div>
+  <span class="h-badge">冰点反抽 + 龙头主升浪</span>
+  <a href="https://eason-byte.github.io/daily-briefing/stock-picks/" class="h-home" title="返回首页">📋</a>
+</div>
+
+<div class="section">
+  <div class="sec-label">🧊 冰点反抽模式分析</div>
+
+  <table class="at">
+    <tr><th>指标</th><th>今日数据</th><th>冰点阈值</th><th>判断</th></tr>
+        <tr><td>跌停家数</td><td><strong>5家</strong></td><td>≥20家</td><td><span class="sig g"></span>远未触发</td></tr>
+    <tr><td>涨停家数</td><td><strong>140家</strong></td><td>—</td><td><span style="color:var(--red)">🔥 极度活跃</span></td></tr>
+    <tr><td>亏钱效应</td><td>最弱板块+2.4%</td><td>大面积低开</td><td><span class="sig g"></span>全市场赚钱</td></tr>
+    <tr><td>指数表现</td><td>上证+0.5% / 深成指+2.48%<br>创业板+2.99%</td><td>放量破位</td><td><span class="sig g"></span>普涨格局</td></tr>
+  </table>
+
+  <div class="callout success">今日市场情绪正常，完全不触发冰点条件。全市场普涨，赚钱效应极强。</div>
+
+  <table class="at">
+    <tr><th>项目</th><th>判断</th></tr>
+    <tr><td>是否冰点D0</td><td>❌ 否（跌停仅5家）</td></tr>
+    <tr><td>是否有活口需要寻找</td><td>❌ 不需要（市场未恐慌）</td></tr>
+    <tr><td>模式当前状态</td><td><strong style="color:var(--amber)">待机 - 今日不适用</strong></td></tr>
+</table>
+
+  <h3 style="font-size:14px;font-weight:600;margin:14px 0 8px;color:var(--text-secondary)">跌停股一览（仅5家，无板块性）</h3>
+<table class="at">
+    <tr><th>代码</th><th>名称</th><th>跌幅</th></tr>
+    <tr><td>603262</td><td>技源集团</td><td style="color:var(--green)">-10.01%</td></tr>
+    <tr><td>600791</td><td>京能置业</td><td style="color:var(--green)">-9.99%</td></tr>
+    <tr><td>000766</td><td>通化金马</td><td style="color:var(--green)">-10.02%</td></tr>
+    <tr><td>002674</td><td>兴业科技</td><td style="color:var(--green)">-10.00%</td></tr>
+    <tr><td>000636</td><td>风华高科</td><td style="color:var(--green)">-10.00%</td></tr>
+</table>
+<div class="callout neutral">跌停股分散在不同行业（医药、地产、化工、电子），无系统性恐慌，进一步确认情绪正常。</div>
+
+  <div class="callout warn"><strong>今日不适用冰点反抽模式。</strong>市场处于亢奋状态，不是冰点后的修复，而是主升浪中的加速。仓位建议<strong>0%</strong>（该模式无需动用）。</div>
+</div>
+
+<div class="section section-alt">
+  <div class="sec-label">🐉 龙头主升浪战法分析</div>
+
+  <table class="at">
+    <tr><th>最强板块</th><th>涨幅</th><th>涨停集中度</th><th>持续性判断</th></tr>
+        <tr><td>🥇 模拟芯片设计</td><td style="color:var(--red)"><strong>+8.97%</strong></td><td>高</td><td><span style="color:var(--red)">🔥 主线核心</span></td></tr>
+    <tr><td>🥈 光学元件</td><td style="color:var(--red)"><strong>+7.93%</strong></td><td>高</td><td><span style="color:var(--red)">🔥 与芯片共振</span></td></tr>
+    <tr><td>🥉 数字芯片设计</td><td style="color:var(--red)"><strong>+6.85%</strong></td><td>高</td><td><span style="color:var(--red)">🔥 科创50核心</span></td></tr>
+    <tr><td>4 分立器件</td><td style="color:var(--red)"><strong>+6.61%</strong></td><td>高</td><td><span style="color:var(--red)">🔥 功率半导体</span></td></tr>
+    <tr><td>5 光学光电子</td><td style="color:var(--red)"><strong>+6.42%</strong></td><td>高</td><td><span style="color:var(--red)">🔥 泛科技</span></td></tr>
+  </table>
+
+  <div class="callout success"><strong>主线确认：芯片半导体 + 光学光电子 双轮驱动。</strong>基本面有支撑——电子行业利润同比暴增103.9%，电子专用材料利润飙升665.4%。这是业绩+政策+资金三重共振的主升浪。</div>
+
+  <div class="dragon-card dc-hot">
+  <div class="dc-header">
+    <div class="dc-name">🐉 水晶光电（002273）<span class="dc-tag dc-hot-tag">光学元件龙头</span></div>
+    <div class="dc-score">五维评分：⭐⭐⭐⭐</div>
+  </div>
+  <table class="at">
+    <tr><th style="width:80px">维度</th><th>评分</th><th>详情</th></tr>
+    <tr><td>辨识度</td><td><span class="stars">⭐⭐⭐⭐</span></td><td>封板资金7.8亿（全场最高），光学龙头地位</td></tr>
+    <tr><td>带动性</td><td><span class="stars">⭐⭐⭐⭐⭐</span></td><td>光学元件板块+7.93%，全场第二强</td></tr>
+    <tr><td>成交量</td><td><span class="stars">⭐⭐⭐⭐</span></td><td>封板7.8亿 + 35.48元涨停，资金深度参与</td></tr>
+    <tr><td>题材</td><td><span class="stars">⭐⭐⭐⭐</span></td><td>光学+AI算力+AR/VR，有预期差</td></tr>
+    <tr><td>换手率</td><td>—</td><td>数据缺失，但封板资金大说明换手充分</td></tr>
+  </table>
+  <div class="dc-detail"><strong>位置判断：</strong>已处在主升浪中段或加速初期。市场讨论调整10-15%后是第二波主升加仓位，说明已有一定涨幅。今日涨停是加速信号。</div>
+  <div class="dc-buy"><strong>买点判断：</strong>今日属于加速涨停，不适合追。若明天分歧回调不破5日线（约32-33元），可视为买点③（加速途中分歧加仓）。止损设在32元下方。</div>
+</div>
+<div class="dragon-card">
+  <div class="dc-header">
+    <div class="dc-name">🐉 中科曙光（603019）<span class="dc-tag">算力/芯片总龙头</span></div>
+    <div class="dc-score">五维评分：⭐⭐⭐⭐⭐</div>
+  </div>
+  <table class="at">
+    <tr><th style="width:80px">维度</th><th>评分</th><th>详情</th></tr>
+    <tr><td>辨识度</td><td><span class="stars">⭐⭐⭐⭐⭐</span></td><td>全市场知名的算力龙头，107元高价涨停</td></tr>
+    <tr><td>带动性</td><td><span class="stars">⭐⭐⭐⭐</span></td><td>数字芯片设计+6.85%，算力板块全面跟涨</td></tr>
+    <tr><td>成交量</td><td><span class="stars">⭐⭐⭐⭐</span></td><td>107元涨停封板4.2亿，大资金态度明确</td></tr>
+    <tr><td>题材</td><td><span class="stars">⭐⭐⭐⭐⭐</span></td><td>算力+AI芯片+信创，科创50权重</td></tr>
+    <tr><td>换手率</td><td>—</td><td>数据缺失，但高价股涨停换手通常不低</td></tr>
+  </table>
+  <div class="dc-detail"><strong>位置判断：</strong>已在主升浪加速期。107元涨停说明市场情绪极度亢奋，但高价股加速后容易出现剧烈震荡。</div>
+  <div class="dc-buy"><strong>买点判断：</strong>今日追涨风险极大。若明后天缩量回踩5日线（约98-100元）且不放量跌破，可考虑买点①（缩量回踩均线低吸），仓位10-15%。止损设在95元。</div>
+</div>
+<div class="dragon-card">
+  <div class="dc-header">
+    <div class="dc-name">🐉 新洁能（605111）<span class="dc-tag">功率半导体龙头</span></div>
+    <div class="dc-score">五维评分：⭐⭐⭐⭐</div>
+  </div>
+  <table class="at">
+    <tr><th style="width:80px">维度</th><th>评分</th><th>详情</th></tr>
+    <tr><td>辨识度</td><td><span class="stars">⭐⭐⭐⭐</span></td><td>功率半导体核心标的，99元涨停</td></tr>
+    <tr><td>带动性</td><td><span class="stars">⭐⭐⭐⭐</span></td><td>分立器件板块+6.61%，功率半导体集体走强</td></tr>
+    <tr><td>成交量</td><td><span class="stars">⭐⭐⭐⭐</span></td><td>昨日成交38.89亿（涨8.42%），今日封板1.7亿</td></tr>
+    <tr><td>题材</td><td><span class="stars">⭐⭐⭐</span></td><td>功率半导体+国产替代，题材不新但确定性高</td></tr>
+    <tr><td>换手率</td><td>—</td><td>连续两日放量，换手活跃</td></tr>
+  </table>
+  <div class="dc-detail"><strong>位置判断：</strong>连续两日放量大涨（+8.42% → +10%），处于加速期。昨日已有明显资金介入，今日加速涨停确认主升浪。</div>
+  <div class="dc-buy"><strong>买点判断：</strong>同样不适合追涨。若回踩5日线（约90-92元）不破，可考虑买点③（加速途中分歧加仓）。仓位10-15%。止损设在88元。</div>
+</div>
+
+  <h3 style="font-size:14px;font-weight:600;margin:14px 0 8px;color:var(--text-secondary)">其他值得关注的强势股</h3>
+<table class="at">
+    <tr><th>代码</th><th>名称</th><th>亮点</th></tr>
+    <tr><td>000100</td><td>TCL科技</td><td>封板5.4亿，面板+半导体双主线</td></tr>
+    <tr><td>002407</td><td>多氟多</td><td>50元涨停封板4.7亿，氟化工+新能源</td></tr>
+    <tr><td>603005</td><td>晶方科技</td><td>53.87元封板2.3亿，先进封装</td></tr>
+    <tr><td>002202</td><td>金风科技</td><td>23.9元封板4.6亿，风电龙头</td></tr>
+    <tr><td>000938</td><td>紫光股份</td><td>28.86元封板3.6亿，芯片+IT</td></tr>
+</table>
+
+  <table class="at">
+    <tr><th>项目</th><th>判断</th></tr>
+    <tr><td>市场环境</td><td>单边上涨，芯片半导体主线明确 <span class="stars">⭐⭐⭐⭐</span></td></tr>
+    <tr><td>真龙候选</td><td>水晶光电、中科曙光、新洁能（三选一即可）</td></tr>
+    <tr><td>当前位置</td><td><strong style="color:var(--amber)">加速冲顶期 - 不适合追涨</strong></td></tr>
+    <tr><td>买点类型</td><td>等买点①（缩量回踩）或买点③（分歧加仓）</td></tr>
+</table>
+</div>
+
+<div class="section">
+  <div class="sec-label">⚖️ 综合结论</div>
+
+  <table class="at">
+    <tr><th>对比维度</th><th>冰点反抽</th><th>龙头主升浪</th><th>是否一致</th></tr>
+        <tr><td>市场状态</td><td>正常（非冰点）</td><td>主线主升浪</td><td><span class="sig g"></span>一致</td></tr>
+    <tr><td>是否该动手</td><td>不动手（不适用）</td><td>等回调再动手</td><td><span class="sig g"></span>一致</td></tr>
+    <tr><td>共同推荐</td><td>无</td><td>芯片三龙</td><td>—</td></tr>
+  </table>
+
+  <table class="st">
+    <tr><td>场景</td><td>策略</td></tr>
+        <tr><td>🔴 已持仓芯片股</td><td>持有，但设好移动止损（5日线为警戒线）。涨幅超30%的分批止盈</td></tr>
+    <tr><td style="color:var(--amber)">🟡 空仓/轻仓</td><td>明天不追涨！切勿在涨停潮次日开盘追高</td></tr>
+    <tr><td style="color:var(--green)">🟢 等回调买入</td><td>观察水晶光电/中科曙光/新洁能，任一只缩量回踩5日线不破 → 建仓10-15%</td></tr>
+  </table>
+
+  <table class="pos-table">
+    <tr><td>战法</td><td>建议仓位</td><td>标的</td></tr>
+        <tr><td>冰点反抽</td><td><strong>0%</strong></td><td>不适用</td></tr>
+    <tr><td>龙头主升浪</td><td><strong>0-15%</strong>（等回调后）</td><td>水晶光电/中科曙光/新洁能</td></tr>
+    <tr><td><strong>总仓位上限</strong></td><td class="amt"><strong>≤15%</strong></td><td>单一个股最多10-15%</td></tr>
+  </table>
+
+  <h3 style="font-size:14px;font-weight:600;margin:16px 0 8px;color:var(--text-secondary)">风险提示</h3>
+<ul class="risk-list">
+    <li><strong>涨停潮次日风险最大</strong> — 140家涨停的次日，大概率出现大面积分化，追高被套概率极高</li>
+    <li><strong>连续加速后警惕见顶</strong> — 新洁能连拉两日17%+，中科曙光107元涨停，一旦放量滞涨就是见顶信号</li>
+    <li><strong>单一个股仓位严格≤15%</strong> — 宁可错过，不可重仓押注</li>
+    <li><strong>止损纪律</strong> — 跌破5日线或入场支撑位，无条件离场，不犹豫</li>
+</ul>
+</div>
+
+<div class="section section-alt">
+  <div class="conclusion-box">
+    <div class="conclusion-text">🎯 今天该不该动手？<br><span style="font-size:22px;color:var(--amber)">不动手。等回调。</span></div>
+<div class="conclusion-sub">
+今日涨停140家、芯片板块集体暴涨，这是<span style="color:var(--red)">持仓者的盛宴，不是买入者的时机</span>。<br><br>
+龙头主升浪战法的核心是等龙头走出来再吃一口——现在龙头已经走出来了，但跑太快了追不上。等它停下来喘口气（缩量回踩5日线），才是你上车的时候。<br><br>
+冰点反抽继续待机，龙头主升浪等买点①或③。明天如果芯片三龙中有缩量回踩不破5日线的，可以轻仓试探（10-15%）。否则继续看戏。
+</div>
+  </div>
+</div>
+
+<div class="footer">
+  数据源：Tushare Pro · AKShare · 东方财富 · 新浪财经<br>
+  采集时间：2026-06-30 18:06 CST &nbsp;·&nbsp; 基于ds-hermes deepseek-v4-pro<br>
+  <a href="https://eason-byte.github.io/daily-briefing/">🏠 返回首页</a> &nbsp;·&nbsp;
+  <a href="https://eason-byte.github.io/daily-briefing/stock-picks/">📋 历史分析</a> &nbsp;·&nbsp;
+  <a href="https://19930808.xyz">19930808.xyz</a><br>
+  ⚠️ 基于双战法纪律框架分析，仅供参考，不构成投资建议
+</div>
+
+</div>
+</body>
+</html>
