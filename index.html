@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📈 晨间速览 · 双战法选股 · 学习</title>
+<title>📈 晨间速览 · 双战法选股 · 学习 · IPO分析</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  :root{--bg:#f4f5f8;--surface:#fff;--surface-alt:#f0f1f4;--border:#e4e6ec;--border-l:#eef0f3;--text:#191c24;--text2:#56606e;--text3:#8e96a6;--blue:#1a5cc8;--blue-l:#e5edf8;--purple:#6d28d9;--purple-l:#ede9fe;--green:#059669;--green-l:#ecfdf5;--radius:14px;--shadow:0 1px 3px rgba(0,0,0,.04),0 4px 14px rgba(0,0,0,.03);--font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  :root{--bg:#f4f5f8;--surface:#fff;--surface-alt:#f0f1f4;--border:#e4e6ec;--border-l:#eef0f3;--text:#191c24;--text2:#56606e;--text3:#8e96a6;--blue:#1a5cc8;--blue-l:#e5edf8;--purple:#6d28d9;--purple-l:#ede9fe;--green:#059669;--green-l:#ecfdf5;--orange:#d97706;--orange-l:#fef3c7;--radius:14px;--shadow:0 1px 3px rgba(0,0,0,.04),0 4px 14px rgba(0,0,0,.03);--font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
   body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.5;min-height:100vh}
   .container{max-width:1280px;margin:0 auto;padding:0 24px}
 
@@ -37,10 +37,12 @@
   .tab.tn .badge{background:var(--blue-l);color:var(--blue)}
   .tab.tp .badge{background:var(--purple-l);color:var(--purple)}
   .tab.tl .badge{background:var(--green-l);color:var(--green)}
+  .tab.to .badge{background:var(--orange-l);color:var(--orange)}
 
   .dashboard{display:grid;grid-template-columns:1fr;gap:20px}
   .dashboard.two-col{grid-template-columns:1fr 1fr}
   .dashboard.three-col{grid-template-columns:1fr 1fr 1fr}
+  .dashboard.four-col{grid-template-columns:1fr 1fr 1fr 1fr}
 
   .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
   .panel-h{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--border-l);font-size:13px;font-weight:600}
@@ -48,6 +50,7 @@
   .panel-h .ic.blue{background:var(--blue-l);color:var(--blue)}
   .panel-h .ic.purple{background:var(--purple-l);color:var(--purple)}
   .panel-h .ic.green{background:var(--green-l);color:var(--green)}
+  .panel-h .ic.orange{background:var(--orange-l);color:var(--orange)}
   .panel-h .meta{font-size:9px;color:var(--text3);font-weight:400;margin-left:auto}
   .panel-b{padding:12px 18px}
 
@@ -61,6 +64,7 @@
   .a-tag.blue{color:var(--blue);background:var(--blue-l)}
   .a-tag.purple{color:var(--purple);background:var(--purple-l)}
   .a-tag.green{color:var(--green);background:var(--green-l)}
+  .a-tag.orange{color:var(--orange);background:var(--orange-l)}
   .arrow{color:var(--text3);font-size:12px;flex-shrink:0;transition:transform .12s}
   .a-item:hover .arrow{transform:translateX(3px)}
 
@@ -77,6 +81,7 @@
   .sr-cat.blue{color:var(--blue);background:var(--blue-l)}
   .sr-cat.purple{color:var(--purple);background:var(--purple-l)}
   .sr-cat.green{color:var(--green);background:var(--green-l)}
+  .sr-cat.orange{color:var(--orange);background:var(--orange-l)}
   .sr-info{flex:1;min-width:0}
   .sr-info .sr-title{font-size:12px;font-weight:600;color:var(--text)}
   .sr-info .sr-desc{font-size:10px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -94,9 +99,9 @@
   @media(max-width:820px){
     .container{padding:0 14px}
     .hero{padding:28px 0 20px}.hero-title{font-size:20px}
-    .tab-bar{display:flex;width:100%;border-radius:10px}
-    .tab{flex:1;text-align:center;padding:9px 4px;font-size:11px}
-    .dashboard.two-col,.dashboard.three-col{grid-template-columns:1fr}
+    .tab-bar{display:flex;width:100%;border-radius:10px;overflow-x:auto}
+    .tab{flex:1;text-align:center;padding:9px 4px;font-size:11px;white-space:nowrap}
+    .dashboard.two-col,.dashboard.three-col,.dashboard.four-col{grid-template-columns:1fr}
     .panel-h{padding:11px 12px;font-size:12px}
     .panel-b{padding:8px 12px}
     .a-item{padding:9px 0;gap:6px}.a-date{font-size:12px}.a-desc{display:none}
@@ -116,12 +121,13 @@
 
 <div class="hero">
   <div class="hero-icon">📈</div>
-  <div class="hero-title">晨间速览 · 双战法选股 · 学习</div>
-  <div class="hero-sub">早8:00 隔夜美股·宏观·持仓 &nbsp;·&nbsp; 18:05 冰点反抽·龙头主升浪 &nbsp;·&nbsp; 投资路线图·十年悟道</div>
+  <div class="hero-title">晨间速览 · 双战法选股 · 学习 · 港股IPO</div>
+  <div class="hero-sub">早8:00 隔夜美股·宏观·持仓 · 18:15 冰点反抽·龙头主升浪 · 投资学习 · 港股新股分析</div>
   <div class="hero-info">
     <span>📰 晨间速览</span>
     <span>📊 双战法选股</span>
     <span>📖 学习</span>
+    <span>📋 IPO分析</span>
     <span>🌙 非高峰运行</span>
     <span><a href="https://19930808.xyz" style="color:var(--text3);text-decoration:none">19930808.xyz</a></span>
   </div>
@@ -137,10 +143,11 @@
     <button class="tab tn active" onclick="st('news')"><span>📰</span> 晨间速览 <span class="badge" id="nc">0</span></button>
     <button class="tab tp" onclick="st('picks')"><span>📊</span> 双战法选股 <span class="badge" id="pc">0</span></button>
     <button class="tab tl" onclick="st('learn')"><span>📖</span> 学习 <span class="badge" id="lc">0</span></button>
+    <button class="tab to" onclick="st('ipos')"><span>📋</span> IPO分析 <span class="badge" id="ic">0</span></button>
   </div>
 </div>
 
-<!-- Dashboard (normal view) -->
+<!-- Dashboard -->
 <div class="dashboard two-col" id="dash">
   <div class="panel" id="pnNews">
     <div class="panel-h"><div class="ic blue">📰</div> 晨间新闻速览 <span class="meta">data/briefings.json</span></div>
@@ -154,14 +161,18 @@
     <div class="panel-h"><div class="ic green">📖</div> 投资学习 <span class="meta">路线图 · 十年悟道</span></div>
     <div class="panel-b" id="ll"></div>
   </div>
+  <div class="panel" id="pnIpos">
+    <div class="panel-h"><div class="ic orange">📋</div> 港股IPO分析 <span class="meta">新股申购建议</span></div>
+    <div class="panel-b" id="il"></div>
+  </div>
 </div>
 
-<!-- Search Results Panel -->
+<!-- Search Results -->
 <div class="sr-panel" id="sr"></div>
 
 <div class="footer">
   RSS 19源 · CoinGecko · Yahoo Finance · Tushare Pro · AKShare · 东方财富<br>
-  早8:00 · 18:05 CST · deepseek-v4-pro · 非高峰 · ⚠️ 仅供参考<br>
+  早8:00 · 18:15 · 18:30 CST · deepseek-v4-pro · ⚠️ 仅供参考<br>
   <a href="https://19930808.xyz" style="color:var(--blue);text-decoration:none">19930808.xyz</a>
 </div>
 
@@ -169,7 +180,7 @@
 
 <script>
 // ---- Data store ----
-var D = {briefings:[], stockpicks:[], articles:[]};
+var D = {briefings:[], stockpicks:[], articles:[], ipos:[]};
 
 // ---- Render helpers ----
 function rl(el, data, prefix, tc, tt) {
@@ -188,19 +199,21 @@ function rl(el, data, prefix, tc, tt) {
 
 function st(name) {
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  const map = {news:'tn',picks:'tp',learn:'tl'};
+  const map = {news:'tn',picks:'tp',learn:'tl',ipos:'to'};
   document.querySelector('.'+map[name]).classList.add('active');
   const w = window.innerWidth;
   let layout = '';
-  if (w >= 1024) layout = 'three-col';
-  else if (w >= 640 || name !== 'news') layout = 'two-col';
+  if (w >= 1024) layout = 'four-col';
+  else if (w >= 640 || name === 'picks' || name === 'learn' || name === 'ipos') layout = 'two-col';
   document.getElementById('dash').className = 'dashboard' + (layout ? ' '+layout : '');
-  ['pnNews','pnPicks','pnLearn'].forEach(id => document.getElementById(id).style.display = '');
+  ['pnNews','pnPicks','pnLearn','pnIpos'].forEach(function(id) {
+    document.getElementById(id).style.display = '';
+  });
 }
 window.addEventListener('resize', ()=>{
   const a = document.querySelector('.tab.active');
   if(a) {
-    const rev = {tn:'news',tp:'picks',tl:'learn'};
+    const rev = {tn:'news',tp:'picks',tl:'learn',to:'ipos'};
     st(rev[a.classList[1]]);
   }
 });
@@ -214,7 +227,6 @@ function hl(txt, q) {
 
 function onSearch(val) {
   const sw = document.querySelector('.search-wrap');
-  const ipt = document.getElementById('sq');
   const dash = document.getElementById('dash');
   const sr = document.getElementById('sr');
   const q = val.trim();
@@ -234,21 +246,18 @@ function onSearch(val) {
   const results = [];
   const ql = q.toLowerCase();
 
-  D.briefings.forEach(function(item) {
-    if ((item.date||'').toLowerCase().includes(ql) || (item.dow||'').toLowerCase().includes(ql) || (item.desc||'').toLowerCase().includes(ql)) {
-      results.push({item: item, cat: 'briefings', tag: 'blue', tagText: '速览', prefix: ''});
-    }
-  });
-  D.stockpicks.forEach(function(item) {
-    if ((item.date||'').toLowerCase().includes(ql) || (item.dow||'').toLowerCase().includes(ql) || (item.desc||'').toLowerCase().includes(ql)) {
-      results.push({item: item, cat: 'stockpicks', tag: 'purple', tagText: '选股', prefix: 'stock-picks/'});
-    }
-  });
-  D.articles.forEach(function(item) {
-    if ((item.date||'').toLowerCase().includes(ql) || (item.dow||'').toLowerCase().includes(ql) || (item.desc||'').toLowerCase().includes(ql)) {
-      results.push({item: item, cat: 'articles', tag: 'green', tagText: '学习', prefix: ''});
-    }
-  });
+  function pushMatches(arr, cat, tag, tagText, prefix) {
+    arr.forEach(function(item) {
+      if ((item.date||'').toLowerCase().includes(ql) || (item.dow||'').toLowerCase().includes(ql) || (item.desc||'').toLowerCase().includes(ql)) {
+        results.push({item: item, tag: tag, tagText: tagText, prefix: prefix});
+      }
+    });
+  }
+
+  pushMatches(D.briefings, 'briefings', 'blue', '速览', '');
+  pushMatches(D.stockpicks, 'stockpicks', 'purple', '选股', 'stock-picks/');
+  pushMatches(D.articles, 'articles', 'green', '学习', '');
+  pushMatches(D.ipos, 'ipos', 'orange', 'IPO', '');
 
   if (results.length === 0) {
     sr.innerHTML = '<div class="sr-h"></div><div class="sr-b"><div class="sr-none">😕 没有找到匹配 "<strong>' + escHtml(q) + '</strong>" 的结果</div></div>';
@@ -287,24 +296,28 @@ function escHtml(s) {
 }
 
 // ---- Init ----
-['bl','sl','ll'].forEach(function(id) {
+['bl','sl','ll','il'].forEach(function(id) {
   document.getElementById(id).innerHTML = '<div class="loading"><div class="spinner"></div>加载中...</div>';
 });
 
 var p1 = fetch('data/briefings.json').then(function(r) { return r.json(); });
 var p2 = fetch('data/stockpicks.json').then(function(r) { return r.json(); });
 var p3 = fetch('data/articles.json').then(function(r) { return r.json(); });
+var p4 = fetch('data/ipos.json').then(function(r) { return r.json(); });
 
-Promise.all([p1, p2, p3]).then(function(arr) {
+Promise.all([p1, p2, p3, p4]).then(function(arr) {
   D.briefings = arr[0];
   D.stockpicks = arr[1];
   D.articles = arr[2];
+  D.ipos = arr[3];
   rl(document.getElementById('bl'), D.briefings, '', 'blue', '最新');
   rl(document.getElementById('sl'), D.stockpicks, 'stock-picks/', 'purple', '分析');
   rl(document.getElementById('ll'), D.articles, '', 'green', '学习');
+  rl(document.getElementById('il'), D.ipos, '', 'orange', '新股');
   document.getElementById('nc').textContent = (D.briefings||[]).length;
   document.getElementById('pc').textContent = (D.stockpicks||[]).length;
   document.getElementById('lc').textContent = (D.articles||[]).length;
+  document.getElementById('ic').textContent = (D.ipos||[]).length;
 }).catch(function() {
   document.getElementById('bl').innerHTML = '<div class="empty"><div class="eic">⚠️</div>加载失败</div>';
 });
