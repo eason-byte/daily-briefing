@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>港股打新分析 — 2026年7月IPO申购建议</title>
+<style>
+  :root {
+    --bg: #0f0f13;
+    --card: #1a1a24;
+    --card-hover: #222233;
+    --accent: #6c5ce7;
+    --accent2: #00cec9;
+    --gold: #fdcb6e;
+    --red: #e17055;
+    --green: #00b894;
+    --orange: #f39c12;
+    --text: #e0e0e8;
+    --text-muted: #888899;
+    --border: #2a2a3a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 60px 24px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(108,92,231,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 50%, rgba(0,206,201,0.06) 0%, transparent 50%);
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .hero h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); color: #fff; font-weight: 700; margin-bottom: 6px; }
+  .hero h1 span { color: var(--accent2); }
+  .hero .subtitle { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; }
+  .hero .budget { margin-top: 14px; display: inline-block; background: rgba(0,206,201,0.1); border: 1px solid rgba(0,206,201,0.2); padding: 6px 20px; border-radius: 20px; font-size: 0.85rem; color: var(--accent2); }
+
+  .container { max-width: 800px; margin: 0 auto; padding: 32px 20px 60px; }
+
+  .section-title { font-size: 1.1rem; font-weight: 700; color: #fff; margin: 32px 0 14px; display: flex; align-items: center; gap: 8px; }
+  .section-title .line { flex: 1; height: 1px; background: var(--border); }
+
+  /* Score Badge */
+  .score { display: inline-flex; align-items: center; gap: 6px; padding: 3px 12px; border-radius: 10px; font-size: 0.72rem; font-weight: 600; }
+  .score.s5 { background: rgba(0,184,148,0.15); color: var(--green); }
+  .score.s4 { background: rgba(0,206,201,0.12); color: var(--accent2); }
+  .score.s3 { background: rgba(253,203,110,0.12); color: var(--gold); }
+  .score.s2 { background: rgba(225,112,85,0.1); color: var(--red); }
+
+  /* IPO Card */
+  .ipo-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    transition: all 0.2s;
+  }
+  .ipo-card:hover { border-color: rgba(108,92,231,0.3); }
+  .ipo-card .header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .ipo-card .header h2 { font-size: 1.05rem; color: #fff; font-weight: 600; }
+  .ipo-card .header .code { color: var(--text-muted); font-size: 0.78rem; font-weight: 400; }
+  .ipo-card .header .deadline { font-size: 0.72rem; padding: 2px 8px; border-radius: 6px; background: rgba(253,203,110,0.1); color: var(--gold); margin-left: auto; }
+
+  .ipo-card .reason { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px; line-height: 1.6; }
+  .ipo-card .reason strong { color: var(--text); }
+
+  .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px; margin-bottom: 10px; }
+  .info-item { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 6px 10px; }
+  .info-item .label { font-size: 0.62rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .info-item .value { font-size: 0.85rem; color: var(--text); font-weight: 500; }
+  .info-item .value.green { color: var(--green); }
+  .info-item .value.gold { color: var(--gold); }
+  .info-item .value.red { color: var(--red); }
+
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 500; margin-right: 4px; }
+  .tag.green { background: rgba(0,184,148,0.12); color: var(--green); }
+  .tag.gold { background: rgba(253,203,110,0.12); color: var(--gold); }
+  .tag.red { background: rgba(225,112,85,0.12); color: var(--red); }
+  .tag.blue { background: rgba(108,92,231,0.12); color: var(--accent); }
+  .tag.teal { background: rgba(0,206,201,0.12); color: var(--accent2); }
+
+  .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+  /* Budget Box */
+  .budget-box {
+    background: linear-gradient(135deg, rgba(108,92,231,0.06), rgba(0,206,201,0.06));
+    border: 1px solid rgba(108,92,231,0.2);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin: 20px 0;
+  }
+  .budget-box h3 { color: var(--accent); font-size: 0.95rem; font-weight: 600; margin-bottom: 12px; }
+  .budget-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.85rem; border-bottom: 1px solid rgba(42,42,58,0.5); }
+  .budget-row:last-child { border-bottom: none; font-weight: 700; color: #fff; }
+  .budget-row .name { color: var(--text); }
+  .budget-row .amt { color: var(--accent2); }
+  .budget-row .score-tag { font-size: 0.7rem; }
+
+  /* Skip List */
+  .skip-item { display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: rgba(225,112,85,0.04); border-radius: 8px; margin-bottom: 6px; font-size: 0.82rem; }
+  .skip-item .name { color: var(--text); font-weight: 500; min-width: 120px; }
+  .skip-item .why { color: var(--text-muted); }
+
+  /* Risk Note */
+  .risk-note {
+    margin-top: 28px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(225,112,85,0.2);
+    background: rgba(225,112,85,0.04);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .risk-note strong { color: var(--red); }
+
+  .footer { text-align: center; padding: 24px 0; font-size: 0.72rem; color: var(--text-muted); border-top: 1px solid var(--border); margin-top: 24px; }
+
+  @media (max-width: 600px) {
+    .ipo-card { padding: 16px; }
+    .info-grid { grid-template-columns: repeat(2, 1fr); }
+    .budget-box { padding: 16px; }
+    .skip-item { flex-direction: column; align-items: flex-start; gap: 2px; }
+    .skip-item .name { min-width: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>港股打新 <span>IPO申购建议</span></h1>
+    <p class="subtitle">2026年7月 · 9只新股分析 · 4万港币预算分配</p>
+    <div class="budget">💰 预算 40,000 HKD</div>
+  </div>
+</section>
+
+<div class="container">
+
+  <!-- ============ MUST BUY ============ -->
+  <div class="section-title">🥇 强烈申购 <span class="line"></span></div>
+
+  <!-- 三环集团 -->
+  <div class="ipo-card">
+    <div class="header">
+      <span class="score s5">⭐⭐⭐⭐⭐</span>
+      <h2>三环集团</h2>
+      <span class="code">06951</span>
+      <span class="deadline">⏰ 截止 7/6</span>
+    </div>
+    <div class="reason">
+      基石阵容：<strong>淡马锡 + 阿里巴巴 + 腾讯 + 高盛 + 摩根大通</strong> 等17家巨头站台，
+      这是近期最豪华的新股基石阵容。折价49%，绿鞋保护。电子陶瓷龙头，A股市值3199亿。
+      破发概率极低。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">10,131 HKD</div></div>
+      <div class="info-item"><div class="label">认购倍数</div><div class="value green">8.64倍</div></div>
+      <div class="info-item"><div class="label">折价</div><div class="value gold">49.02%</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value green">✅ 有</div></div>
+      <div class="info-item"><div class="label">赛道</div><div class="value">电子陶瓷元件</div></div>
+      <div class="info-item"><div class="label">建议手数</div><div class="value" style="color:#fff;">1手</div></div>
+    </div>
+    <div>
+      <span class="tag green">淡马锡</span>
+      <span class="tag green">阿里巴巴</span>
+      <span class="tag green">腾讯</span>
+      <span class="tag green">高盛</span>
+      <span class="tag green">摩根大通</span>
+    </div>
+  </div>
+
+  <!-- 晶合集成 -->
+  <div class="ipo-card">
+    <div class="header">
+      <span class="score s5">⭐⭐⭐⭐⭐</span>
+      <h2>晶合集成</h2>
+      <span class="code">02249</span>
+      <span class="deadline">⏰ 截止 7/7</span>
+    </div>
+    <div class="reason">
+      <strong>20家基石投资者</strong>（高瓴、高毅、奇瑞、思特威…），认购了50%发售股份。
+      折价54%，入场费仅3,262，<strong style="color:var(--accent2);">性价比最高的票</strong>。
+      半导体晶圆代工赛道，绿鞋保护。注意Q1净利润下降63%。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">3,262 HKD</div></div>
+      <div class="info-item"><div class="label">认购倍数</div><div class="value" style="color:var(--gold);">1.61倍</div></div>
+      <div class="info-item"><div class="label">折价</div><div class="value gold">54.34%</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value green">✅ 有</div></div>
+      <div class="info-item"><div class="label">赛道</div><div class="value">DDIC晶圆代工</div></div>
+      <div class="info-item"><div class="label">建议手数</div><div class="value" style="color:#fff;">2手</div></div>
+    </div>
+    <div>
+      <span class="tag green">高瓴</span>
+      <span class="tag green">高毅</span>
+      <span class="tag green">奇瑞</span>
+      <span class="tag blue">思特威</span>
+      <span class="tag teal">半导体</span>
+    </div>
+  </div>
+
+  <!-- ============ SUGGEST ============ -->
+  <div class="section-title">🥈 建议申购 <span class="line"></span></div>
+
+  <!-- 珞石机器人 -->
+  <div class="ipo-card">
+    <div class="header">
+      <span class="score s4">⭐⭐⭐⭐</span>
+      <h2>珞石机器人</h2>
+      <span class="code">03752</span>
+      <span class="deadline">⏰ 截止 7/6</span>
+    </div>
+    <div class="reason">
+      工业机器人+<strong>具身智能</strong>赛道，当下最热概念。绿鞋保护，6.62倍认购热度不错。
+      固定价38元招股，无A股折价参考，但有绿鞋保底。
+      入场费3,838适中，适合小仓位博热点。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">3,838 HKD</div></div>
+      <div class="info-item"><div class="label">认购倍数</div><div class="value green">6.62倍</div></div>
+      <div class="info-item"><div class="label">招股价</div><div class="value">38.00（固定）</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value green">✅ 有</div></div>
+      <div class="info-item"><div class="label">赛道</div><div class="value">工业/具身智能机器人</div></div>
+      <div class="info-item"><div class="label">建议手数</div><div class="value" style="color:#fff;">2手</div></div>
+    </div>
+    <div>
+      <span class="tag teal">具身智能</span>
+      <span class="tag blue">机器人</span>
+      <span class="tag green">绿鞋</span>
+    </div>
+  </div>
+
+  <!-- ============ OPTIONAL ============ -->
+  <div class="section-title">🥉 可申可不申 <span class="line"></span></div>
+
+  <!-- 齐云山食品 -->
+  <div class="ipo-card" style="border-color: rgba(253,203,110,0.15);">
+    <div class="header">
+      <span class="score s3">⭐⭐⭐</span>
+      <h2>齐云山食品</h2>
+      <span class="code">02797</span>
+      <span class="deadline">⏰ 截止 7/6</span>
+    </div>
+    <div class="reason">
+      南酸枣休闲食品，赛道偏窄，想象空间有限。但有绿鞋保护，认购5.32倍热度中等。
+      消费股相对稳健，但爆发力不足。资金有剩就申，不够就放弃。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">4,040 HKD</div></div>
+      <div class="info-item"><div class="label">认购倍数</div><div class="value" style="color:var(--gold);">5.32倍</div></div>
+      <div class="info-item"><div class="label">非A+H</div><div class="value">—</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value green">✅ 有</div></div>
+      <div class="info-item"><div class="label">赛道</div><div class="value">休闲食品</div></div>
+      <div class="info-item"><div class="label">建议手数</div><div class="value" style="color:#fff;">0-1手</div></div>
+    </div>
+    <div>
+      <span class="tag gold">消费</span>
+      <span class="tag green">绿鞋</span>
+    </div>
+  </div>
+
+  <!-- ============ BUDGET ============ -->
+  <div class="section-title">💰 4万港币分配方案 <span class="line"></span></div>
+
+  <div class="budget-box">
+    <h3>📋 申购计划</h3>
+    <div class="budget-row">
+      <span><span class="score-tag" style="color:var(--green);">🥇</span> <span class="name">三环集团 (06951)</span></span>
+      <span class="amt">1手 = 10,131 HKD</span>
+    </div>
+    <div class="budget-row">
+      <span><span class="score-tag" style="color:var(--green);">🥇</span> <span class="name">晶合集成 (02249)</span></span>
+      <span class="amt">2手 = 6,524 HKD</span>
+    </div>
+    <div class="budget-row">
+      <span><span class="score-tag" style="color:var(--accent2);">🥈</span> <span class="name">珞石机器人 (03752)</span></span>
+      <span class="amt">2手 = 7,676 HKD</span>
+    </div>
+    <div class="budget-row">
+      <span><span class="score-tag" style="color:var(--gold);">🥉</span> <span class="name">齐云山食品 (02797)</span></span>
+      <span class="amt">1手 = 4,040 HKD（资金有余再申）</span>
+    </div>
+    <div class="budget-row">
+      <span class="name">合计占用</span>
+      <span class="amt">28,371 HKD</span>
+    </div>
+    <div class="budget-row">
+      <span class="name">剩余备用</span>
+      <span class="amt" style="color:var(--gold);">11,629 HKD</span>
+    </div>
+  </div>
+
+  <!-- ============ SKIP ============ -->
+  <div class="section-title">❌ 建议跳过 <span class="line"></span></div>
+
+  <div class="skip-item"><span class="name">滨化股份 (06745)</span><span class="why">无绿鞋，化工传统行业，折价虽大但无保护</span></div>
+  <div class="skip-item"><span class="name">普源精电 (00537)</span><span class="why">无绿鞋，赛道好但没安全垫</span></div>
+  <div class="skip-item"><span class="name">立讯精密 (02475)</span><span class="why">认购0.85倍冷门，折价仅17%</span></div>
+  <div class="skip-item"><span class="name">永康控股 (02523)</span><span class="why">新加坡堆场物流，太冷门</span></div>
+  <div class="skip-item"><span class="name">鼎泰高科 (01377)</span><span class="why">一手38k吃光预算，无绿鞋，风险集中</span></div>
+
+  <!-- ============ TIMELINE ============ -->
+  <div class="section-title">📅 时间线 <span class="line"></span></div>
+
+  <div style="display:flex; flex-direction:column; gap:8px;">
+    <div style="display:flex; align-items:center; gap:10px; padding:8px 12px; background:rgba(225,112,85,0.06); border-radius:8px; font-size:0.82rem;">
+      <span style="color:var(--red); font-weight:600; min-width:60px;">7/6 截止</span>
+      <span style="color:var(--text);">三环集团 · 珞石机器人 · 齐云山食品</span>
+      <span style="margin-left:auto; color:var(--text-muted); font-size:0.72rem;">今日申购</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px; padding:8px 12px; background:rgba(0,184,148,0.06); border-radius:8px; font-size:0.82rem;">
+      <span style="color:var(--green); font-weight:600; min-width:60px;">7/7 截止</span>
+      <span style="color:var(--text);">晶合集成 · 滨化股份</span>
+      <span style="margin-left:auto; color:var(--text-muted); font-size:0.72rem;">可用7/6退款再申</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px; padding:8px 12px; background:rgba(253,203,110,0.06); border-radius:8px; font-size:0.82rem;">
+      <span style="color:var(--gold); font-weight:600; min-width:60px;">7/9 上市</span>
+      <span style="color:var(--text);">三环集团 · 珞石机器人</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px; padding:8px 12px; background:rgba(108,92,231,0.06); border-radius:8px; font-size:0.82rem;">
+      <span style="color:var(--accent); font-weight:600; min-width:60px;">7/10 上市</span>
+      <span style="color:var(--text);">晶合集成</span>
+    </div>
+  </div>
+
+  <!-- ============ RISK ============ -->
+  <div class="risk-note">
+    <strong>⚠️ 风险提示：</strong>
+    港股打新不是稳赚。三环和晶合有A股折价+豪华基石，安全垫最高，但：
+    <br>• 晶合集成Q1净利润降63%，基本面在走弱
+    <br>• 三环入场费10K，中签后首日如果低开，亏损也大
+    <br>• 珞石机器人无A股折价参考，纯博热点
+    <br><br>
+    <strong>策略：</strong>中签后首日就走，别贪。赚了是利润，亏了控制在本金1-2%以内。
+  </div>
+
+  <div class="footer">
+    数据来源：东方财富 · AKShare · 新浪财经 · 雪球<br>
+    分析时间：2026-07-01 20:00 CST · 仅供参考，不构成投资建议
+  </div>
+
+</div>
+
+</body>
+</html>
