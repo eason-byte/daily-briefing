@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>十年悟道之路 — 从亏货到稳定盈利的交易实录</title>
+<style>
+  :root {
+    --bg: #0f0f13;
+    --card: #1a1a24;
+    --card-hover: #222233;
+    --accent: #6c5ce7;
+    --accent2: #00cec9;
+    --accent3: #fd79a8;
+    --gold: #fdcb6e;
+    --red: #e17055;
+    --green: #00b894;
+    --text: #e0e0e8;
+    --text-muted: #888899;
+    --border: #2a2a3a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #2d1b36 50%, #16213e 100%);
+    padding: 80px 24px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(253,203,110,0.06) 0%, transparent 50%),
+                radial-gradient(circle at 70% 50%, rgba(108,92,231,0.06) 0%, transparent 50%);
+    animation: heroGlow 8s ease-in-out infinite alternate;
+  }
+  @keyframes heroGlow {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(-20px, -20px) rotate(3deg); }
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+    color: #fff;
+  }
+  .hero h1 .highlight { color: var(--gold); }
+  .hero .subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  .hero .subtitle .red { color: var(--red); }
+  .hero .subtitle .green { color: var(--green); }
+  .hero .stats {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .hero .stats span {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 6px 16px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .hero .stats span strong { color: #fff; }
+  .hero .nav-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: var(--accent2);
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+  .hero .nav-link:hover { opacity: 1; }
+
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  /* Journey Timeline */
+  .journey-line { position: relative; padding-left: 36px; }
+  .journey-line::before {
+    content: '';
+    position: absolute;
+    left: 13px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--red), var(--accent3), var(--gold), var(--green));
+    opacity: 0.4;
+  }
+
+  .journey-node { position: relative; margin-bottom: 36px; }
+  .journey-dot {
+    position: absolute;
+    left: -30px;
+    top: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.55rem;
+    font-weight: 700;
+    z-index: 1;
+  }
+  .journey-dot.fail { border-color: var(--red); color: var(--red); }
+  .journey-dot.turning { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 10px rgba(253,203,110,0.3); }
+  .journey-dot.win { border-color: var(--green); color: var(--green); }
+
+  .journey-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    transition: all 0.3s;
+  }
+  .journey-card:hover {
+    background: var(--card-hover);
+    transform: translateX(4px);
+  }
+  .journey-card .phase-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+  }
+  .journey-card .phase-badge.red { background: rgba(225,112,85,0.15); color: var(--red); }
+  .journey-card .phase-badge.gold { background: rgba(253,203,110,0.15); color: var(--gold); }
+  .journey-card .phase-badge.green { background: rgba(0,184,148,0.15); color: var(--green); }
+  .journey-card .phase-badge.blue { background: rgba(108,92,231,0.15); color: var(--accent); }
+  .journey-card .phase-badge.teal { background: rgba(0,206,201,0.15); color: var(--accent2); }
+
+  .journey-card h3 { font-size: 1rem; color: #fff; font-weight: 600; margin-bottom: 4px; }
+  .journey-card .time { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px; }
+  .journey-card .desc { font-size: 0.85rem; color: var(--text); line-height: 1.65; }
+  .journey-card .desc .highlight { color: var(--accent3); font-weight: 500; }
+  .journey-card .lesson {
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: rgba(253,203,110,0.06);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  /* Method Boxes */
+  .case-method-box {
+    background: linear-gradient(135deg, rgba(108,92,231,0.06), rgba(0,206,201,0.06));
+    border: 1px solid rgba(108,92,231,0.2);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .case-method-box h4 {
+    color: var(--accent);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .case-method-box p, .case-method-box li { font-size: 0.85rem; color: var(--text); line-height: 1.6; }
+  .case-method-box ul { padding-left: 18px; margin-top: 6px; }
+  .case-method-box ul li { margin-bottom: 4px; list-style: none; padding-left: 0; }
+  .case-method-box ul li::before { content: '• '; color: var(--accent); }
+  .case-method-box .tag-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .case-highlight {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 8px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    margin-right: 4px;
+    margin-bottom: 4px;
+  }
+  .tag-purple { background: rgba(108,92,231,0.15); color: var(--accent); }
+  .tag-teal { background: rgba(0,206,201,0.15); color: var(--accent2); }
+  .tag-pink { background: rgba(253,121,168,0.15); color: var(--accent3); }
+  .tag-gold { background: rgba(253,203,110,0.15); color: var(--gold); }
+
+  /* Mistake Grid */
+  .mistake-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+  .mistake-card {
+    background: rgba(225,112,85,0.06);
+    border: 1px solid rgba(225,112,85,0.15);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .mistake-card .num { font-size: 1.1rem; font-weight: 700; color: var(--red); display: block; }
+  .mistake-card .text { font-size: 0.82rem; color: var(--text); margin-top: 2px; }
+  .mistake-card .text .em { color: var(--accent3); }
+
+  /* Gold Box */
+  .gold-box {
+    background: linear-gradient(135deg, rgba(253,203,110,0.08), rgba(108,92,231,0.08));
+    border: 1px solid rgba(253,203,110,0.2);
+    border-radius: 14px;
+    padding: 24px 28px;
+    text-align: center;
+    margin-top: 24px;
+  }
+  .gold-box .big-text {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .gold-box .sub-text { font-size: 0.88rem; color: var(--text-muted); }
+
+  /* Checklist */
+  .checklist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    color: var(--text);
+  }
+  .check-item .box {
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--text-muted);
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 600px) {
+    .mistake-grid, .checklist-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>十年<span class="highlight">悟道</span>之路</h1>
+    <p class="subtitle">
+      从2012年<span class="red">30万入市</span>到稳定盈利的真实历程<br>
+      每一个阶段，<strong>都可能正在你身上重演</strong>
+    </p>
+    <div class="stats">
+      <span>📅 <strong>2012-2018</strong> 七年磨一剑</span>
+      <span>💰 <strong>30万→腰斩→翻倍</strong></span>
+      <span>🏆 <strong>2018熊市+50%</strong></span>
+      <span>🧊 <strong>冰点反抽+龙头主升浪</strong></span>
+    </div>
+    <a class="nav-link" href="roadmap">📚 延伸阅读：七阶段投资学习路线图 →</a>
+  </div>
+</section>
+
+<!-- ============ CONTENT ============ -->
+<div class="container">
+
+  <!-- -- Introduction -- -->
+  <div style="text-align:center; margin-bottom: 36px; color: var(--text-muted); font-size:0.9rem;">
+    <p>本文深度剖析一位真实股民的交易生涯，完整记录从<strong style="color:var(--red);">亏货</strong>到<strong style="color:var(--green);">稳定盈利</strong>的每一个关键节点。</p>
+    <p style="margin-top:4px;">这位博主网名"<strong style="color: var(--accent2);">宇菠萝</strong>"，在淘股吧记录了自己的十年历程。</p>
+  </div>
+
+  <!-- -- Timeline -- -->
+  <div class="journey-line">
+
+    <!-- Node 1 -->
+    <div class="journey-node">
+      <div class="journey-dot fail">01</div>
+      <div class="journey-card">
+        <span class="phase-badge red">🎭 入市 · 理想与现实的碰撞</span>
+        <h3>"我要40岁赚一个亿"</h3>
+        <div class="time">2012年6月 · 大连 · 二姑投资30万</div>
+        <div class="desc">
+          24岁，不想给人打工，定下"40岁赚一个亿"的目标。二姑给了30万入市。<br>
+          借了市图书馆借书证，花一年多把<strong>所有股票书看了一遍</strong>——<span class="highlight">然并卵，书看完了，钱照样亏。</span><br>
+          后来泡淘股吧，被短线大神的收益"惊呆了"——<span class="highlight">依然不影响亏钱。</span>
+        </div>
+        <div class="lesson">📌 看书有用，但不解决亏钱问题；向大神学有用，但复制不了他的收益。</div>
+      </div>
+    </div>
+
+    <!-- Node 2 -->
+    <div class="journey-node">
+      <div class="journey-dot fail">02</div>
+      <div class="journey-card">
+        <span class="phase-badge red">💸 至暗 · 本金腰斩，酒吧驻唱</span>
+        <h3>"穷得一块钱恨不得掰成八瓣花"</h3>
+        <div class="time">2014年上半年 · 全职亏货</div>
+        <div class="desc">
+          30万本金接近腰斩，无收入，家里也不好意思要钱。<br>
+          <span class="highlight">白天炒股票，晚上去酒吧驻唱赚生活费。</span><br>
+          去图书馆为了省1块钱路费，少倒一趟车，多走几公里路。
+        </div>
+        <div class="lesson">📌 在没钱、没信心、没体系的三重压力下做交易，只会越做越错。</div>
+      </div>
+    </div>
+
+    <!-- Node 3 -->
+    <div class="journey-node">
+      <div class="journey-dot fail">03</div>
+      <div class="journey-card">
+        <span class="phase-badge red">🐂 牛市踏空 · 熊市思维的诅咒</span>
+        <h3>"越涨越害怕，越不敢买，它就越涨"</h3>
+        <div class="time">2014-2015年 · 波澜壮阔的大牛市</div>
+        <div class="desc">
+          熊市进来的，胆子已经被跌小了。面对史上最大牛市之一——<strong>大部分时间在踏空。</strong><br>
+          当时只有一个"跌停潮反抽模式"（冰点反抽原型），只适用于熊市，牛市中很少出现。<br>
+          靠着这个模式，<span class="highlight">勉强回了本</span>，但完美错过了牛市主升浪。
+        </div>
+        <div class="lesson">📌 <strong>用熊市的思维做牛市 = 踏空。</strong> 不同的市场环境需要不同的策略。</div>
+      </div>
+    </div>
+
+    <!-- Node 4 -->
+    <div class="journey-node">
+      <div class="journey-dot fail">04</div>
+      <div class="journey-card">
+        <span class="phase-badge red">💀 股灾被埋 · 流动性危机的代价</span>
+        <h3>"地板下面有地窖，地窖下面有地狱，地狱下面还有十八层"</h3>
+        <div class="time">2015年6月 · 千古跌停</div>
+        <div class="desc">
+          股灾第一次跌停潮时，按老习惯冲进去抄底——<span class="highlight">被深度套牢。</span><br>
+          硬扛到底，庆幸买的票弹性高，反弹涨回来一大半才止损。
+        </div>
+        <div class="lesson">📌 <strong>流动性危机引发的系统性风险，必须及时止损，不能硬扛，不能随便抄底。</strong> 这条至今写在他风控手册的第一页。</div>
+      </div>
+    </div>
+
+    <!-- Node 5 -->
+    <div class="journey-node">
+      <div class="journey-dot fail">05</div>
+      <div class="journey-card">
+        <span class="phase-badge red">🌀 做加法 · 越学越亏的陷阱</span>
+        <h3>"什么都想抓，结果肉抓住了，屎也抓住了"</h3>
+        <div class="time">2015下半年 - 2017年底 · 疯狂试错期</div>
+        <div class="desc">
+          经历牛熊后，发现只有一个模式不够，开始疯狂做加法：<br>
+          首板、二波、三进四、缠论……各种战法全学一遍。<br>
+          <span class="highlight">天天频繁交易，在这个地方赚一点，在那个地方亏出去。</span><br>
+          到2017年底——账户再次腰斩。
+        </div>
+        <div class="lesson">📌 <strong>不是学得越多越赚钱，是越杂越亏。</strong> 做加法容易，做减法才是本事。</div>
+      </div>
+    </div>
+
+    <!-- Node 6 - TURNING -->
+    <div class="journey-node">
+      <div class="journey-dot turning">✦</div>
+      <div class="journey-card" style="border-color: rgba(253,203,110,0.3);">
+        <span class="phase-badge gold">🔥 转折点 · 全面复盘 + 向内求索</span>
+        <h3>"我决定再给自己半年时间"</h3>
+        <div class="time">2017年底 - 2018年初 · 人生最低谷</div>
+        <div class="desc">
+          五年半，接近腰斩，信心全无，准备放弃。<br>
+          在最穷的时候认识了现在的老婆（通过猫友群结缘，帮他照顾猫开始）。<br>
+          他做了最关键的一件事：<strong>复盘了2015下半年到2017年底所有交易。</strong><br>
+          然后发现——<span class="highlight">问题的根源不是战法不够，是太贪。</span>
+        </div>
+        <div class="lesson" style="border-color: var(--gold); color: var(--gold);">
+          🎯 <strong>破局的关键——"一个龙头只吃一口"</strong><br>
+          不去预判哪个能走成龙头，等龙头走出来再去做。主升浪给机会吃主升浪，不给机会等回调吃反抽。<br>
+          只吃一口，不贪。就这么简单。
+        </div>
+      </div>
+    </div>
+
+    <!-- Node 7 -->
+    <div class="journey-node">
+      <div class="journey-dot win">✓</div>
+      <div class="journey-card">
+        <span class="phase-badge green">🏆 稳定盈利 · 从亏货到交易员</span>
+        <h3>"2018年大熊市，我全年还赚了50%"</h3>
+        <div class="time">2018年 - 至今</div>
+        <div class="desc">
+          <strong>2018年全年</strong>：大熊市，别人亏成狗，他赚了将近50%<br>
+          <strong>2018年年中</strong>：老妈给的买房钱，2018年用这笔钱又赚了40%多<br>
+          <strong>2019年前后</strong>：三个月翻了一倍<br>
+          <strong>2019年上半年</strong>：用赚的钱买了两台房车，开始带家人环中国旅行（目前已跑完三分之二）
+        </div>
+        <div class="lesson" style="border-color: var(--green); color: var(--green);">
+          📌 转折前后唯一的区别：<strong>从一个"什么钱都想赚的人"变成了"只吃最有把握的那一口的人"。</strong>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /journey-line -->
+
+  <!-- -- Four Iron Rules -- -->
+  <div class="case-method-box" style="margin-top: 8px;">
+    <h4>📜 完整牛熊经历总结的四条铁律</h4>
+    <ul>
+      <li><strong>牛市比的是谁胆大</strong> — 敢买、拿得住，才能吃到大肉。怂逼没有前途。</li>
+      <li><strong>疯狂是暴跌的前兆</strong> — 当绝大部分人都看好并买进去时，买盘衰竭，暴跌就要来了。</li>
+      <li><strong>涨多疯，跌多惨</strong> — 那轮牛市是杠杆牛（伞形信托+配资），源于杠杆，崩于去杠杆。</li>
+      <li><strong>赚不到认知以外的钱</strong> — 靠运气赚到的，最终也会凭实力亏回去。</li>
+    </ul>
+  </div>
+
+  <!-- -- Three Mistakes -- -->
+  <div class="case-method-box">
+    <h4>❌ 走不出来的三个错误（你很可能也在犯）</h4>
+    <div class="mistake-grid">
+      <div class="mistake-card">
+        <span class="num">错误1</span>
+        <div class="text">总想从龙头启动时就买进去吃一整段，结果买的都是<span class="em">被淘汰的杂毛</span>。龙头是赛马走出来的，买在最低位的概率极低。</div>
+      </div>
+      <div class="mistake-card">
+        <span class="num">错误2</span>
+        <div class="text">看各种超短线比赛，觉得"别人能凭什么我不能"——<span class="em">幸存者偏差</span>。不可复制的阶段性运气，没有参考意义。</div>
+      </div>
+      <div class="mistake-card">
+        <span class="num">错误3</span>
+        <div class="text">觉得每天都有涨停票，每天都有机会——<span class="em">站在概率的对立面</span>。想抓住每一天的机会，结果就是每天都在亏。</div>
+      </div>
+      <div class="mistake-card">
+        <span class="num">根因</span>
+        <div class="text" style="color: var(--accent3); font-weight: 500;">三个错误归根结底就两个字：<strong>太贪</strong>。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- -- Ice Point Rebound -- -->
+  <div class="case-method-box">
+    <h4>❄️ 他的看家本领：冰点反抽模式（跌停潮反抽）</h4>
+    <p>这是他从入市就开始摸索、迭代了十几年的核心模式。最早形成于2012-2014年，当时他发现每次出现几十只跌停潮时买入，能赚约10%。</p>
+    <p style="margin-top:4px;"><strong>核心逻辑</strong>：情绪冰点后必有修复。<strong style="color: var(--accent3);">但操作的关键在于"等确认、做龙头、控仓位"，而非盲目抄底。</strong></p>
+    <div class="tag-row" style="margin: 8px 0;">
+      <span class="tag tag-purple">📉 D0找活口</span>
+      <span class="tag tag-teal">📈 D1等确认</span>
+      <span class="tag tag-gold">🎯 只做核心龙头</span>
+      <span class="tag tag-pink">⚠️ 仓位≤20%</span>
+      <span class="tag tag-purple">✂️ 目标10%止盈</span>
+    </div>
+    <p style="margin-top: 6px;"><strong>操作框架</strong>：<br>
+    <strong>D0（冰点当天）</strong>：出现批量跌停（20只+），找逆势抗跌的活口股1-2只，制定预案，<span class="case-highlight">但不买入。</span><br>
+    <strong>D1（冰点次日）</strong>：观察竞价，若活口股高开有溢价、跌停大幅减少、赚钱效应回升 → 确认情绪修复 → 果断买入核心龙头。<br>
+    <strong>止损</strong>：跌破入场低点无条件走人，单笔亏损控制在总资金1.5%以内。<br>
+    <strong>止盈</strong>：目标10%左右，分批兑现。</p>
+  </div>
+
+  <!-- -- Dragon Stock Strategy -- -->
+  <div class="case-method-box">
+    <h4>🐉 抓龙头主升浪：只做龙头、只做主升、只做惯性</h4>
+    <p><strong>识别"真龙"五维标准</strong>：</p>
+    <div class="tag-row" style="margin: 6px 0;">
+      <span class="tag tag-gold">🗣️ 辨识度</span>
+      <span class="tag tag-teal">🔗 带动性</span>
+      <span class="tag tag-pink">💰 成交量>10亿</span>
+      <span class="tag tag-purple">📰 新题材</span>
+      <span class="tag tag-gold">🔄 换手率>8%</span>
+    </div>
+    <p style="margin-top: 6px;"><strong>三大买点</strong>：<br>
+    ① 缩量回踩10/20日线低吸（最优）<br>
+    ② 箱体突破确认（稳健型）<br>
+    ③ 加速途中分歧加仓（激进型）<br><br>
+    <strong>核心纪律</strong>：总仓位≤50%，单一个股≤20%，单笔亏损≤总资金1.5%。</p>
+  </div>
+
+  <!-- -- Self-Check -- -->
+  <div class="case-method-box" style="border-color: rgba(253,203,110,0.3);">
+    <h4 style="color: var(--gold);">⚠️ 你也在"随波逐流"吗？</h4>
+    <div class="checklist-grid">
+      <div class="check-item"><span class="box"></span>学了多种战法但都无法持续盈利</div>
+      <div class="check-item"><span class="box"></span>有过"抄底被埋"的经历</div>
+      <div class="check-item"><span class="box"></span>牛市踏空、熊市被套两头挨打</div>
+      <div class="check-item"><span class="box"></span>没有硬性的止损规则</div>
+      <div class="check-item"><span class="box"></span>从不复盘自己的交易记录</div>
+      <div class="check-item"><span class="box"></span>总在找下一个"大神"或"秘籍"</div>
+      <div class="check-item"><span class="box"></span>亏损时说服自己"长期持有"</div>
+      <div class="check-item"><span class="box"></span>盈利不知为何赚，亏损不知为何亏</div>
+      <div class="check-item"><span class="box"></span>想抓住每一个机会，什么钱都想赚</div>
+    </div>
+    <p style="margin-top: 12px; text-align: center; color: var(--accent3); font-weight: 500;">勾选超过3项 → 你需要的不是新战法，是一次彻底的向内求索。</p>
+  </div>
+
+  <!-- -- Golden Quote -- -->
+  <div class="gold-box">
+    <div class="big-text">"一个龙头只吃一口"</div>
+    <div class="sub-text">
+      从亏货到稳定盈利的转折点，不是找到了什么神奇战法，而是<span style="color: var(--gold);">向内求索</span>。<br>
+      能让你赚钱的从来不是某个战法，而是你对自己的了解有多深，<br>
+      对纪律的执行有多彻底。
+    </div>
+  </div>
+
+  <!-- -- Cross-link -- -->
+  <div style="margin-top: 40px; padding: 24px; border-radius: 14px; border: 1px solid var(--border); background: var(--card); text-align: center;">
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px;">📚 推荐结合学习</p>
+    <a href="roadmap" style="color: var(--accent2); font-size: 1rem; font-weight: 600; text-decoration: none;">从小白到交易员 — 七阶段投资学习路线图 →</a>
+    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">系统化的知识体系构建，从思维重塑到实战训练的完整路径</p>
+  </div>
+
+  <!-- -- Footer -- -->
+  <div style="text-align:center; padding:40px 0 20px; color:var(--text-muted); font-size:0.78rem; border-top:1px solid var(--border); margin-top:40px;">
+    <p>投资有风险，学习是长期过程。每一条曲线都是学习曲线。</p>
+    <p style="margin-top:4px;">🚀 从今天开始，从第一本书开始。</p>
+    <p style="margin-top:10px;"><a href="../" style="color:var(--accent2); text-decoration:none;">↩ 返回首页</a></p>
+  </div>
+
+</div>
+
+</body>
+</html>
