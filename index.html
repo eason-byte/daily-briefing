@@ -7,23 +7,36 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  :root{--bg:#f8f9fa;--surface:#fff;--surface-alt:#f2f3f5;--border:#e8eaed;--border-light:#f0f1f3;--text:#1a1d23;--text-secondary:#5a5f6b;--text-tertiary:#8a8f98;--blue:#0066cc;--blue-light:#e8f0fe;--blue-bg:#f0f5ff;--green:#059669;--green-bg:#ecfdf5;--radius:10px;--shadow:0 1px 4px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.03);--font-sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  :root{--bg:#f8f9fa;--surface:#fff;--surface-alt:#f2f3f5;--border:#e8eaed;--border-light:#f0f1f3;--text:#1a1d23;--text-secondary:#5a5f6b;--text-tertiary:#8a8f98;--blue:#0066cc;--blue-light:#e8f0fe;--blue-bg:#f0f5ff;--purple:#7c3aed;--purple-light:#f5f3ff;--radius:10px;--shadow:0 1px 4px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.03);--font-sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
   body{font-family:var(--font-sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6}
   .container{max-width:640px;margin:0 auto;padding:0}
 
-  .hero{background:linear-gradient(135deg,#fff,#f4f6fb);border-bottom:1px solid var(--border);padding:44px 20px 36px;text-align:center}
-  .hero-icon{font-size:36px;margin-bottom:6px}
-  .hero-title{font-size:26px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px}
-  .hero-sub{font-size:13px;color:var(--text-secondary)}
-  .hero-info{margin-top:14px;display:flex;justify-content:center;gap:18px;font-size:11px;color:var(--text-tertiary);flex-wrap:wrap}
-  .hero-info span{display:flex;align-items:center;gap:4px}
+  .hero{background:linear-gradient(135deg,#fff,#f4f6fb);border-bottom:1px solid var(--border);padding:40px 20px 32px;text-align:center}
+  .hero-icon{font-size:34px;margin-bottom:4px}
+  .hero-title{font-size:24px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px}
+  .hero-sub{font-size:12px;color:var(--text-secondary)}
+  .hero-info{margin-top:12px;display:flex;justify-content:center;gap:16px;font-size:11px;color:var(--text-tertiary);flex-wrap:wrap}
+  .hero-info a{color:var(--text-tertiary);text-decoration:none}
 
-  .section{padding:22px 20px}
-  .section+.section{border-top:1px solid var(--border-light)}
-  .sec-label{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:14px;display:flex;align-items:center;gap:6px}
-  .sec-label::after{content:'';flex:1;height:1px;background:var(--border);margin-left:8px}
-  .section-alt{background:var(--surface-alt)}
+  /* ===== Tab Bar ===== */
+  .tab-bar{display:flex;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:100}
+  .tab{flex:1;padding:14px 10px;text-align:center;font-size:13px;font-weight:500;color:var(--text-tertiary);cursor:pointer;border:none;background:none;position:relative;transition:color .15s;font-family:var(--font-sans)}
+  .tab:hover{color:var(--text)}
+  .tab.active{color:var(--text);font-weight:600}
+  .tab.active::after{content:'';position:absolute;bottom:0;left:10%;width:80%;height:2.5px;border-radius:2px 2px 0 0}
+  .tab.tab-news.active::after{background:var(--blue)}
+  .tab.tab-picks.active::after{background:var(--purple)}
+  .tab .tab-icon{font-size:15px;margin-right:5px}
+  .tab .tab-badge{font-size:10px;font-weight:500;padding:1px 7px;border-radius:10px;margin-left:4px}
+  .tab.tab-news .tab-badge{background:var(--blue-light);color:var(--blue)}
+  .tab.tab-picks .tab-badge{background:var(--purple-light);color:var(--purple)}
 
+  /* ===== Tab Content ===== */
+  .tab-content{display:none}
+  .tab-content.active{display:block}
+  .section{padding:20px 20px}
+
+  /* ===== Archive List ===== */
   .archive{display:flex;flex-direction:column;gap:8px}
   .a-item{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 16px;box-shadow:var(--shadow);text-decoration:none;color:inherit;transition:all .15s}
   .a-item:hover{border-color:var(--blue);box-shadow:0 2px 12px rgba(0,102,204,.1)}
@@ -33,35 +46,21 @@
   .a-desc{flex:1;margin:0 10px;font-size:11px;color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
   .a-tag{font-size:9px;font-weight:500;padding:2px 10px;border-radius:20px;flex-shrink:0}
   .a-tag.blue{color:var(--blue);background:var(--blue-light)}
-  .a-tag.purple{color:#7c3aed;background:#f5f3ff}
+  .a-tag.purple{color:var(--purple);background:var(--purple-light)}
   .a-arrow{color:var(--text-tertiary);font-size:14px;flex-shrink:0}
   .a-item:hover .a-arrow{color:var(--blue)}
 
-  .empty{padding:24px 20px;text-align:center;color:var(--text-tertiary);font-size:12px}
-  .empty .empty-icon{font-size:28px;margin-bottom:6px}
-
-  .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-  .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;box-shadow:var(--shadow)}
-  .stat-num{font-size:20px;font-weight:700;font-family:var(--font-mono)}
-  .stat-num.blue{color:var(--blue)}
-  .stat-num.purple{color:#7c3aed}
-  .stat-label{font-size:10px;color:var(--text-tertiary);margin-top:2px}
+  .empty{padding:60px 20px;text-align:center;color:var(--text-tertiary);font-size:13px}
+  .empty .empty-icon{font-size:36px;margin-bottom:8px;opacity:.6}
 
   .footer{text-align:center;padding:18px 20px 28px;font-size:10px;color:var(--text-tertiary);line-height:1.7;border-top:1px solid var(--border-light)}
   .footer a{color:var(--blue);text-decoration:none}
 
-  .section-header{display:flex;align-items:center;gap:8px;margin-bottom:16px}
-  .section-header .sh-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
-  .section-header .sh-icon.news{background:var(--blue-light);color:var(--blue)}
-  .section-header .sh-icon.picks{background:#f5f3ff;color:#7c3aed}
-  .section-header .sh-title{font-size:15px;font-weight:600}
-  .section-header .sh-meta{font-size:10px;color:var(--text-tertiary);margin-top:1px}
-
   @media(max-width:480px){
-    .hero{padding:32px 14px 24px}.hero-title{font-size:20px}
-    .section{padding:16px 14px}
-    .a-item{padding:11px 12px}.a-date{font-size:14px}
-    .stats{gap:6px}.stat{padding:10px}.stat-num{font-size:17px}
+    .hero{padding:28px 14px 22px}.hero-title{font-size:20px}
+    .tab{font-size:12px;padding:12px 6px}.tab .tab-icon{margin-right:3px}
+    .section{padding:14px 14px}
+    .a-item{padding:11px 12px}.a-date{font-size:14px}.a-desc{display:none}
   }
 </style>
 </head>
@@ -71,43 +70,42 @@
 <div class="hero">
   <div class="hero-icon">📈</div>
   <div class="hero-title">晨间速览 &amp; 双战法选股</div>
-  <div class="hero-sub">每日早8:00 · 隔夜美股 · 宏观政策 · 加密货币 &nbsp;·&nbsp; 每日18:05 · 冰点反抽 · 龙头主升浪</div>
+  <div class="hero-sub">每日早8:00 · 隔夜美股 · 宏观 · 加密货币 &nbsp;·&nbsp; 每日18:05 · 冰点反抽 · 龙头主升浪</div>
   <div class="hero-info">
-    <span>📰 新闻速览</span>
+    <span>📰 晨间速览</span>
     <span>📊 双战法选股</span>
     <span>🌙 非高峰运行</span>
-    <span><a href="https://github.com/eason-byte/daily-briefing" style="color:var(--text-tertiary);text-decoration:none">GitHub</a></span>
-    <span><a href="https://19930808.xyz" style="color:var(--text-tertiary);text-decoration:none">19930808.xyz</a></span>
+    <span><a href="https://github.com/eason-byte/daily-briefing">GitHub</a></span>
+    <span><a href="https://19930808.xyz">19930808.xyz</a></span>
   </div>
 </div>
 
-<!-- Morning Briefings -->
-<div class="section">
-  <div class="section-header">
-    <div class="sh-icon news">📰</div>
-    <div>
-      <div class="sh-title">晨间新闻速览</div>
-      <div class="sh-meta">工作日早8:00 · RSS 19源 · 持仓影响 · 宏观政策</div>
-    </div>
-  </div>
-  <div id="briefingList"></div>
+<div class="tab-bar">
+  <button class="tab tab-news active" onclick="switchTab('news')">
+    <span class="tab-icon">📰</span>晨间速览
+    <span class="tab-badge" id="newsCount">0</span>
+  </button>
+  <button class="tab tab-picks" onclick="switchTab('picks')">
+    <span class="tab-icon">📊</span>双战法选股
+    <span class="tab-badge" id="picksCount">0</span>
+  </button>
 </div>
 
-<!-- Stock Picks -->
-<div class="section section-alt">
-  <div class="section-header">
-    <div class="sh-icon picks">📊</div>
-    <div>
-      <div class="sh-title">双战法选股分析</div>
-      <div class="sh-meta">每日18:05 · 冰点反抽 + 龙头主升浪 · Tushare+AKShare</div>
-    </div>
+<div id="tabNews" class="tab-content active">
+  <div class="section">
+    <div id="briefingList"></div>
   </div>
-  <div id="stockpickList"></div>
+</div>
+
+<div id="tabPicks" class="tab-content">
+  <div class="section">
+    <div id="stockpickList"></div>
+  </div>
 </div>
 
 <div class="footer">
   数据源：RSS 19源 · CoinGecko · Yahoo Finance · Tushare Pro · AKShare · 东方财富<br>
-  晨间速览早8:00 CST · 双战法选股18:05 CST · 非高峰时段运行 · deepseek-v4-pro<br>
+  晨间速览早8:00 CST · 双战法选股18:05 CST · deepseek-v4-pro · 非高峰时段<br>
   ⚠️ 仅供参考，不构成投资建议
 </div>
 
@@ -148,8 +146,25 @@ function renderList(containerId, data, prefix, tagClass, tagText) {
   ).join('') + '</div>';
 }
 
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelector('.tab-' + name).classList.add('active');
+  document.getElementById('tab' + name.charAt(0).toUpperCase() + name.slice(1)).classList.add('active');
+  // Store preference
+  try { localStorage.setItem('briefingTab', name); } catch(e) {}
+}
+
 renderList('briefingList', BRIEFINGS, '', 'blue', '最新');
 renderList('stockpickList', STOCKPICKS, 'stock-picks/', 'purple', '分析');
+document.getElementById('newsCount').textContent = BRIEFINGS.length;
+document.getElementById('picksCount').textContent = STOCKPICKS.length;
+
+// Restore last active tab
+try {
+  const saved = localStorage.getItem('briefingTab');
+  if (saved && saved !== 'news') switchTab(saved);
+} catch(e) {}
 </script>
 </body>
 </html>
