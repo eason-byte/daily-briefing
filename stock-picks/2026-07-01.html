@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📊 双战法选股 · 2026-07-01</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#0d1117;--surface:#161b22;--surface-alt:#1c2333;--border:#30363d;--border-light:#21262d;--text:#e6edf3;--text-secondary:#8b949e;--text-tertiary:#6e7681;--accent:#58a6ff;--accent-bg:#0d419d33;--green:#3fb950;--green-bg:#1b3a1f;--red:#f85149;--red-bg:#3d1416;--amber:#d29922;--amber-bg:#2d1f00;--purple:#a371f7;--purple-bg:#2a1a4a;--teal:#56d4dd;--teal-bg:#1d3b3d;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,.3),0 4px 12px rgba(0,0,0,.15);--font-sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  body{font-family:var(--font-sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.7;min-height:100vh}
+  .container{max-width:800px;margin:0 auto;padding:0}
+  .header{background:linear-gradient(135deg,#161b22 0%,#1c2333 50%,#111 100%);border-bottom:1px solid var(--border);padding:22px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;position:relative;overflow:hidden}
+  .header::before{content:'';position:absolute;top:-50%;left:-30%;width:160%;height:200%;background:radial-gradient(ellipse at 30% 50%,var(--accent-bg) 0%,transparent 50%),radial-gradient(ellipse at 70% 50%,var(--purple-bg) 0%,transparent 50%);opacity:.2;pointer-events:none}
+  .h-left{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+  .h-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--accent),var(--purple));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff}
+  .h-title{font-size:18px;font-weight:700;letter-spacing:-.3px}
+  .h-meta{font-size:12px;color:var(--text-tertiary);margin-top:2px}
+  .h-badge{font-size:11px;font-weight:500;color:var(--accent);background:var(--accent-bg);padding:4px 16px;border-radius:20px;letter-spacing:.3px;position:relative;z-index:1}
+  .h-home{font-size:20px;text-decoration:none;margin-left:8px;position:relative;z-index:1;transition:opacity .15s}
+  .h-home:hover{opacity:.7}
+
+  .section{padding:24px 22px}
+  .section+.section{border-top:1px solid var(--border-light)}
+  .sec-label{font-size:12px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+  .sec-label::after{content:'';flex:1;height:1px;background:var(--border);margin-left:8px}
+  .section-alt{background:var(--surface-alt)}
+
+  .at{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin-bottom:14px}
+  .at th{text-align:left;padding:10px 14px;font-weight:600;color:var(--text-secondary);background:var(--surface-alt);border-bottom:1px solid var(--border);font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+  .at th:first-child{border-radius:8px 0 0 0}
+  .at th:last-child{border-radius:0 8px 0 0}
+  .at td{padding:10px 14px;border-bottom:1px solid var(--border-light);color:var(--text)}
+  .at tr:last-child td:first-child{border-radius:0 0 0 8px}
+  .at tr:last-child td:last-child{border-radius:0 0 8px 0}
+  .at tr:last-child td{border-bottom:none}
+
+  .up{color:var(--red)}
+  .down{color:var(--green)}
+  .dragon-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin-bottom:14px;box-shadow:var(--shadow);border-left:3px solid var(--purple)}
+  .dragon-card.dc-hot{border-left-color:var(--red)}
+  .dc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px}
+  .dc-name{font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .dc-name .dc-tag{font-size:10px;font-weight:600;padding:2px 10px;border-radius:20px;background:var(--accent-bg);color:var(--accent)}
+  .dc-name .dc-tag.dc-hot-tag{background:var(--red-bg);color:var(--red)}
+  .dc-score{font-size:12px;color:var(--text-tertiary)}
+  .dc-body{margin-top:6px}
+  .dc-detail{font-size:13px;color:var(--text-secondary);line-height:1.7;padding:8px 12px;background:var(--surface-alt);border-radius:6px;margin-top:8px;border-left:2px solid var(--border)}
+  .dc-buy{font-size:13px;padding:10px 14px;border-radius:6px;margin-top:10px;background:var(--green-bg);border-left:3px solid var(--green);color:var(--green)}
+
+  .callout{padding:14px 18px;border-radius:var(--radius);margin:10px 0;font-size:13px;line-height:1.6}
+  .callout.info{background:var(--accent-bg);border-left:3px solid var(--accent);color:var(--accent)}
+  .callout.success{background:var(--green-bg);border-left:3px solid var(--green);color:var(--green)}
+  .callout.warn{background:var(--amber-bg);border-left:3px solid var(--amber);color:var(--amber)}
+  .callout.danger{background:var(--red-bg);border-left:3px solid var(--red);color:var(--red)}
+  .callout.neutral{background:var(--surface-alt);border-left:3px solid var(--text-tertiary);color:var(--text-secondary)}
+
+  .sig{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
+  .sig.g{background:var(--green)}
+  .sig.r{background:var(--red)}
+  .sig.y{background:var(--amber)}
+  .sig.b{background:var(--accent)}
+
+  .stars{font-size:14px;letter-spacing:1px;color:var(--amber)}
+  .risk-list{list-style:none;padding:0}
+  .risk-list li{padding:8px 0 8px 24px;position:relative;font-size:13px;color:var(--text-secondary);border-bottom:1px solid var(--border-light)}
+  .risk-list li:last-child{border-bottom:none}
+  .risk-list li::before{content:'⚠️';position:absolute;left:0;top:8px;font-size:12px}
+
+  .st{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin:10px 0 14px}
+  .st td{padding:10px 14px;border-bottom:1px solid var(--border-light);color:var(--text-secondary)}
+  .st td:first-child{font-weight:600;color:var(--text);white-space:nowrap;width:110px}
+  .st tr:last-child td{border-bottom:none}
+
+  .conclusion-box{text-align:center;padding:28px 22px;background:linear-gradient(135deg,var(--surface-alt),var(--surface));border:1px solid var(--border);border-radius:var(--radius);margin:16px 0;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .conclusion-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--purple),var(--teal))}
+  .conclusion-text{font-size:18px;font-weight:700;color:var(--text);line-height:1.6;margin-bottom:6px}
+  .conclusion-sub{font-size:13px;color:var(--text-secondary);line-height:1.7}
+
+  .pos-table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin:10px 0}
+  .pos-table td{padding:10px 14px;border-bottom:1px solid var(--border-light);color:var(--text)}
+  .pos-table td:first-child{font-weight:600;white-space:nowrap;width:120px}
+  .pos-table tr:last-child td{border-bottom:none}
+  .pos-table .amt{font-family:var(--font-mono);color:var(--accent);font-weight:600}
+
+  .footer{text-align:center;padding:24px 22px 36px;font-size:11px;color:var(--text-tertiary);line-height:1.8;border-top:1px solid var(--border-light)}
+  .footer a{color:var(--accent);text-decoration:none}.footer a:hover{text-decoration:underline}
+
+  .idx-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px}
+  .idx-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;text-align:center}
+  .idx-card .idx-name{font-size:11px;color:var(--text-tertiary);margin-bottom:4px}
+  .idx-card .idx-val{font-size:22px;font-weight:700;font-family:var(--font-mono)}
+  .idx-card .idx-chg{font-size:13px;font-weight:600;margin-top:2px}
+
+  @media(max-width:480px){
+    .section{padding:18px 14px}.header{padding:14px 14px}.h-title{font-size:16px}
+    .at{font-size:12px}.at td,.at th{padding:8px 10px}
+    .dragon-card{padding:14px 14px}.dc-name{font-size:15px}
+    .conclusion-text{font-size:16px}.idx-card .idx-val{font-size:18px}
+  }
+  @media(min-width:1024px){
+    .container{max-width:960px}.header{padding:26px 28px}.h-title{font-size:20px}
+    .section{padding:28px 28px}.at{font-size:14px}.at td,.at th{padding:12px 16px}
+    .dragon-card{padding:24px 28px;margin-bottom:18px}.dc-name{font-size:19px}
+    .conclusion-box{padding:34px 28px}.conclusion-text{font-size:20px}
+    .footer{padding:28px 28px 40px;font-size:12px}
+  }
+  @media(min-width:1400px){.container{max-width:1080px}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="h-left">
+    <div class="h-icon">📊</div>
+    <div>
+      <div class="h-title">双战法选股分析</div>
+      <div class="h-meta">2026-07-01 · 周三 · 收盘后</div>
+    </div>
+  </div>
+  <span class="h-badge">冰点反抽 + 龙头主升浪</span>
+  <a href="https://eason-byte.github.io/daily-briefing/stock-picks/" class="h-home" title="返回首页">📋</a>
+</div>
+
+<!-- 指数概览 -->
+<div class="section">
+  <div class="sec-label">📈 今日指数</div>
+  <div class="idx-grid">
+    <div class="idx-card">
+      <div class="idx-name">上证指数</div>
+      <div class="idx-val up">4112.45</div>
+      <div class="idx-chg up">+0.44%</div>
+    </div>
+    <div class="idx-card">
+      <div class="idx-name">深证成指</div>
+      <div class="idx-val down">16119.17</div>
+      <div class="idx-chg down">-0.53%</div>
+    </div>
+    <div class="idx-card">
+      <div class="idx-name">创业板指</div>
+      <div class="idx-val down">4260.72</div>
+      <div class="idx-chg down">-1.89%</div>
+    </div>
+    <div class="idx-card">
+      <div class="idx-name">科创50</div>
+      <div class="idx-val down">2153.04</div>
+      <div class="idx-chg down">-2.48%</div>
+    </div>
+  </div>
+  <div class="callout neutral">
+    全市场 5511 只 · <span class="up">涨停 166</span> · <span class="down">跌停 11</span> · 沪强深弱分化明显，上证微红而科创和创业板调整，<strong>氟化工+新材料</strong>成为今日最强主线。
+  </div>
+</div>
+
+<!-- ========== 冰点反抽 ========== -->
+<div class="section section-alt">
+  <div class="sec-label">🧊 冰点反抽模式分析</div>
+
+  <table class="at">
+    <tr><th>指标</th><th>今日数据</th><th>冰点阈值</th><th>判断</th></tr>
+    <tr><td>跌停家数</td><td>11 家</td><td>≥ 20 家</td><td><span class="down">❌ 未触发</span></td></tr>
+    <tr><td>涨停家数</td><td>166 家</td><td>—</td><td><span class="up">情绪活跃</span></td></tr>
+    <tr><td>连板高度</td><td>多氟多 3 连板</td><td>≤ 3 板触发</td><td><span class="up">✅ 高度正常</span></td></tr>
+    <tr><td>亏钱效应</td><td>科创 -2.48% / 创业 -1.89%</td><td>大面积低开低走</td><td><span class="up">❌ 未触发</span></td></tr>
+    <tr><td>成交量萎缩</td><td>涨停股成交活跃</td><td>交投清淡</td><td><span class="up">❌ 未触发</span></td></tr>
+  </table>
+
+  <div class="callout info">
+    <strong>冰点判断：不适用。</strong>跌停仅 11 家（远低于 20 家阈值），且 166 家涨停说明市场做多情绪充沛。今日属于结构性分化行情（沪强深弱），而非情绪恐慌。
+  </div>
+
+  <table class="at">
+    <tr><th colspan="4">⚠️ 今日跌停股（非ST，共10只）</th></tr>
+    <tr><th>代码</th><th>名称</th><th>跌幅</th><th>板块</th></tr>
+    <tr><td>301626.SZ</td><td>苏州天脉</td><td class="down">-10.54%</td><td>创业板</td></tr>
+    <tr><td>002522.SZ</td><td>浙江众成</td><td class="down">-10.04%</td><td>主板</td></tr>
+    <tr><td>603203.SH</td><td>快克智能</td><td class="down">-10.00%</td><td>主板</td></tr>
+    <tr><td>600206.SH</td><td>有研新材</td><td class="down">-10.00%</td><td>主板</td></tr>
+    <tr><td>600228.SH</td><td>返利科技</td><td class="down">-10.00%</td><td>主板</td></tr>
+    <tr><td>002674.SZ</td><td>兴业科技</td><td class="down">-9.99%</td><td>主板</td></tr>
+    <tr><td>603303.SH</td><td>得邦照明</td><td class="down">-9.98%</td><td>主板</td></tr>
+    <tr><td>603458.SH</td><td>勘设股份</td><td class="down">-9.97%</td><td>主板</td></tr>
+    <tr><td>001223.SZ</td><td>欧克科技</td><td class="down">-9.96%</td><td>主板</td></tr>
+    <tr><td>600545.SH</td><td>卓郎智能</td><td class="down">-9.94%</td><td>主板</td></tr>
+  </table>
+
+  <div class="callout warn">
+    <strong>🧊 冰点反抽结论：不适用，无需操作。</strong>跌停家数远未触发阈值，不存在恐慌性修复机会。跌停股分散在多个板块（光伏设备、消费、纺织），无系统性风险信号。冰点反抽战法的 D0/D1 流程今日不启动。
+  </div>
+</div>
+
+<!-- ========== 龙头主升浪 ========== -->
+<div class="section">
+  <div class="sec-label">🐉 龙头主升浪战法分析</div>
+
+  <table class="at">
+    <tr><th>最强板块</th><th>涨停数(估)</th><th>代表股</th><th>持续性判断</th></tr>
+    <tr>
+      <td>氟化工 / 新材料</td>
+      <td><span class="up">~15+</span></td>
+      <td>多氟多 · 三美股份 · 东阳光 · 东方锆业</td>
+      <td><span class="up">★★★★★ 主线确认</span></td>
+    </tr>
+    <tr>
+      <td>半导体</td>
+      <td><span class="up">~10+</span></td>
+      <td>太极实业 · 格科微 · 金宏气体</td>
+      <td><span class="up">★★★★ 趋势延续</span></td>
+    </tr>
+    <tr>
+      <td>电力能源</td>
+      <td><span class="up">~8+</span></td>
+      <td>先导基电 · 大唐发电</td>
+      <td><span class="up">★★★ 轮动补涨</span></td>
+    </tr>
+    <tr>
+      <td>券商</td>
+      <td><span class="up">~5+</span></td>
+      <td>华安证券 · 天风证券</td>
+      <td><span class="up">★★ 脉冲行情</span></td>
+    </tr>
+  </table>
+
+  <div class="callout success">
+    <strong>主线确认：氟化工/新材料是今日最强主线。</strong>多氟多 3 连板带动整个氟化工板块集体走强（三美股份、东阳光、东方锆业同步涨停），且具备半导体材料+锂电多概念叠加，题材新颖有预期差。证券时报确认氟化工为今日领涨板块。
+  </div>
+
+  <!-- Dragon Candidate 1: 多氟多 -->
+  <div class="dragon-card dc-hot">
+    <div class="dc-header">
+      <div class="dc-name">
+        🥇 多氟多 <span style="font-weight:400;font-size:14px;color:var(--text-secondary)">002407.SZ</span>
+        <span class="dc-tag dc-hot-tag">3连板</span>
+        <span class="dc-tag">氟化工龙头</span>
+      </div>
+      <div class="dc-score">总分 <span class="stars">★★★★★</span> 24/25</div>
+    </div>
+    <div class="dc-body">
+      <table class="at" style="margin-bottom:0">
+        <tr><th>五维</th><th>评分</th><th>依据</th></tr>
+        <tr><td>🗣️ 辨识度</td><td class="stars">★★★★★</td><td>全市场焦点，3连板，证券时报专题报道，各大财经媒体头条</td></tr>
+        <tr><td>🔗 带动性</td><td class="stars">★★★★★</td><td>三美股份、东阳光、东方锆业同日涨停，氟化工板块全面爆发</td></tr>
+        <tr><td>💰 成交量</td><td class="stars">★★★★</td><td>38.9亿，远超10亿门槛，大资金深度参与</td></tr>
+        <tr><td>📰 题材</td><td class="stars">★★★★★</td><td>氟化工 + 半导体材料 + 锂电，三重概念叠加，预期差大</td></tr>
+        <tr><td>🔄 换手率</td><td class="stars">★★★★★</td><td>3连板高换手充分换筹，上方抛压消化良好</td></tr>
+      </table>
+      <div class="dc-detail">
+        💰 收盘 <span class="up">55.25</span> · 涨幅 <span class="up">+9.99%</span> · 成交额 38.9亿<br>
+        📍 位置判断：主升浪中期加速阶段，沿5日线持续拉升，3连板后存在分歧加仓机会
+      </div>
+      <div class="dc-buy">
+        <strong>🐉 买点参考：</strong> 加速途中分歧加仓（买点③）。若明后日缩量回踩不破5日线，次日放量反包可加仓。不宜追高追板，等分歧给机会。
+      </div>
+    </div>
+  </div>
+
+  <!-- Dragon Candidate 2: 太极实业 -->
+  <div class="dragon-card">
+    <div class="dc-header">
+      <div class="dc-name">
+        🥈 太极实业 <span style="font-weight:400;font-size:14px;color:var(--text-secondary)">600667.SH</span>
+        <span class="dc-tag dc-hot-tag">全市场成交王</span>
+        <span class="dc-tag">半导体</span>
+      </div>
+      <div class="dc-score">总分 <span class="stars">★★★★</span> 22/25</div>
+    </div>
+    <div class="dc-body">
+      <table class="at" style="margin-bottom:0">
+        <tr><th>五维</th><th>评分</th><th>依据</th></tr>
+        <tr><td>🗣️ 辨识度</td><td class="stars">★★★★★</td><td>成交额全市场第一 129.9亿，绝对焦点</td></tr>
+        <tr><td>🔗 带动性</td><td class="stars">★★★★</td><td>半导体后工序服务，与格科微等形成板块联动</td></tr>
+        <tr><td>💰 成交量</td><td class="stars">★★★★★</td><td>129.9亿，全市场成交额冠军</td></tr>
+        <tr><td>📰 题材</td><td class="stars">★★★★</td><td>半导体后工序+光伏电站，国产替代逻辑</td></tr>
+        <tr><td>🔄 换手率</td><td class="stars">★★★★</td><td>天量换手但封板稳定，多方占优</td></tr>
+      </table>
+      <div class="dc-detail">
+        💰 收盘 <span class="up">29.70</span> · 涨幅 <span class="up">+10.01%</span> · 成交额 129.9亿<br>
+        📍 位置判断：近期异常波动，已在上涨趋势中，今日虽涨停但前期已有较大涨幅
+      </div>
+      <div class="dc-buy">
+        <strong>🐉 买点参考：</strong> 箱体突破确认（买点②）。等待突破后回踩确认再考虑建仓，当前高位追涨风险较大。关注是否能缩量回踩前期平台支撑。
+      </div>
+    </div>
+  </div>
+
+  <!-- Dragon Candidate 3: 格科微 -->
+  <div class="dragon-card">
+    <div class="dc-header">
+      <div class="dc-name">
+        🥉 格科微 <span style="font-weight:400;font-size:14px;color:var(--text-secondary)">688728.SH</span>
+        <span class="dc-tag dc-hot-tag">科创20cm</span>
+        <span class="dc-tag">CIS芯片</span>
+      </div>
+      <div class="dc-score">总分 <span class="stars">★★★★</span> 21/25</div>
+    </div>
+    <div class="dc-body">
+      <table class="at" style="margin-bottom:0">
+        <tr><th>五维</th><th>评分</th><th>依据</th></tr>
+        <tr><td>🗣️ 辨识度</td><td class="stars">★★★★</td><td>科创板20%涨停，43亿成交吸引眼球</td></tr>
+        <tr><td>🔗 带动性</td><td class="stars">★★★</td><td>个股行情为主，带动效应弱于多氟多</td></tr>
+        <tr><td>💰 成交量</td><td class="stars">★★★★</td><td>43亿，满足10亿门槛</td></tr>
+        <tr><td>📰 题材</td><td class="stars">★★★★★</td><td>CIS图像传感器国产替代，有强预期差</td></tr>
+        <tr><td>🔄 换手率</td><td class="stars">★★★★</td><td>科创板高换手特征，需警惕短期过热</td></tr>
+      </table>
+      <div class="dc-detail">
+        💰 涨幅 <span class="up">+20.01%</span> · 成交额 43.0亿<br>
+        📍 位置判断：科创板20cm首板，放量突破形态，属于启动初期
+      </div>
+      <div class="dc-buy">
+        <strong>🐉 买点参考：</strong> 箱体突破确认（买点②）。需等待次日确认是否站稳突破位，避免一日游行情。优先等待缩量回踩再考虑进场。
+      </div>
+    </div>
+  </div>
+
+  <!-- Other watchlist -->
+  <table class="at">
+    <tr><th colspan="4">👀 其他值得关注的强势股</th></tr>
+    <tr><th>代码</th><th>名称</th><th>表现</th><th>关注理由</th></tr>
+    <tr>
+      <td>603379.SH</td><td>三美股份</td>
+      <td><span class="up">+10.00%</span> · 35.9亿</td>
+      <td>氟化工二当家，跟多氟多联动性强，有板块补涨潜力</td>
+    </tr>
+    <tr>
+      <td>002167.SZ</td><td>东方锆业</td>
+      <td><span class="up">+10.01%</span> · 39.7亿</td>
+      <td>新材料+核电概念，涨停放量突破</td>
+    </tr>
+    <tr>
+      <td>601991.SH</td><td>大唐发电</td>
+      <td><span class="up">+10.03%</span> · 52.1亿</td>
+      <td>电力改革预期，低位放量首板，但持续性待验证</td>
+    </tr>
+    <tr>
+      <td>688106.SH</td><td>金宏气体</td>
+      <td><span class="up">+20.01%</span> · 26.6亿</td>
+      <td>电子特气+半导体材料，科创新高</td>
+    </tr>
+  </table>
+
+  <div class="callout success">
+    <strong>🐉 龙头主升浪结论：确认。</strong>氟化工/新材料为当前最强主线，多氟多（002407）是最符合真龙五维标准的候选股。3连板+板块全面跟涨+多概念叠加，具备主升浪延续条件。太极实业（600667）和格科微（688728）为半导体方向的次选。操作上<strong>不追高</strong>，等缩量回踩5/10日线的分歧加仓机会。
+  </div>
+</div>
+
+<!-- ========== 综合结论 ========== -->
+<div class="section section-alt">
+  <div class="sec-label">⚖️ 综合结论</div>
+
+  <table class="at">
+    <tr><th>对比维度</th><th>冰点反抽</th><th>龙头主升浪</th><th>是否一致</th></tr>
+    <tr><td>市场情绪</td><td>不适用（非冰点）</td><td>多头情绪充沛</td><td><span class="up">—</span></td></tr>
+    <tr><td>主线判断</td><td>无冰点→无修复机会</td><td>氟化工/新材料主线</td><td><span class="up">—</span></td></tr>
+    <tr><td>核心标的</td><td>无活口股可选</td><td>多氟多 · 太极实业 · 格科微</td><td><span class="up">—</span></td></tr>
+    <tr><td>操作建议</td><td>不启动D0/D1流程</td><td>等分歧低吸，不追高</td><td><span class="up">✅ 无冲突</span></td></tr>
+  </table>
+
+  <table class="st">
+    <tr><td>适用战法</td><td>龙头主升浪（冰点反抽不适用）</td></tr>
+    <tr><td>核心策略</td><td>等分歧给机会，缩量回踩5/10日线再动手</td></tr>
+    <tr><td>最佳买点</td><td>加速途中分歧加仓（多氟多）· 箱体突破回踩确认（太极实业/格科微）</td></tr>
+    <tr><td>操作窗口</td><td>明后日观察分歧信号，不急于今日追板</td></tr>
+  </table>
+
+  <table class="pos-table">
+    <tr><td>战法</td><td>建议仓位</td><td>标的</td></tr>
+    <tr><td>龙头主升浪</td><td class="amt">总仓 ≤50%</td><td>多氟多 15-20% · 太极实业 15-20%</td></tr>
+    <tr><td>冰点反抽</td><td class="amt">— 不适用 —</td><td>不建仓</td></tr>
+    <tr><td>合计建议</td><td class="amt">≤35%</td><td>等分歧再分批建仓</td></tr>
+  </table>
+
+  <div class="callout warn">
+    <strong>⚠️ 风险提示：</strong>
+  </div>
+  <ul class="risk-list">
+    <li>多氟多已 3 连板，短期涨幅过大，追高有日内回调风险。必须等分歧（缩量回踩5日线）再动手</li>
+    <li>科创50跌2.48%、创业板跌1.89%，说明权重股在调整，结构性行情下跟风股可能率先回调</li>
+    <li>太极实业近一周涨幅过大，已有异常波动公告，谨防监管问询带来的情绪冲击</li>
+    <li>冰点反抽不适用（非冰点），切不可强行套用战法逆向买入跌停股</li>
+    <li>若明日多氟多低开低走，说明分歧加大，应放弃或减仓，不可逆势加仓</li>
+  </ul>
+
+  <div class="conclusion-box">
+    <div class="conclusion-text">
+      🐉 氟化工主线已确认 · 多氟多暂居真龙之位
+    </div>
+    <div class="conclusion-sub">
+      冰点反抽不适用（市场情绪正常，跌停仅11家）<br>
+      龙头主升浪确认：氟化工/新材料为最强主线，多氟多五维评分 24/25<br>
+      策略：不追高，等缩量分歧回踩5日线再动手 · 仓位上限35%<br>
+      记住：<strong>等走出龙头再跟，吃中间最肥的一段</strong>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  数据源：Tushare Pro · 证券时报 · 新浪财经 · 东方财富<br>
+  采集时间：2026-07-01 18:06 &nbsp;·&nbsp; 基于 deepseek-v4-pro 分析<br>
+  <a href="https://eason-byte.github.io/daily-briefing/">🏠 返回首页</a> &nbsp;·&nbsp;
+  <a href="https://eason-byte.github.io/daily-briefing/stock-picks/">📋 历史分析</a> &nbsp;·&nbsp;
+  <a href="https://19930808.xyz">19930808.xyz</a><br>
+  ⚠️ 基于双战法纪律框架分析，仅供参考，不构成投资建议
+</div>
+
+</div>
+</body>
+</html>
