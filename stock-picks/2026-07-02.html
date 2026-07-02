@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📊 双战法选股 · 2026-07-02</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#0d1117;--surface:#161b22;--surface-alt:#1c2333;--border:#30363d;--border-light:#21262d;--text:#e6edf3;--text-secondary:#8b949e;--text-tertiary:#6e7681;--accent:#58a6ff;--accent-bg:#0d419d33;--green:#3fb950;--green-bg:#1b3a1f;--red:#f85149;--red-bg:#3d1416;--amber:#d29922;--amber-bg:#2d1f00;--purple:#a371f7;--purple-bg:#2a1a4a;--teal:#56d4dd;--teal-bg:#1d3b3d;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,.3),0 4px 12px rgba(0,0,0,.15);--font-sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  body{font-family:var(--font-sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.7;min-height:100vh}
+  .container{max-width:800px;margin:0 auto;padding:0}
+  .header{background:linear-gradient(135deg,#161b22 0%,#1c2333 50%,#111 100%);border-bottom:1px solid var(--border);padding:22px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;position:relative;overflow:hidden}
+  .header::before{content:'';position:absolute;top:-50%;left:-30%;width:160%;height:200%;background:radial-gradient(ellipse at 30% 50%,var(--accent-bg) 0%,transparent 50%),radial-gradient(ellipse at 70% 50%,var(--purple-bg) 0%,transparent 50%);opacity:.2;pointer-events:none}
+  .h-left{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+  .h-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--accent),var(--purple));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff}
+  .h-title{font-size:18px;font-weight:700;letter-spacing:-.3px}
+  .h-meta{font-size:12px;color:var(--text-tertiary);margin-top:2px}
+  .h-badge{font-size:11px;font-weight:500;color:var(--accent);background:var(--accent-bg);padding:4px 16px;border-radius:20px;letter-spacing:.3px;position:relative;z-index:1}
+  .h-home{font-size:20px;text-decoration:none;margin-left:8px;position:relative;z-index:1;transition:opacity .15s}
+  .h-home:hover{opacity:.7}
+  .section{padding:24px 22px}
+  .section+.section{border-top:1px solid var(--border-light)}
+  .sec-label{font-size:12px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+  .sec-label::after{content:'';flex:1;height:1px;background:var(--border);margin-left:8px}
+  .section-alt{background:var(--surface-alt)}
+  .at{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin-bottom:14px}
+  .at th{text-align:left;padding:10px 14px;font-weight:600;color:var(--text-secondary);background:var(--surface-alt);border-bottom:1px solid var(--border);font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+  .at th:first-child{border-radius:8px 0 0 0}
+  .at th:last-child{border-radius:0 8px 0 0}
+  .at td{padding:10px 14px;border-bottom:1px solid var(--border-light);color:var(--text)}
+  .at tr:last-child td:first-child{border-radius:0 0 0 8px}
+  .at tr:last-child td:last-child{border-radius:0 0 8px 0}
+  .at tr:last-child td{border-bottom:none}
+  .dragon-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin-bottom:14px;box-shadow:var(--shadow);border-left:3px solid var(--purple)}
+  .dragon-card.dc-hot{border-left-color:var(--red)}
+  .dc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px}
+  .dc-name{font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .dc-name .dc-tag{font-size:10px;font-weight:600;padding:2px 10px;border-radius:20px;background:var(--accent-bg);color:var(--accent)}
+  .dc-name .dc-tag.dc-hot-tag{background:var(--red-bg);color:var(--red)}
+  .dc-score{font-size:12px;color:var(--text-tertiary)}
+  .dc-body{margin-top:6px}
+  .dc-detail{font-size:13px;color:var(--text-secondary);line-height:1.7;padding:8px 12px;background:var(--surface-alt);border-radius:6px;margin-top:8px;border-left:2px solid var(--border)}
+  .callout{padding:14px 18px;border-radius:var(--radius);margin:10px 0;font-size:13px;line-height:1.6}
+  .callout.info{background:var(--accent-bg);border-left:3px solid var(--accent);color:var(--accent)}
+  .callout.success{background:var(--green-bg);border-left:3px solid var(--green);color:var(--green)}
+  .callout.warn{background:var(--amber-bg);border-left:3px solid var(--amber);color:var(--amber)}
+  .callout.danger{background:var(--red-bg);border-left:3px solid var(--red);color:var(--red)}
+  .callout.neutral{background:var(--surface-alt);border-left:3px solid var(--text-tertiary);color:var(--text-secondary)}
+  .stars{font-size:14px;letter-spacing:1px;color:var(--amber)}
+  .risk-list{list-style:none;padding:0}
+  .risk-list li{padding:8px 0 8px 24px;position:relative;font-size:13px;color:var(--text-secondary);border-bottom:1px solid var(--border-light)}
+  .risk-list li:last-child{border-bottom:none}
+  .risk-list li::before{content:'⚠️';position:absolute;left:0;top:8px;font-size:12px}
+  .st{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin:10px 0 14px}
+  .st td{padding:10px 14px;border-bottom:1px solid var(--border-light);color:var(--text-secondary)}
+  .st td:first-child{font-weight:600;color:var(--text);white-space:nowrap;width:240px}
+  .st tr:last-child td{border-bottom:none}
+  .conclusion-box{text-align:center;padding:28px 22px;background:linear-gradient(135deg,var(--surface-alt),var(--surface));border:1px solid var(--border);border-radius:var(--radius);margin:16px 0;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .conclusion-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--purple),var(--teal))}
+  .conclusion-text{font-size:18px;font-weight:700;color:var(--text);line-height:1.6;margin-bottom:6px}
+  .conclusion-sub{font-size:13px;color:var(--text-secondary);line-height:1.7}
+  .pos-table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin:10px 0}
+  .pos-table td{padding:10px 14px;border-bottom:1px solid var(--border-light);color:var(--text)}
+  .pos-table td:first-child{font-weight:600;white-space:nowrap;width:140px}
+  .pos-table tr:last-child td{border-bottom:none}
+  .pos-table .amt{font-family:var(--font-mono);color:var(--accent);font-weight:600}
+  .footer{text-align:center;padding:24px 22px 36px;font-size:11px;color:var(--text-tertiary);line-height:1.8;border-top:1px solid var(--border-light)}
+  .footer a{color:var(--accent);text-decoration:none}.footer a:hover{text-decoration:underline}
+  @media(max-width:480px){.section{padding:18px 14px}.header{padding:14px 14px}.h-title{font-size:16px}.at{font-size:12px}.at td,.at th{padding:8px 10px}.dragon-card{padding:14px 14px}.dc-name{font-size:15px}.conclusion-text{font-size:16px}}
+  @media(min-width:1024px){.container{max-width:960px}.header{padding:26px 28px}.h-title{font-size:20px}.section{padding:28px 28px}.at{font-size:14px}.at td,.at th{padding:12px 16px}.dragon-card{padding:24px 28px;margin-bottom:18px}.dc-name{font-size:19px}.conclusion-box{padding:34px 28px}.conclusion-text{font-size:20px}.footer{padding:28px 28px 40px;font-size:12px}}
+  @media(min-width:1400px){.container{max-width:1080px}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="h-left">
+    <div class="h-icon">📊</div>
+    <div>
+      <div class="h-title">双战法选股分析</div>
+      <div class="h-meta">2026-07-02 · 周四 · 收盘后</div>
+    </div>
+  </div>
+  <span class="h-badge">冰点反抽 + 龙头主升浪</span>
+  <a href="https://eason-byte.github.io/daily-briefing/stock-picks/" class="h-home" title="返回首页">📋</a>
+</div>
+
+<div class="section">
+  <div class="sec-label">🧊 冰点反抽模式分析</div>
+  <table class="at">
+    <tr><th>指标</th><th>今日数据</th><th>冰点阈值</th><th>判断</th></tr>
+    <tr><td>跌停家数</td><td style="font-family:var(--font-mono);font-weight:600">40 只</td><td style="color:var(--text-tertiary)">≥20 只</td><td style="color:var(--red);font-weight:700">✅ 冰点</td></tr>
+    <tr><td>涨停封板</td><td style="font-family:var(--font-mono);font-weight:600">93 只</td><td style="color:var(--text-tertiary)">—</td><td style="color:var(--green);font-weight:700">多头仍有力量</td></tr>
+    <tr><td>炸板家数</td><td style="font-family:var(--font-mono);font-weight:600">40 只</td><td style="color:var(--text-tertiary)">—</td><td style="color:var(--amber);font-weight:700">分歧较大</td></tr>
+    <tr><td>触及涨停</td><td style="font-family:var(--font-mono);font-weight:600">133 只</td><td style="color:var(--text-tertiary)">—</td><td style="color:var(--accent);font-weight:700">做多意愿存在</td></tr>
+    <tr><td>亏钱效应</td><td style="font-weight:600">半导体/元件/通信集体跌停</td><td style="color:var(--text-tertiary)">板块崩盘</td><td style="color:var(--red);font-weight:700">✅ 确认</td></tr>
+    <tr><td>成交量</td><td style="font-weight:600">半导体放量杀跌</td><td style="color:var(--text-tertiary)">恐慌出逃</td><td style="color:var(--amber);font-weight:700">⚠️ 关注</td></tr>
+  </table>
+
+  <div class="callout danger">
+<strong>⚠️ 冰点确认</strong> — 跌停40只(远超标准20阈值)，半导体/元件/通信设备板块集体崩盘。<br>
+<span style="color:var(--text-secondary)">今日为D0冰点日，根据纪律：冰点当天<strong>绝对不买入</strong>。D1等待修复确认后再动手。</span>
+  </div>
+
+  <div class="callout success">
+<strong>✅ 冰点反抽模式：适用</strong> — 市场环境为单边杀跌，冰点阈值明确触发。<br>
+<span style="color:var(--text-secondary)">适用性评分：⭐⭐⭐⭐⭐ | 明日D1为关键观察日</span>
+  </div>
+
+  <div style="margin-top:16px">
+    <div style="font-size:13px;font-weight:600;margin-bottom:10px">🛑 跌停板块分布</div>
+    <table class="at">
+      <tr><th>板块</th><th>跌停数</th><th>代表个股</th><th>分析</th></tr>
+      <tr><td style="font-weight:600">半导体</td><td style="font-family:var(--font-mono);color:var(--red);font-weight:600">8只</td><td style="font-size:12px;color:var(--text-secondary)">北方华创、兆易创新、长电科技、晶方科技、立昂微、雅克科技、金海通、中晶科技</td><td style="font-size:12px;color:var(--text-tertiary)">板块系统性杀跌，恐慌出逃</td></tr>
+      <tr><td style="font-weight:600">元件</td><td style="font-family:var(--font-mono);color:var(--red);font-weight:600">7只</td><td style="font-size:12px;color:var(--text-secondary)">风华高科、法拉电子、铜峰电子、泰晶科技、东山精密、洁美科技、莱宝高科</td><td style="font-size:12px;color:var(--text-tertiary)">被动元件+PCB全线崩</td></tr>
+      <tr><td style="font-weight:600">通信设备</td><td style="font-family:var(--font-mono);color:var(--red);font-weight:600">4只</td><td style="font-size:12px;color:var(--text-secondary)">剑桥科技、永鼎股份、通鼎互联、光迅科技</td><td style="font-size:12px;color:var(--text-tertiary)">跟随半导体杀跌</td></tr>
+      <tr><td style="font-weight:600">自动化设备</td><td style="font-family:var(--font-mono);color:var(--red);font-weight:600">3只</td><td style="font-size:12px;color:var(--text-secondary)">华工科技、赛腾股份、欧克科技</td><td style="font-size:12px;color:var(--text-tertiary)">制造设备链跟跌</td></tr>
+      <tr><td style="font-weight:600">消费电子</td><td style="font-family:var(--font-mono);color:var(--red);font-weight:600">2只</td><td style="font-size:12px;color:var(--text-secondary)">利通电子、深科技</td><td style="font-size:12px;color:var(--text-tertiary)">终端需求担忧</td></tr>
+    </table>
+  </div>
+
+  <div class="callout neutral">
+<strong>🧊 冰点反抽结论</strong><br>
+<span style="color:var(--text-secondary)">
+<strong>D0(今日)</strong>：40只跌停确认冰点，半导体产业链系统性崩盘。<br>
+<strong>活口筛选</strong>：<span style="color:var(--green)">600641先导基电</span>(半导体涨停!)、002020京新药业(化学制药龙头)、002979雷赛智能(自动化逆势)、000595宝塔实业(电力竞价封板)<br>
+<strong>D1(明日)计划</strong>：等确认 → 跌停降至10只以内 + 活口高开溢价 → 轻仓博弈活口。未确认则放弃。
+</span>
+  </div>
+</div>
+
+<div class="section section-alt">
+  <div class="sec-label">🐉 龙头主升浪战法分析</div>
+  <table class="at">
+    <tr><th>最强板块</th><th>涨停数</th><th>持续性</th><th>判断</th></tr>
+    <tr><td style="font-weight:600">汽车零部件</td><td style="font-family:var(--font-mono);color:var(--green);font-weight:600">8只</td><td>⭐⭐⭐⭐</td><td style="font-size:12px;color:var(--text-secondary)">板块效应最强，多股竞价封板</td></tr>
+    <tr><td style="font-weight:600">化学制药</td><td style="font-family:var(--font-mono);color:var(--green);font-weight:600">6只</td><td>⭐⭐⭐⭐</td><td style="font-size:12px;color:var(--text-secondary)">京新药业领衔，板块联动好</td></tr>
+    <tr><td style="font-weight:600">塑料</td><td style="font-family:var(--font-mono);color:var(--green);font-weight:600">6只</td><td>⭐⭐⭐</td><td style="font-size:12px;color:var(--text-secondary)">多为小市值跟风</td></tr>
+    <tr><td style="font-weight:600">化学制品</td><td style="font-family:var(--font-mono);color:var(--green);font-weight:600">5只</td><td>⭐⭐⭐</td><td style="font-size:12px;color:var(--text-secondary)">分散，无绝对龙头</td></tr>
+    <tr><td style="font-weight:600">纺织制造</td><td style="font-family:var(--font-mono);color:var(--green);font-weight:600">5只</td><td>⭐⭐</td><td style="font-size:12px;color:var(--text-secondary)">缺乏辨识度龙头</td></tr>
+  </table>
+
+  <div class="callout info">
+<strong>📊 板块格局</strong> — 半导体/元件主线崩塌，市场进入新旧交替期。汽车零部件和化学制药逆势走强，有望成为新主线。<br>
+<span style="color:var(--text-secondary)">但D0冰点日的板块走强需要D1确认，防止一日游。</span>
+  </div>
+
+  <!-- 候选1: 先导基电 -->
+  <div class="dragon-card dc-hot">
+    <div class="dc-header">
+      <span class="dc-name"><span class="dc-tag dc-hot-tag">活口</span> 600641 先导基电 <span style="font-size:11px;color:var(--text-tertiary)">半导体</span></span>
+      <span class="dc-score">五维评分 <span class="stars">⭐⭐⭐⭐</span> 4/5</span>
+    </div>
+    <table class="at" style="margin-bottom:0">
+      <tr><th>维度</th><th>评分</th><th>分析</th></tr>
+      <tr><td>🗣️ 辨识度</td><td style="color:var(--green)">⭐⭐⭐⭐⭐</td><td>全市场最强活口——半导体板块集体跌停中逆势封板，全市场瞩目</td></tr>
+      <tr><td>🔗 带动性</td><td style="color:var(--red)">⭐⭐</td><td>半导体板块整体崩盘，无带动效应。孤军奋战</td></tr>
+      <tr><td>💰 成交量</td><td style="color:var(--amber)">待确认</td><td>竞价封板(09:25:03)，成交数据需D1验证</td></tr>
+      <tr><td>📰 题材</td><td style="color:var(--green)">⭐⭐⭐⭐</td><td>半导体/新材料，逆板块走强说明有独立逻辑</td></tr>
+      <tr><td>🔄 换手率</td><td style="color:var(--amber)">待确认</td><td>竞价板换手可能偏低，需观察D1是否放量</td></tr>
+    </table>
+    <div class="dc-detail">
+<strong>🧊 冰点视角</strong>：最强活口，D1若高开溢价(3-8%)+跌停降至10只以内→确认修复信号→可轻仓博弈<br>
+<strong>🐉 龙头视角</strong>：孤军无板块效应，不符合龙头主升浪标准。但若D1半导体板块止跌反弹，先导基电可能成为反弹龙头<br>
+<strong>⚠️ 风险</strong>：板块共振下跌风险，若D1半导体继续杀跌，活口可能补跌
+    </div>
+  </div>
+
+  <!-- 候选2: 京新药业 -->
+  <div class="dragon-card">
+    <div class="dc-header">
+      <span class="dc-name"><span class="dc-tag">主线</span> 002020 京新药业 <span style="font-size:11px;color:var(--text-tertiary)">化学制药</span></span>
+      <span class="dc-score">五维评分 <span class="stars">⭐⭐⭐⭐</span> 4/5</span>
+    </div>
+    <table class="at" style="margin-bottom:0">
+      <tr><th>维度</th><th>评分</th><th>分析</th></tr>
+      <tr><td>🗣️ 辨识度</td><td style="color:var(--green)">⭐⭐⭐⭐</td><td>化学制药板块龙头，竞价封板(09:25:00)，板块内辨识度高</td></tr>
+      <tr><td>🔗 带动性</td><td style="color:var(--green)">⭐⭐⭐⭐</td><td>化学制药6只涨停(含海南海药、美诺华)，板块联动强</td></tr>
+      <tr><td>💰 成交量</td><td style="color:var(--amber)">待确认</td><td>竞价封板，量能需D1确认</td></tr>
+      <tr><td>📰 题材</td><td style="color:var(--green)">⭐⭐⭐⭐</td><td>化学制药+创新药，政策面有支撑</td></tr>
+      <tr><td>🔄 换手率</td><td style="color:var(--amber)">待确认</td><td>竞价板换手低，D1开板后换手率是关键</td></tr>
+    </table>
+    <div class="dc-detail">
+<strong>🧊 冰点视角</strong>：板块效应最强的活口方向，化学制药6只涨停确认资金认可<br>
+<strong>🐉 龙头视角</strong>：有板块效应，具备龙头潜质。若D1板块继续走强可确认主线地位<br>
+<strong>⚠️ 风险</strong>：竞价封板无换手，D1开板分歧可能大
+    </div>
+  </div>
+
+  <!-- 候选3: 金科股份 -->
+  <div class="dragon-card">
+    <div class="dc-header">
+      <span class="dc-name">000656 金科股份 <span style="font-size:11px;color:var(--text-tertiary)">房地产开发</span></span>
+      <span class="dc-score">五维评分 <span class="stars">⭐⭐⭐</span> 3/5</span>
+    </div>
+    <table class="at" style="margin-bottom:0">
+      <tr><th>维度</th><th>评分</th><th>分析</th></tr>
+      <tr><td>🗣️ 辨识度</td><td style="color:var(--green)">⭐⭐⭐</td><td>知名地产股，但板块仅1只涨停，非市场焦点</td></tr>
+      <tr><td>🔗 带动性</td><td style="color:var(--red)">⭐⭐</td><td>地产板块无跟风，独舞</td></tr>
+      <tr><td>💰 成交量</td><td style="color:var(--amber)">待确认</td><td>竞价封板(09:25:00)</td></tr>
+      <tr><td>📰 题材</td><td style="color:var(--amber)">⭐⭐⭐</td><td>房地产，政策博弈属性</td></tr>
+      <tr><td>🔄 换手率</td><td style="color:var(--amber)">待确认</td><td>竞价板换手低</td></tr>
+    </table>
+    <div class="dc-detail">
+<strong>🧊 冰点视角</strong>：竞价封板有溢价，但板块独舞缺乏资金合力<br>
+<strong>🐉 龙头视角</strong>：无板块效应，不符合龙头标准<br>
+<strong>⚠️ 风险</strong>：地产板块整体偏弱，一日游概率大
+    </div>
+  </div>
+
+  <div style="margin-top:14px">
+    <div style="font-size:13px;font-weight:600;margin-bottom:8px">👀 其他值得关注</div>
+    <table class="at">
+      <tr><th>代码</th><th>名称</th><th>涨幅</th><th>板块</th><th>观察理由</th></tr>
+      <tr><td>002979</td><td>雷赛智能</td><td style="color:var(--green);font-weight:600">+10.00%</td><td>自动化设备</td><td>自动化板块有跌停，雷赛逆势封板，活口属性</td></tr>
+      <tr><td>000595</td><td>宝塔实业</td><td style="color:var(--green);font-weight:600">+10.10%</td><td>电力</td><td>竞价封板(09:25:00)，电力板块有韶能跟风</td></tr>
+      <tr><td>000601</td><td>韶能股份</td><td style="color:var(--green);font-weight:600">+9.94%</td><td>电力</td><td>09:31封板，与宝塔形成电力板块联动</td></tr>
+      <tr><td>300111</td><td>向日葵</td><td style="color:var(--green);font-weight:600">+16.55%</td><td>化学制药</td><td>炸板但涨幅仍超16%，创业板高弹性(20cm)，化学制药热度确认</td></tr>
+      <tr><td>000520</td><td>凤凰航运</td><td style="color:var(--green);font-weight:600">+10.00%</td><td>航运港口</td><td>09:30封板，独立逻辑</td></tr>
+    </table>
+  </div>
+
+  <div class="callout warn">
+<strong>🐉 龙头主升浪结论：未确认</strong><br>
+<span style="color:var(--text-secondary)">
+旧主线(半导体/元件)崩溃，新主线未明确。汽车零部件和化学制药有潜力，但需D1确认。<br>
+<strong>真龙候选排序</strong>：①600641先导基电(最强活口) > ②002020京新药业(板块效应) > ③000656金科股份(辨识度)<br>
+<strong>策略</strong>：等待。D1确认新主线后再上车。宁错过，不做错。
+</span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-label">⚖️ 综合结论</div>
+  <table class="at">
+    <tr><th>对比维度</th><th>冰点反抽</th><th>龙头主升浪</th><th>是否一致</th></tr>
+    <tr>
+      <td>市场环境判断</td>
+      <td style="color:var(--green)">冰点确认(单边杀跌)</td>
+      <td style="color:var(--amber)">旧主线崩塌，新主线待确认</td>
+      <td style="color:var(--amber)">⚠️ 半一致</td>
+    </tr>
+    <tr>
+      <td>操作方向</td>
+      <td style="color:var(--green)">D1等确认后做活口</td>
+      <td style="color:var(--amber)">等新主线走出来</td>
+      <td style="color:var(--green)">✅ 一致(都等)</td>
+    </tr>
+    <tr>
+      <td>核心标的</td>
+      <td>600641先导基电、002020京新药业</td>
+      <td>暂未确认真龙</td>
+      <td style="color:var(--amber)">⚠️ 冰点领先</td>
+    </tr>
+    <tr>
+      <td>仓位建议</td>
+      <td style="color:var(--green)">确认后≤20%</td>
+      <td style="color:var(--amber)">未确认，不开仓</td>
+      <td style="color:var(--amber)">⚠️ 存分歧</td>
+    </tr>
+  </table>
+
+  <table class="st">
+    <tr><td>场景</td><td>策略</td></tr>
+    <tr><td>D1(明日)</td><td><strong>观察日，不开新仓</strong></td></tr>
+    <tr><td>D1跌停降至10只内+活口高开溢价</td><td>轻仓买入活口龙头(优先600641)，仓位≤15%</td></tr>
+    <tr><td>D1跌停仍超15只或活口低开</td><td>放弃本次交易，等下一个冰点</td></tr>
+    <tr><td>D2(若D1确认修复)</td><td>活口涨停可加仓至20%，否则止盈/止损</td></tr>
+  </table>
+
+  <table class="pos-table">
+    <tr><td>战法</td><td>建议仓位</td><td>标的</td></tr>
+    <tr><td>🧊 冰点反抽</td><td class="amt">≤20%</td><td>600641先导基电(首选) / 002020京新药业(备选)</td></tr>
+    <tr><td>🐉 龙头主升浪</td><td class="amt">暂不开仓</td><td>等待新主线确认</td></tr>
+    <tr><td>💰 止损线</td><td class="amt">-3%</td><td>跌破入场低点或D1开盘价无条件止损</td></tr>
+    <tr><td>🎯 止盈线</td><td class="amt">+10%</td><td>达到后分批止盈</td></tr>
+  </table>
+
+  <div style="margin-top:16px">
+    <div style="font-size:13px;font-weight:600;margin-bottom:8px">⚠️ 风险提示</div>
+    <ul class="risk-list">
+      <li><strong>板块共振风险</strong>：半导体/元件板块若明日继续杀跌，可能拖累全市场，活口补跌</li>
+      <li><strong>一日游风险</strong>：汽车零部件和化学制药的强势可能只是资金避险，D1未必持续</li>
+      <li><strong>炸板率高</strong>：今日触及涨停133只但封死仅93只，炸板率30%，市场分歧大</li>
+      <li><strong>外部风险</strong>：科技股杀跌可能有外部利空(关税/制裁/业绩雷)，需关注消息面</li>
+      <li><strong>核心纪律</strong>：D0绝不买入，D1未确认不进场。宁错过不做错</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section section-alt">
+  <div class="conclusion-box">
+    <div class="conclusion-text">🧊 冰点确认(40跌停) + 🐉 龙头未确认</div>
+    <div class="conclusion-sub">
+<strong>双战法综合结论：等待D1确认</strong><br>
+半导体产业链系统性崩盘触发冰点，但新旧主线交替期不宜激进。<br><br>
+<span style="color:var(--green)"><strong>若D1确认修复</strong></span>：轻仓博弈活口龙头600641先导基电和002020京新药业(仓位≤20%)<br>
+<span style="color:var(--red)"><strong>若D1未确认</strong></span>：放弃本次交易，保存实力等待下一个冰点<br><br>
+核心原则：等确认、做龙头、控仓位。市场永远有机会。
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  数据源：Tushare Pro · AKShare · 东方财富 · 新浪财经<br>
+  采集时间：2026-07-02 18:15 &nbsp;·&nbsp; 基于ds-hermes deepseek-v4-pro<br>
+  <a href="https://eason-byte.github.io/daily-briefing/">🏠 返回首页</a> &nbsp;·&nbsp;
+  <a href="https://eason-byte.github.io/daily-briefing/stock-picks/">📋 历史分析</a> &nbsp;·&nbsp;
+  <a href="https://19930808.xyz">19930808.xyz</a><br>
+  ⚠️ 基于双战法纪律框架分析，仅供参考，不构成投资建议
+</div>
+
+</div>
+</body>
+</html>
