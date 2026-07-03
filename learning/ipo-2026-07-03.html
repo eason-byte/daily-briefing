@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>港股打新 · 2026年7月3日 每日IPO分析</title>
+<style>
+  :root {
+    --bg: #0f0f13;
+    --card: #1a1a24;
+    --card-hover: #222233;
+    --accent: #6c5ce7;
+    --accent2: #00cec9;
+    --gold: #fdcb6e;
+    --red: #e17055;
+    --green: #00b894;
+    --orange: #f39c12;
+    --text: #e0e0e8;
+    --text-muted: #888899;
+    --border: #2a2a3a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 60px 24px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(108,92,231,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 50%, rgba(0,206,201,0.06) 0%, transparent 50%);
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .hero h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); color: #fff; font-weight: 700; margin-bottom: 6px; }
+  .hero h1 span { color: var(--accent2); }
+  .hero .subtitle { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; }
+  .hero .budget { margin-top: 14px; display: inline-block; background: rgba(255,107,107,0.12); border: 1px solid rgba(255,107,107,0.25); padding: 6px 20px; border-radius: 20px; font-size: 0.85rem; color: #ff6b6b; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 32px 20px 60px; }
+
+  .section-title { font-size: 1.1rem; font-weight: 700; color: #fff; margin: 36px 0 16px; display: flex; align-items: center; gap: 8px; }
+  .section-title .line { flex: 1; height: 1px; background: var(--border); }
+
+  .summary-bar {
+    display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;
+  }
+  .summary-chip {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 16px; font-size: 0.8rem; display: flex; align-items: center; gap: 8px;
+  }
+  .summary-chip .num { font-size: 1.3rem; font-weight: 700; }
+  .summary-chip .num.green { color: var(--green); }
+  .summary-chip .num.orange { color: var(--orange); }
+  .summary-chip .num.red { color: var(--red); }
+
+  /* Score Badge */
+  .score { display: inline-flex; align-items: center; gap: 4px; padding: 3px 12px; border-radius: 10px; font-size: 0.72rem; font-weight: 600; }
+  .score.s5 { background: rgba(0,184,148,0.15); color: var(--green); }
+  .score.s4 { background: rgba(0,206,201,0.12); color: var(--accent2); }
+  .score.s3 { background: rgba(253,203,110,0.12); color: var(--gold); }
+  .score.s2 { background: rgba(225,112,85,0.12); color: var(--red); }
+  .score.s1 { background: rgba(225,112,85,0.18); color: var(--red); font-weight: 700; }
+
+  /* IPO Card */
+  .ipo-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    transition: all 0.2s;
+  }
+  .ipo-card:hover { border-color: rgba(108,92,231,0.3); }
+  .ipo-card.danger { border-color: rgba(225,112,85,0.2); background: rgba(225,112,85,0.03); }
+
+  .ipo-card .header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .ipo-card .header h2 { font-size: 1.05rem; color: #fff; font-weight: 600; }
+  .ipo-card .header .code { color: var(--text-muted); font-size: 0.78rem; font-weight: 400; }
+  .ipo-card .header .deadline { font-size: 0.72rem; padding: 2px 8px; border-radius: 6px; margin-left: auto; }
+  .deadline.urgent { background: rgba(255,107,107,0.15); color: #ff6b6b; font-weight: 600; }
+  .deadline.closed { background: rgba(136,136,153,0.12); color: var(--text-muted); }
+
+  .reason { font-size: 0.84rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.65; }
+  .reason strong { color: var(--text); }
+
+  .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 6px; margin-bottom: 12px; }
+  .info-item { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 6px 10px; }
+  .info-item .label { font-size: 0.62rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .info-item .value { font-size: 0.85rem; color: var(--text); font-weight: 500; }
+  .info-item .value.green { color: var(--green); }
+  .info-item .value.gold { color: var(--gold); }
+  .info-item .value.red { color: var(--red); }
+
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 500; margin-right: 4px; margin-bottom: 4px; }
+  .tag.green { background: rgba(0,184,148,0.12); color: var(--green); }
+  .tag.gold { background: rgba(253,203,110,0.12); color: var(--gold); }
+  .tag.red { background: rgba(225,112,85,0.12); color: var(--red); }
+  .tag.blue { background: rgba(108,92,231,0.12); color: var(--accent); }
+  .tag.teal { background: rgba(0,206,201,0.12); color: var(--accent2); }
+
+  /* Dim table */
+  .dim-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.78rem; }
+  .dim-table th { text-align: left; color: var(--text-muted); font-weight: 500; font-size: 0.7rem; padding: 4px 8px 4px 0; border-bottom: 1px solid var(--border); }
+  .dim-table td { padding: 4px 8px 4px 0; border-bottom: 1px solid rgba(42,42,58,0.4); }
+  .dim-table td.score-cell { font-weight: 600; }
+
+  .verdict-box {
+    margin-top: 10px; padding: 10px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 600;
+  }
+  .verdict-box.buy { background: rgba(0,184,148,0.08); border: 1px solid rgba(0,184,148,0.2); color: var(--green); }
+  .verdict-box.hold { background: rgba(253,203,110,0.08); border: 1px solid rgba(253,203,110,0.2); color: var(--gold); }
+  .verdict-box.skip { background: rgba(225,112,85,0.08); border: 1px solid rgba(225,112,85,0.2); color: var(--red); }
+
+  .divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+  /* Budget Box */
+  .budget-box {
+    background: linear-gradient(135deg, rgba(108,92,231,0.06), rgba(0,206,201,0.06));
+    border: 1px solid rgba(108,92,231,0.2);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin: 20px 0;
+  }
+  .budget-box h3 { color: var(--accent); font-size: 0.95rem; font-weight: 600; margin-bottom: 12px; }
+  .budget-row { display: flex; justify-content: space-between; padding: 7px 0; font-size: 0.85rem; border-bottom: 1px solid rgba(42,42,58,0.5); }
+  .budget-row:last-child { border-bottom: none; font-weight: 700; color: #fff; }
+  .budget-row .name { color: var(--text); }
+  .budget-row .amt { color: var(--accent2); }
+
+  /* Skip List */
+  .skip-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: rgba(225,112,85,0.04); border-radius: 8px; margin-bottom: 6px; font-size: 0.82rem; }
+  .skip-item .skip-name { color: var(--text); font-weight: 500; min-width: 140px; }
+  .skip-item .why { color: var(--text-muted); flex: 1; }
+  .skip-item .red-badge { font-size: 0.7rem; background: rgba(225,112,85,0.15); color: var(--red); padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+
+  /* Risk Note */
+  .risk-note {
+    margin-top: 28px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(225,112,85,0.2);
+    background: rgba(225,112,85,0.04);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .risk-note strong { color: var(--red); }
+
+  .footer { text-align: center; padding: 24px 0; font-size: 0.72rem; color: var(--text-muted); border-top: 1px solid var(--border); margin-top: 24px; }
+
+  @media (max-width: 600px) {
+    .ipo-card { padding: 16px; }
+    .info-grid { grid-template-columns: repeat(2, 1fr); }
+    .budget-box { padding: 16px; }
+    .skip-item { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .skip-item .skip-name { min-width: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>港股打新 · <span>每日IPO分析</span></h1>
+    <p class="subtitle">2026年7月3日（周五）· 6只新股今天截止 · 2只建议申购</p>
+    <div class="budget">⚠️ 今日中午12:00截止！最后决策窗口</div>
+  </div>
+</section>
+
+<div class="container">
+
+  <!-- Summary -->
+  <div class="summary-bar">
+    <div class="summary-chip"><span class="num green">2</span> 建议申购</div>
+    <div class="summary-chip"><span class="num orange">1</span> 可申可不申</div>
+    <div class="summary-chip"><span class="num red">4</span> 建议跳过</div>
+  </div>
+
+  <!-- ============ STRONG BUY ⭐⭐⭐⭐ ============ -->
+  <div class="section-title">🥇 强烈建议申购 <span class="line"></span></div>
+
+  <!-- MOMENTA -->
+  <div class="ipo-card">
+    <div class="header">
+      <span class="score s4">⭐⭐⭐⭐</span>
+      <h2>MOMENTA</h2>
+      <span class="code">06880</span>
+      <span class="deadline urgent">⚠️ 今天截止 12:00</span>
+    </div>
+    <div class="reason">
+      <strong>14家全明星基石阵容：GIC（新加坡主权基金）、富达国际、BlackRock、梅赛德斯-奔驰、Oaktree、金浦投资</strong>等，基石认购近30亿港元占比~50%。中金+德意志银行联席保荐。自动驾驶赛道龙头，696亿港元市值。孖展145亿+，超购23.7倍。有绿鞋保护。
+    </div>
+
+    <table class="dim-table">
+      <tr><th>维度</th><th>得分</th><th>说明</th></tr>
+      <tr><td>🏛️ 基石投资者</td><td class="score-cell" style="color:var(--green);">5/5</td><td>GIC主权基金+富达+BlackRock+奔驰等14家，占比~50%，6个月锁定期</td></tr>
+      <tr><td>🏦 保荐人</td><td class="score-cell" style="color:var(--green);">5/5</td><td>中金+德意志银行，顶级联合保荐</td></tr>
+      <tr><td>💰 估值</td><td class="score-cell" style="color:var(--red);">2/5</td><td>一口价295.60港元，市值696亿，亏损中无PE参考，PS偏高</td></tr>
+      <tr><td>🛡️ 绿鞋</td><td class="score-cell" style="color:var(--green);">5/5</td><td>有，15%标准超额配售</td></tr>
+      <tr><td>🔥 热度</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>孖展145亿+，超购23.7倍</td></tr>
+      <tr><td>🚀 赛道</td><td class="score-cell" style="color:var(--green);">5/5</td><td>自动驾驶/AI，顶尖赛道，行业龙头</td></tr>
+      <tr><td>📊 财务</td><td class="score-cell" style="color:var(--red);">2/5</td><td>营收高增但持续亏损，研发投入大</td></tr>
+      <tr style="font-weight:700;"><td>总分</td><td class="score-cell" style="color:var(--accent2);">28/35</td><td>⭐⭐⭐⭐ 强烈申购</td></tr>
+    </table>
+
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">5,972 HKD</div></div>
+      <div class="info-item"><div class="label">认购倍数</div><div class="value green">23.7倍</div></div>
+      <div class="info-item"><div class="label">招股价</div><div class="value">295.60（固定）</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value green">✅ 有</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value">7月8日</div></div>
+      <div class="info-item"><div class="label">建议手数</div><div class="value" style="color:#fff;">1手</div></div>
+    </div>
+    <div>
+      <span class="tag green">GIC</span>
+      <span class="tag green">富达</span>
+      <span class="tag green">BlackRock</span>
+      <span class="tag green">奔驰</span>
+      <span class="tag teal">自动驾驶</span>
+    </div>
+    <div class="verdict-box buy">✅ 建议申购1手 · 基石强大+绿鞋保护+自动驾驶龙头 · 入场费较高注意仓位</div>
+  </div>
+
+  <!-- 易控智驾 -->
+  <div class="ipo-card">
+    <div class="header">
+      <span class="score s4">⭐⭐⭐⭐</span>
+      <h2>易控智驾</h2>
+      <span class="code">07687</span>
+      <span class="deadline urgent">⚠️ 今天截止 12:00</span>
+    </div>
+    <div class="reason">
+      <strong>豪华基石：紫金矿业+徐工集团+富达国际+摩根大通+霸菱</strong>，产业资本与顶级基金联合站台。全球最大矿区无人驾驶解决方案商。海通国际独家保荐。有绿鞋。孖展41亿，超购17倍。
+    </div>
+
+    <table class="dim-table">
+      <tr><th>维度</th><th>得分</th><th>说明</th></tr>
+      <tr><td>🏛️ 基石投资者</td><td class="score-cell" style="color:var(--green);">5/5</td><td>紫金矿业+徐工+富达+摩根大通+霸菱，产业+顶级基金组合</td></tr>
+      <tr><td>🏦 保荐人</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>海通国际独家，中资头部但非顶级联合</td></tr>
+      <tr><td>💰 估值</td><td class="score-cell" style="color:var(--red);">2/5</td><td>81.16-87.92港元，亏损企业无PE，PS估值偏高</td></tr>
+      <tr><td>🛡️ 绿鞋</td><td class="score-cell" style="color:var(--green);">5/5</td><td>有，15%标准超额配售</td></tr>
+      <tr><td>🔥 热度</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>孖展41亿，超购17倍</td></tr>
+      <tr><td>🚀 赛道</td><td class="score-cell" style="color:var(--green);">5/5</td><td>矿区无人驾驶/自动驾驶，全球龙头，顶尖赛道</td></tr>
+      <tr><td>📊 财务</td><td class="score-cell" style="color:var(--red);">2/5</td><td>营收高增（CAGR 130%+）但2025年亏损~5亿，亏损扩大</td></tr>
+      <tr style="font-weight:700;"><td>总分</td><td class="score-cell" style="color:var(--accent2);">26/35</td><td>⭐⭐⭐⭐ 建议申购</td></tr>
+    </table>
+
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">4,440 HKD</div></div>
+      <div class="info-item"><div class="label">认购倍数</div><div class="value green">17倍</div></div>
+      <div class="info-item"><div class="label">招股价</div><div class="value">81.16-87.92</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value green">✅ 有</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value">7月8日</div></div>
+      <div class="info-item"><div class="label">建议手数</div><div class="value" style="color:#fff;">1手</div></div>
+    </div>
+    <div>
+      <span class="tag green">紫金矿业</span>
+      <span class="tag green">富达</span>
+      <span class="tag green">摩根大通</span>
+      <span class="tag teal">无人驾驶</span>
+    </div>
+    <div class="verdict-box buy">✅ 建议申购1手 · 顶级基石+绿鞋+全球龙头 · 亏损扩大是主要风险</div>
+  </div>
+
+  <!-- ============ OPTIONAL ⭐⭐⭐ ============ -->
+  <div class="section-title">🥉 可申可不申 <span class="line"></span></div>
+
+  <!-- 同仁堂医养 -->
+  <div class="ipo-card">
+    <div class="header">
+      <span class="score s4">⭐⭐⭐⭐</span>
+      <h2>同仁堂医养</h2>
+      <span class="code">02667</span>
+      <span class="deadline closed">已截止 (7/2)</span>
+    </div>
+    <div class="reason">
+      百年老字号同仁堂旗下中医连锁。基石：航空港科技资本+Aurora SF等，占比46.79%，锁定期6个月。中金独家保荐。有绿鞋。二次招股下调估值至5.48-6.21港元。孖展超购159倍极度火爆。但财务层面，营收增长停滞（~11.7亿），净利润中37%来自资产出售一次性收益，内生盈利薄弱。
+    </div>
+
+    <table class="dim-table">
+      <tr><th>维度</th><th>得分</th><th>说明</th></tr>
+      <tr><td>🏛️ 基石投资者</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>航空港科技资本（国资）+Aurora SF等，占比46.79%，无顶级主权/长线基金</td></tr>
+      <tr><td>🏦 保荐人</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>中金公司独家保荐，顶级中资</td></tr>
+      <tr><td>💰 估值</td><td class="score-cell" style="color:var(--red);">2/5</td><td>PE~50-62x（按2024净利），远高同业固生堂14x；PS~2x略高于固生堂1.6x</td></tr>
+      <tr><td>🛡️ 绿鞋</td><td class="score-cell" style="color:var(--green);">5/5</td><td>有，标准超额配售</td></tr>
+      <tr><td>🔥 热度</td><td class="score-cell" style="color:var(--green);">5/5</td><td>孖展超购159倍，极度火爆</td></tr>
+      <tr><td>🚀 赛道</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>中医医疗+同仁堂品牌，品牌护城河强但中医赛道增长有限</td></tr>
+      <tr><td>📊 财务</td><td class="score-cell" style="color:var(--red);">2/5</td><td>营收增长停滞（11.53→11.75→11.71亿），内生盈利薄弱，37%利润来自资产出售</td></tr>
+      <tr style="font-weight:700;"><td>总分</td><td class="score-cell" style="color:var(--accent2);">25/35</td><td>⭐⭐⭐⭐（但财务+估值有瑕疵）</td></tr>
+    </table>
+
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">~3,136 HKD</div></div>
+      <div class="info-item"><div class="label">最终认购</div><div class="value green">159倍+</div></div>
+      <div class="info-item"><div class="label">招股价</div><div class="value">5.48-6.21</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value green">✅ 有</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value">7月7日</div></div>
+      <div class="info-item"><div class="label">状态</div><div class="value" style="color:var(--text-muted);">已截止</div></div>
+    </div>
+    <div>
+      <span class="tag blue">同仁堂</span>
+      <span class="tag gold">老字号</span>
+      <span class="tag green">绿鞋</span>
+    </div>
+    <div class="verdict-box hold">⚠️ 已截止无法申购 · 品牌价值高+热度极高，但估值偏贵+财务疲软，上市后关注暗盘</div>
+  </div>
+
+  <!-- ============ SKIP ⭐⭐ / ⭐ ============ -->
+  <div class="section-title">❌ 建议跳过 <span class="line"></span></div>
+
+  <!-- 基本半导体 -->
+  <div class="ipo-card danger">
+    <div class="header">
+      <span class="score s2">⭐⭐</span>
+      <h2>基本半导体</h2>
+      <span class="code">09971</span>
+      <span class="deadline urgent">⚠️ 今天截止 12:00</span>
+    </div>
+    <div class="reason">
+      碳化硅功率器件IDM企业，赛道极佳（SiC半导体），孖展超购553倍极度火爆。但<strong>无基石投资者</strong>（重大减分），国金+中银联席保荐仅为中资中等级别。年亏损3.35亿。有绿鞋保护。无基石触发一票否决降星机制。
+    </div>
+
+    <table class="dim-table">
+      <tr><th>维度</th><th>得分</th><th>说明</th></tr>
+      <tr><td>🏛️ 基石投资者</td><td class="score-cell" style="color:var(--red);">1/5</td><td>❌ 无基石投资者（强烈预警）</td></tr>
+      <tr><td>🏦 保荐人</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>国金证券+中银国际，中资中等</td></tr>
+      <tr><td>💰 估值</td><td class="score-cell" style="color:var(--red);">2/5</td><td>27.49-31.62港元，市值79-99亿，亏损无PE，PS偏高</td></tr>
+      <tr><td>🛡️ 绿鞋</td><td class="score-cell" style="color:var(--green);">5/5</td><td>有，15%标准超额配售</td></tr>
+      <tr><td>🔥 热度</td><td class="score-cell" style="color:var(--green);">5/5</td><td>孖展239.58亿，超购553倍！极度火爆</td></tr>
+      <tr><td>🚀 赛道</td><td class="score-cell" style="color:var(--green);">5/5</td><td>碳化硅半导体，顶尖赛道，国产替代概念</td></tr>
+      <tr><td>📊 财务</td><td class="score-cell" style="color:var(--red);">2/5</td><td>2025年亏损3.35亿，持续亏损中</td></tr>
+      <tr style="font-weight:700;"><td>原始总分</td><td class="score-cell" style="color:var(--gold);">23/35</td><td>无基石触发降星 → ⭐⭐ 谨慎</td></tr>
+    </table>
+
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">6,388 HKD</div></div>
+      <div class="info-item"><div class="label">认购倍数</div><div class="value green">553倍</div></div>
+      <div class="info-item"><div class="label">招股价</div><div class="value">27.49-31.62</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value green">✅ 有</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value">7月8日</div></div>
+      <div class="info-item"><div class="label">建议</div><div class="value red">跳过</div></div>
+    </div>
+    <div>
+      <span class="tag red">无基石</span>
+      <span class="tag teal">碳化硅</span>
+      <span class="tag gold">极热</span>
+    </div>
+    <div class="verdict-box skip">❌ 建议跳过 · 赛道好+热度极高但无基石是硬伤 · 博反弹可现金打1手但不推荐融资</div>
+  </div>
+
+  <!-- 东方科脉 -->
+  <div class="ipo-card danger">
+    <div class="header">
+      <span class="score s2">⭐⭐</span>
+      <h2>东方科脉</h2>
+      <span class="code">01770</span>
+      <span class="deadline urgent">⚠️ 今天截止 12:00</span>
+    </div>
+    <div class="reason">
+      全球电子纸显示器龙头，年营收17亿，净利8023万，是为数不多盈利的新股。中信证券独家保荐。有超额配股权。但<strong>无基石投资者</strong>，招股价高达78.64-101.11港元，入场费5107。电子纸赛道偏窄。孖展17亿，超购32倍。
+    </div>
+
+    <table class="dim-table">
+      <tr><th>维度</th><th>得分</th><th>说明</th></tr>
+      <tr><td>🏛️ 基石投资者</td><td class="score-cell" style="color:var(--red);">1/5</td><td>❌ 无基石投资者（强烈预警）</td></tr>
+      <tr><td>🏦 保荐人</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>中信证券独家，中资头部</td></tr>
+      <tr><td>💰 估值</td><td class="score-cell" style="color:var(--red);">2/5</td><td>78.64-101.11港元高价，虽盈利但PE偏高</td></tr>
+      <tr><td>🛡️ 绿鞋</td><td class="score-cell" style="color:var(--green);">5/5</td><td>有超额配股权</td></tr>
+      <tr><td>🔥 热度</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>孖展17.1亿，超购32倍</td></tr>
+      <tr><td>🚀 赛道</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>电子纸显示器，赛道偏窄但有一定技术壁垒</td></tr>
+      <tr><td>📊 财务</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>营收17亿有规模，净利8023万实现盈利，但利润率仅4.7%偏低</td></tr>
+      <tr style="font-weight:700;"><td>原始总分</td><td class="score-cell" style="color:var(--gold);">21/35</td><td>无基石触发降星 → ⭐⭐ 谨慎</td></tr>
+    </table>
+
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">5,107 HKD</div></div>
+      <div class="info-item"><div class="label">认购倍数</div><div class="value green">32倍</div></div>
+      <div class="info-item"><div class="label">招股价</div><div class="value">78.64-101.11</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value green">✅ 有</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value">7月8日</div></div>
+      <div class="info-item"><div class="label">建议</div><div class="value red">跳过</div></div>
+    </div>
+    <div>
+      <span class="tag red">无基石</span>
+      <span class="tag gold">电子纸</span>
+      <span class="tag blue">中信</span>
+    </div>
+    <div class="verdict-box skip">❌ 建议跳过 · 盈利+绿鞋但无基石+赛道窄+高价 · 风险收益比不佳</div>
+  </div>
+
+  <!-- 瑞为技术 -->
+  <div class="ipo-card danger">
+    <div class="header">
+      <span class="score s1">⭐</span>
+      <h2>瑞为技术</h2>
+      <span class="code">07656</span>
+      <span class="deadline urgent">⚠️ 今天截止 12:00</span>
+    </div>
+    <div class="reason">
+      AI视觉/具身智能概念（18C特专科技），赛道极佳。但<strong>无基石+无绿鞋，双重预警！</strong>触发体系「无基石+无绿鞋」直接一星判定。华泰+建银+农银联席保荐仅算中等。2025年亏损6815万，营收增速放缓至12%。孖展超购168倍完全由零售情绪推动。
+    </div>
+
+    <table class="dim-table">
+      <tr><th>维度</th><th>得分</th><th>说明</th></tr>
+      <tr><td>🏛️ 基石投资者</td><td class="score-cell" style="color:var(--red);">1/5</td><td>❌ 无基石投资者（强烈预警）</td></tr>
+      <tr><td>🏦 保荐人</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>华泰国际+建银国际+农银国际，中资中上</td></tr>
+      <tr><td>💰 估值</td><td class="score-cell" style="color:var(--red);">2/5</td><td>一口价21.66港元，亏损中PS~10x+，不便宜</td></tr>
+      <tr><td>🛡️ 绿鞋</td><td class="score-cell" style="color:var(--red);">1/5</td><td>❌ 无绿鞋（强烈预警）</td></tr>
+      <tr><td>🔥 热度</td><td class="score-cell" style="color:var(--green);">5/5</td><td>孖展51.5亿，超购168倍</td></tr>
+      <tr><td>🚀 赛道</td><td class="score-cell" style="color:var(--green);">5/5</td><td>AI视觉/具身智能，18C特专科技，民航视觉第一</td></tr>
+      <tr><td>📊 财务</td><td class="score-cell" style="color:var(--red);">2/5</td><td>2025年亏损6815万，盈利波动大，经营现金流-1.25亿</td></tr>
+      <tr style="font-weight:700;"><td>总分</td><td class="score-cell" style="color:var(--red);">19/35</td><td>无基石+无绿鞋 → 直接⭐ 跳过</td></tr>
+    </table>
+
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">4,376 HKD</div></div>
+      <div class="info-item"><div class="label">认购倍数</div><div class="value green">168倍</div></div>
+      <div class="info-item"><div class="label">招股价</div><div class="value">21.66（固定）</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value red">❌ 无</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value">7月8日</div></div>
+      <div class="info-item"><div class="label">建议</div><div class="value red">跳过</div></div>
+    </div>
+    <div>
+      <span class="tag red">无基石</span>
+      <span class="tag red">无绿鞋</span>
+      <span class="tag teal">AI视觉</span>
+    </div>
+    <div class="verdict-box skip">❌ 强烈建议跳过 · 无基石无绿鞋双重预警 · 破发后无任何价格稳定机制</div>
+  </div>
+
+  <!-- 宝盖新材 -->
+  <div class="ipo-card danger">
+    <div class="header">
+      <span class="score s1">⭐</span>
+      <h2>宝盖新材</h2>
+      <span class="code">08090</span>
+      <span class="deadline urgent">⚠️ 今天截止 12:00</span>
+    </div>
+    <div class="reason">
+      GEM创业板小盘股，复合材料沟盖板制造商。细分龙头但赛道极窄。<strong>无基石+无绿鞋，双重预警！</strong>触发「无基石+无绿鞋」直接一星判定。中泰国际独家保荐为小型券商。招股书预警2026年利润或倒退。营收~1.4亿停滞，净利~2400万且下滑。孖展超购60-118倍全靠GEM小盘博弈情绪。
+    </div>
+
+    <table class="dim-table">
+      <tr><th>维度</th><th>得分</th><th>说明</th></tr>
+      <tr><td>🏛️ 基石投资者</td><td class="score-cell" style="color:var(--red);">1/5</td><td>❌ 无基石投资者（强烈预警）</td></tr>
+      <tr><td>🏦 保荐人</td><td class="score-cell" style="color:var(--red);">2/5</td><td>中泰国际独家，小型券商</td></tr>
+      <tr><td>💰 估值</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>PE~13-18x相对合理但市场极小</td></tr>
+      <tr><td>🛡️ 绿鞋</td><td class="score-cell" style="color:var(--red);">1/5</td><td>❌ 无绿鞋（强烈预警）</td></tr>
+      <tr><td>🔥 热度</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>孖展超购60-118倍，GEM小盘博彩式热度</td></tr>
+      <tr><td>🚀 赛道</td><td class="score-cell" style="color:var(--red);">2/5</td><td>传统制造业，沟盖板细分市场天花板极低</td></tr>
+      <tr><td>📊 财务</td><td class="score-cell" style="color:var(--red);">2/5</td><td>营收停滞（1.37→1.31→1.44亿），净利下滑，2026年利润预警</td></tr>
+      <tr style="font-weight:700;"><td>总分</td><td class="score-cell" style="color:var(--red);">15/35</td><td>无基石+无绿鞋+GEM → 直接⭐ 跳过</td></tr>
+    </table>
+
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">~4,298 HKD</div></div>
+      <div class="info-item"><div class="label">认购倍数</div><div class="value green">60-118倍</div></div>
+      <div class="info-item"><div class="label">招股价</div><div class="value">6.15-8.51</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value red">❌ 无</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value">7月8日</div></div>
+      <div class="info-item"><div class="label">板块</div><div class="value red">GEM</div></div>
+    </div>
+    <div>
+      <span class="tag red">无基石</span>
+      <span class="tag red">无绿鞋</span>
+      <span class="tag red">GEM</span>
+    </div>
+    <div class="verdict-box skip">❌ 强烈建议跳过 · GEM+无基石+无绿鞋三重预警 · 财务恶化+利润预警</div>
+  </div>
+
+  <!-- ============ BUDGET ============ -->
+  <div class="section-title">💰 申购预算建议 <span class="line"></span></div>
+
+  <div class="budget-box">
+    <h3>📋 建议申购方案（总预算 ~25,000 HKD）</h3>
+    <div class="budget-row">
+      <span><span style="color:var(--green);">🥇</span> <span class="name">MOMENTA (06880)</span></span>
+      <span class="amt">1手 = 5,972 HKD · 融资打</span>
+    </div>
+    <div class="budget-row">
+      <span><span style="color:var(--accent2);">🥈</span> <span class="name">易控智驾 (07687)</span></span>
+      <span class="amt">1手 = 4,440 HKD · 现金打</span>
+    </div>
+    <div class="budget-row" style="color:var(--text-muted);">
+      <span><span style="color:var(--gold);">🥉</span> <span class="name">基本半导体 (09971) — 可选</span></span>
+      <span class="amt">0-1手 = 0~6,388 HKD · 仅现金（博反弹）</span>
+    </div>
+    <div class="budget-row">
+      <span class="name">合计</span>
+      <span class="amt">10,412 ~ 16,800 HKD</span>
+    </div>
+  </div>
+
+  <div class="section-title">📅 时间线 <span class="line"></span></div>
+  <div style="display:flex; flex-direction:column; gap:8px;">
+    <div style="display:flex; align-items:center; gap:10px; padding:10px 14px; background:rgba(255,107,107,0.08); border-radius:8px; font-size:0.82rem;">
+      <span style="color:#ff6b6b; font-weight:600; min-width:70px;">7/3 今天</span>
+      <span style="color:var(--text);">6只新股截止: MOMENTA · 易控智驾 · 基本半导体 · 东方科脉 · 瑞为技术 · 宝盖新材</span>
+      <span style="margin-left:auto; color:#ff6b6b; font-size:0.72rem;">中午12:00</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px; padding:10px 14px; background:rgba(108,92,231,0.06); border-radius:8px; font-size:0.82rem;">
+      <span style="color:var(--accent); font-weight:600; min-width:70px;">7/7 暗盘</span>
+      <span style="color:var(--text);">MOMENTA · 易控智驾 · 基本半导体 · 东方科脉 · 瑞为技术 · 宝盖新材 · 同仁堂医养</span>
+      <span style="margin-left:auto; color:var(--text-muted); font-size:0.72rem;">16:15-18:30</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px; padding:10px 14px; background:rgba(0,184,148,0.06); border-radius:8px; font-size:0.82rem;">
+      <span style="color:var(--green); font-weight:600; min-width:70px;">7/7 上市</span>
+      <span style="color:var(--text);">同仁堂医养 (02667)</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px; padding:10px 14px; background:rgba(0,206,201,0.06); border-radius:8px; font-size:0.82rem;">
+      <span style="color:var(--accent2); font-weight:600; min-width:70px;">7/8 上市</span>
+      <span style="color:var(--text);">MOMENTA · 易控智驾 · 基本半导体 · 东方科脉 · 瑞为技术 · 宝盖新材</span>
+    </div>
+  </div>
+
+  <!-- ============ RISK ============ -->
+  <div class="risk-note">
+    <strong>⚠️ 风险提示：</strong>
+    本批次6只新股同时截止，资金分流效应明显，中签率可能高于预期——但这也意味着破发风险同步放大。
+    <br><br>
+    <strong>核心风险点：</strong>
+    <br>• <strong>MOMENTA & 易控智驾：</strong>均处于亏损状态，自动驾驶赛道虽热但估值缺乏锚定。上市后若市场情绪转冷，首日跌幅可能较大。
+    <br>• <strong>基本半导体：</strong>553倍认购热度极高，中签率极低。无基石意味着缺乏机构背书，纯散户情绪驱动。
+    <br>• <strong>瑞为技术 & 宝盖新材：</strong>无基石+无绿鞋双重预警，破发后无任何价格稳定机制，风险不可控。
+    <br>• <strong>同仁堂医养：</strong>已截止。热度159倍极高但财务基础薄弱，关注7月7日暗盘和首日表现，若高开建议获利了结。
+    <br><br>
+    <strong>策略建议：</strong>优先申购 MOMENTA（基石最强）和 易控智驾（产业资本背书）。基本半导体若资金充裕可现金博1手。其余坚决跳过。上市首日+5%~+15%止盈，-3%止损。
+  </div>
+
+  <div class="footer">
+    数据来源：港交所披露易 · 经济日报 · 信报 · 东方财富 · 雪球 · UTRADE<br>
+    分析时间：2026-07-03 07:00 HKT · 七维度量化评分模型 v2.0<br>
+    <a href="../" style="color:var(--accent2); text-decoration:none;">↩ 返回首页</a> · 仅供参考，不构成投资建议
+  </div>
+
+</div>
+
+</body>
+</html>
