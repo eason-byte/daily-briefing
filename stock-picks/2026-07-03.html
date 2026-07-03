@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📊 双战法选股 · 2026-07-03</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#0d1117;--surface:#161b22;--surface-alt:#1c2333;--border:#30363d;--border-light:#21262d;--text:#e6edf3;--text-secondary:#8b949e;--text-tertiary:#6e7681;--accent:#58a6ff;--accent-bg:#0d419d33;--green:#3fb950;--green-bg:#1b3a1f;--red:#f85149;--red-bg:#3d1416;--amber:#d29922;--amber-bg:#2d1f00;--purple:#a371f7;--purple-bg:#2a1a4a;--teal:#56d4dd;--teal-bg:#1d3b3d;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,.3),0 4px 12px rgba(0,0,0,.15);--font-sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  body{font-family:var(--font-sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.7;min-height:100vh}
+  .container{max-width:800px;margin:0 auto;padding:0}
+  .header{background:linear-gradient(135deg,#161b22 0%,#1c2333 50%,#111 100%);border-bottom:1px solid var(--border);padding:22px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;position:relative;overflow:hidden}
+  .header::before{content:'';position:absolute;top:-50%;left:-30%;width:160%;height:200%;background:radial-gradient(ellipse at 30% 50%,var(--accent-bg) 0%,transparent 50%),radial-gradient(ellipse at 70% 50%,var(--purple-bg) 0%,transparent 50%);opacity:.2;pointer-events:none}
+  .h-left{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+  .h-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--accent),var(--purple));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff}
+  .h-title{font-size:18px;font-weight:700;letter-spacing:-.3px}
+  .h-meta{font-size:12px;color:var(--text-tertiary);margin-top:2px}
+  .h-badge{font-size:11px;font-weight:500;color:var(--accent);background:var(--accent-bg);padding:4px 16px;border-radius:20px;letter-spacing:.3px;position:relative;z-index:1}
+  .h-home{font-size:20px;text-decoration:none;margin-left:8px;position:relative;z-index:1;transition:opacity .15s}
+  .h-home:hover{opacity:.7}
+  .section{padding:24px 22px}
+  .section+.section{border-top:1px solid var(--border-light)}
+  .sec-label{font-size:12px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+  .sec-label::after{content:'';flex:1;height:1px;background:var(--border);margin-left:8px}
+  .section-alt{background:var(--surface-alt)}
+  .at{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin-bottom:14px}
+  .at th{text-align:left;padding:10px 14px;font-weight:600;color:var(--text-secondary);background:var(--surface-alt);border-bottom:1px solid var(--border);font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+  .at th:first-child{border-radius:8px 0 0 0}
+  .at th:last-child{border-radius:0 8px 0 0}
+  .at td{padding:10px 14px;border-bottom:1px solid var(--border-light);color:var(--text)}
+  .at tr:last-child td:first-child{border-radius:0 0 0 8px}
+  .at tr:last-child td:last-child{border-radius:0 0 8px 0}
+  .at tr:last-child td{border-bottom:none}
+  .dragon-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin-bottom:14px;box-shadow:var(--shadow);border-left:3px solid var(--purple)}
+  .dragon-card.dc-hot{border-left-color:var(--red)}
+  .dc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px}
+  .dc-name{font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .dc-name .dc-tag{font-size:10px;font-weight:600;padding:2px 10px;border-radius:20px;background:var(--accent-bg);color:var(--accent)}
+  .dc-name .dc-tag.dc-hot-tag{background:var(--red-bg);color:var(--red)}
+  .dc-score{font-size:12px;color:var(--text-tertiary)}
+  .dc-body{margin-top:6px}
+  .dc-detail{font-size:13px;color:var(--text-secondary);line-height:1.7;padding:8px 12px;background:var(--surface-alt);border-radius:6px;margin-top:8px;border-left:2px solid var(--border)}
+  .dc-buy{font-size:13px;padding:10px 14px;border-radius:6px;margin-top:10px;background:var(--green-bg);border-left:3px solid var(--green);color:var(--green)}
+  .callout{padding:14px 18px;border-radius:var(--radius);margin:10px 0;font-size:13px;line-height:1.6}
+  .callout.info{background:var(--accent-bg);border-left:3px solid var(--accent);color:var(--accent)}
+  .callout.success{background:var(--green-bg);border-left:3px solid var(--green);color:var(--green)}
+  .callout.warn{background:var(--amber-bg);border-left:3px solid var(--amber);color:var(--amber)}
+  .callout.danger{background:var(--red-bg);border-left:3px solid var(--red);color:var(--red)}
+  .callout.neutral{background:var(--surface-alt);border-left:3px solid var(--text-tertiary);color:var(--text-secondary)}
+  .sig{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
+  .sig.g{background:var(--green)}
+  .sig.r{background:var(--red)}
+  .sig.y{background:var(--amber)}
+  .sig.b{background:var(--accent)}
+  .stars{font-size:14px;letter-spacing:1px;color:var(--amber)}
+  .risk-list{list-style:none;padding:0}
+  .risk-list li{padding:8px 0 8px 24px;position:relative;font-size:13px;color:var(--text-secondary);border-bottom:1px solid var(--border-light)}
+  .risk-list li:last-child{border-bottom:none}
+  .risk-list li::before{content:'⚠️';position:absolute;left:0;top:8px;font-size:12px}
+  .st{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin:10px 0 14px}
+  .st td{padding:10px 14px;border-bottom:1px solid var(--border-light);color:var(--text-secondary)}
+  .st td:first-child{font-weight:600;color:var(--text);white-space:nowrap;width:110px}
+  .st tr:last-child td{border-bottom:none}
+  .conclusion-box{text-align:center;padding:28px 22px;background:linear-gradient(135deg,var(--surface-alt),var(--surface));border:1px solid var(--border);border-radius:var(--radius);margin:16px 0;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .conclusion-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--purple),var(--teal))}
+  .conclusion-text{font-size:18px;font-weight:700;color:var(--text);line-height:1.6;margin-bottom:6px}
+  .conclusion-sub{font-size:13px;color:var(--text-secondary);line-height:1.7}
+  .pos-table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin:10px 0}
+  .pos-table td{padding:10px 14px;border-bottom:1px solid var(--border-light);color:var(--text)}
+  .pos-table td:first-child{font-weight:600;white-space:nowrap;width:120px}
+  .pos-table tr:last-child td{border-bottom:none}
+  .pos-table .amt{font-family:var(--font-mono);color:var(--accent);font-weight:600}
+  .footer{text-align:center;padding:24px 22px 36px;font-size:11px;color:var(--text-tertiary);line-height:1.8;border-top:1px solid var(--border-light)}
+  .footer a{color:var(--accent);text-decoration:none}.footer a:hover{text-decoration:underline}
+  @media(max-width:480px){
+    .section{padding:18px 14px}
+    .header{padding:14px 14px}
+    .h-title{font-size:16px}
+    .at{font-size:12px}.at td,.at th{padding:8px 10px}
+    .dragon-card{padding:14px 14px}
+    .dc-name{font-size:15px}
+    .conclusion-text{font-size:16px}
+  }
+  @media(min-width:1024px){
+    .container{max-width:960px}
+    .header{padding:26px 28px}.h-title{font-size:20px}
+    .section{padding:28px 28px}
+    .at{font-size:14px}.at td,.at th{padding:12px 16px}
+    .dragon-card{padding:24px 28px;margin-bottom:18px}
+    .dc-name{font-size:19px}
+    .conclusion-box{padding:34px 28px}.conclusion-text{font-size:20px}
+    .footer{padding:28px 28px 40px;font-size:12px}
+  }
+  @media(min-width:1400px){.container{max-width:1080px}}
+  .ice-day{font-size:12px;color:var(--amber);margin-left:6px;font-weight:600}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="h-left">
+    <div class="h-icon">📊</div>
+    <div>
+      <div class="h-title">双战法选股分析</div>
+      <div class="h-meta">2026-07-03 · 周五 · 收盘后</div>
+    </div>
+  </div>
+  <span class="h-badge">冰点反抽 + 龙头主升浪</span>
+  <a href="https://eason-byte.github.io/daily-briefing/stock-picks/" class="h-home" title="返回首页">📋</a>
+</div>
+
+<div class="section">
+  <div class="sec-label">🧊 冰点反抽模式分析</div>
+
+  <table class="at">
+    <tr><th>指标</th><th>今日数据</th><th>冰点阈值</th><th>判断</th></tr>
+    <tr>
+      <td>跌停家数</td>
+      <td style="color:var(--amber)">19家</td>
+      <td>≥20家</td>
+      <td style="color:var(--amber)">接近阈值</td>
+    </tr>
+    <tr>
+      <td>涨停封板</td>
+      <td style="color:var(--green)">108家</td>
+      <td>—</td>
+      <td style="color:var(--green)">赚钱效应恢复</td>
+    </tr>
+    <tr>
+      <td>炸板率</td>
+      <td>52/160 = 32.5%</td>
+      <td>&gt;40%异常</td>
+      <td style="color:var(--amber)">正常偏高</td>
+    </tr>
+    <tr>
+      <td>昨日冰点(D0)</td>
+      <td style="color:var(--red)">40+跌停</td>
+      <td>—</td>
+      <td style="color:var(--red)">已确认触发</td>
+    </tr>
+    <tr>
+      <td>D1修复信号</td>
+      <td style="color:var(--green)">跌停减半+涨停破百</td>
+      <td>跌停≤5 + 高开</td>
+      <td style="color:var(--amber)">部分修复</td>
+    </tr>
+  </table>
+
+  <div class="callout warn">
+    <strong>⚡ D1观察日：</strong>昨天(07-02)半导体板块集体崩盘，40+跌停触发冰点 → 今日D1。跌停降至19家，未达理想标准(≤5家)，但涨停108家显示多方反攻。汽车零部件20只涨停+贵金属黄金联动，结构性行情已现。
+  </div>
+
+  <div class="callout info">
+    <strong>📐 适用性：⭐⭐⭐ 适用但需谨慎</strong><br>
+    · D1跌停未清零(19家)，修复不够充分，仓位必须从紧<br>
+    · 但赚钱效应已恢复(108涨停)，存在结构性机会<br>
+    · 汽车零部件/贵金属为冰点后资金攻击的结构性主线<br>
+    · 仓位上限：<strong style="color:var(--red)">10%</strong>（跌停19家→动态调整）
+  </div>
+
+  <table class="at">
+    <tr><th style="color:var(--red)">🛑 跌停股(19只)</th><th>跌幅</th><th>所属行业</th><th>特征</th></tr>
+    <tr><td style="color:var(--red)">气派科技</td><td style="color:var(--red)">-20.00%</td><td>半导体</td><td>科创板20cm跌停，昨日崩盘延续</td></tr>
+    <tr><td style="color:var(--red)">京源环保</td><td style="color:var(--red)">-19.98%</td><td>环境治理</td><td>科创板，跟跌</td></tr>
+    <tr><td style="color:var(--red)">三美股份</td><td style="color:var(--red)">-10.00%</td><td>化学制品</td><td>氟化工，昨龙多氟多跌停</td></tr>
+    <tr><td style="color:var(--red)">多氟多</td><td style="color:var(--red)">-10.00%</td><td>化学制品</td><td>昨日3连板龙头，今日补跌</td></tr>
+    <tr><td style="color:var(--red)">巨化股份</td><td style="color:var(--red)">-9.99%</td><td>化学制品</td><td>氟化工跟跌</td></tr>
+    <tr><td style="color:var(--red)">立昂微</td><td style="color:var(--red)">-10.01%</td><td>半导体</td><td>半导体延续弱势</td></tr>
+    <tr><td style="color:var(--red)">莱宝高科</td><td style="color:var(--red)">-9.97%</td><td>光学光电</td><td>面板概念集体下杀</td></tr>
+    <tr><td style="color:var(--red)">彩虹股份</td><td style="color:var(--red)">-10.01%</td><td>光学光电</td><td>同上</td></tr>
+    <tr><td style="color:var(--red)">惠科股份</td><td style="color:var(--red)">-10.00%</td><td>光学光电</td><td>面板批量化跌停</td></tr>
+    <tr><td style="color:var(--red)">龙头股份</td><td style="color:var(--red)">-10.01%</td><td>服装家纺</td><td>非主线杂毛</td></tr>
+    <tr><td style="color:var(--red)">其他9只</td><td style="color:var(--red)">-10%左右</td><td>造纸/小金属/电力等</td><td>跟跌杂毛，非主线</td></tr>
+  </table>
+
+  <div class="callout success">
+    <strong>✅ 冰点反抽结论：</strong>D0冰点已触发，D1部分修复。跌停从40+降至19家(减半)，涨停108家显示多方力量。汽车零部件20只涨停+贵金属黄金联动为结构性主线。<br><br>
+    <strong>操作建议：</strong>适用但谨慎。仓位≤10%，聚焦汽车零部件+贵金属活口。等明日(D2)进一步确认跌停<5再提仓。
+  </div>
+</div>
+
+<div class="section section-alt">
+  <div class="sec-label">🐉 龙头主升浪战法分析</div>
+
+  <table class="at">
+    <tr><th>最强板块</th><th>涨停数</th><th>涨停集中度</th><th>持续性判断</th></tr>
+    <tr>
+      <td style="color:var(--green)">🚗 汽车零部件</td>
+      <td style="color:var(--green)">20只</td>
+      <td style="color:var(--green)">★★★★★</td>
+      <td style="color:var(--green)">连续两日强势，主线确认</td>
+    </tr>
+    <tr>
+      <td>⚙️ 通用设备</td>
+      <td>12只</td>
+      <td>★★★</td>
+      <td>今日爆发，待观察持续性</td>
+    </tr>
+    <tr>
+      <td style="color:var(--amber)">🥇 贵金属</td>
+      <td style="color:var(--amber)">5只</td>
+      <td>★★★★</td>
+      <td>板块联动强，黄金涨价驱动</td>
+    </tr>
+    <tr>
+      <td>🤖 自动化设备</td>
+      <td>4只</td>
+      <td>★★</td>
+      <td>跟涨，非独立主线</td>
+    </tr>
+  </table>
+
+  <div class="callout info">
+    <strong>📈 主线判断：</strong>汽车零部件以20只涨停绝对领先，连续两日(07-02/07-03)强势，是冰点后最先反攻的板块，具备主线特征。通用设备12只涨停为今日新起，需观察次日持续性。贵金属5只联动涨停(招金黄金、赤峰黄金、山金国际)，黄金现货涨价提供基本面支撑。
+  </div>
+
+  <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:12px;text-transform:uppercase;letter-spacing:.8px">真龙候选 · 五维评分</div>
+
+  <div class="dragon-card dc-hot">
+    <div class="dc-header">
+      <div class="dc-name">
+        🚗 汽车零部件板块
+        <span class="dc-tag dc-hot-tag">主线</span>
+      </div>
+      <div class="dc-score"><span class="stars">★★★★☆</span> 综合评分</div>
+    </div>
+    <div class="dc-body">
+      <table class="at" style="margin-bottom:0">
+        <tr><th>维度</th><th>评分</th><th>说明</th></tr>
+        <tr><td>辨识度</td><td>★★★★</td><td>20只涨停碾压全场，市场焦点</td></tr>
+        <tr><td>带动性</td><td>★★★★</td><td>涨停从昨日延续至今，板块效应持续扩散</td></tr>
+        <tr><td>成交量</td><td>—</td><td>需个股确认（首板多，等连板龙头走出）</td></tr>
+        <tr><td>题材</td><td>★★★</td><td>非全新题材，但冰点后资金集中攻击形成预期差</td></tr>
+        <tr><td>换手率</td><td>—</td><td>待龙头确认后跟踪</td></tr>
+      </table>
+    </div>
+    <div class="dc-detail">
+      <strong>⚠️ 注意：</strong>20只涨停中多为首板，尚未出现明确连板龙头。根据真龙原则——不预判龙头等它走出来。观察次日谁能晋级2板/3板，再按买点①(缩量回踩均线)或买点②(箱体突破)上车。
+    </div>
+  </div>
+
+  <div class="dragon-card">
+    <div class="dc-header">
+      <div class="dc-name">
+        🥇 赤峰黄金 600988
+        <span class="dc-tag">防御性龙头</span>
+      </div>
+      <div class="dc-score"><span class="stars">★★★☆</span> 综合评分</div>
+    </div>
+    <div class="dc-body">
+      <table class="at" style="margin-bottom:0">
+        <tr><th>维度</th><th>评分</th><th>说明</th></tr>
+        <tr><td>辨识度</td><td>★★★★</td><td>黄金板块老牌龙头，市场认知度高</td></tr>
+        <tr><td>带动性</td><td>★★★★</td><td>招金黄金+山金国际同步涨停，联动明确</td></tr>
+        <tr><td>成交量</td><td>—</td><td>需确认日成交额是否>10亿</td></tr>
+        <tr><td>题材</td><td>★★★★</td><td>黄金现货涨价+避险逻辑，基本面驱动</td></tr>
+        <tr><td>换手率</td><td>—</td><td>待确认</td></tr>
+      </table>
+    </div>
+    <div class="dc-detail">
+      赤峰黄金(600988)093137封板，招金黄金(000506)093051封板，山金国际(000975)093142封板——三只黄金股密集时段先后涨停，联动性极强。黄金现货价格上涨为板块提供基本面支撑，在市场整体偏弱时黄金具有避险属性，是冰点期较安全的配置方向。
+    </div>
+    <div class="dc-buy">
+      <strong>💰 买点参考：</strong>若明日缩量回踩5日线不破，可轻仓(≤5%)试探性建仓。止损设在今日涨停价下方3%。
+    </div>
+  </div>
+
+  <div class="callout neutral">
+    <strong>📋 其他观察标的：</strong><br>
+    · <strong>宝塔实业(000595)</strong>：电力板块，092500秒板，但非主线<br>
+    · <strong>雷赛智能(002979)</strong>：自动化设备，092500封板，机器人概念<br>
+    · <strong>锐捷网络(301165)</strong>：通信设备炸板但仍涨11.31%，资金分歧大<br>
+    · <strong>先锋新材(300163)</strong>：化学制品炸板涨15.92%，弹性大但风险高<br>
+    · <strong>国华退(000004)</strong>：退市整理股+9.76%，⚠️ 风险极高请远离
+  </div>
+
+  <div class="callout success">
+    <strong>✅ 龙头主升浪结论：</strong>汽车零部件主线确认(20涨停+连续两日)，但需等连板龙头走出(买点①/②)。贵金属黄金联动为确定性较高的防御方向，赤峰黄金五维评分3.5星。通用设备12只涨停为潜在次级主线，需观察次日持续性。<br><br>
+    <strong>策略：不追高，等龙头赛马跑出结果再上车。黄金可轻仓试探。</strong>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-label">⚖️ 综合结论</div>
+
+  <table class="at">
+    <tr><th>对比维度</th><th style="color:var(--accent)">冰点反抽</th><th style="color:var(--purple)">龙头主升浪</th><th>是否一致</th></tr>
+    <tr>
+      <td>市场状态</td>
+      <td>D1修复中</td>
+      <td>结构性行情</td>
+      <td style="color:var(--green)">✓ 一致</td>
+    </tr>
+    <tr>
+      <td>主线方向</td>
+      <td>汽车零部件+贵金属</td>
+      <td>汽车零部件(20涨停)</td>
+      <td style="color:var(--green)">✓ 一致</td>
+    </tr>
+    <tr>
+      <td>操作节奏</td>
+      <td>轻仓试探，等D2确认</td>
+      <td>等龙头走出再上车</td>
+      <td style="color:var(--green)">✓ 一致</td>
+    </tr>
+    <tr>
+      <td>仓位建议</td>
+      <td>≤10%</td>
+      <td>≤20%(等龙头确认后)</td>
+      <td style="color:var(--green)">✓ 一致(取保守值)</td>
+    </tr>
+    <tr>
+      <td>风险提示</td>
+      <td>修复不充分(19跌停)</td>
+      <td>首板多，龙头未出</td>
+      <td style="color:var(--green)">✓ 一致</td>
+    </tr>
+  </table>
+
+  <table class="st">
+    <tr><td>场景</td><td>策略</td></tr>
+    <tr><td>冰点反抽(D1)</td><td>修复进行中，跌停19家未清零 → 仓位≤10%，聚焦汽车零部件活口</td></tr>
+    <tr><td>龙头主升浪</td><td>汽车零部件主线确认 → 等待连板龙头走出，按买点①(缩量回踩均线)上车</td></tr>
+    <tr><td>交叉验证</td><td>两战法结论高度一致：方向=汽车零部件，节奏=等确认不追高</td></tr>
+  </table>
+
+  <table class="pos-table">
+    <tr><td>🧊 冰点反抽</td><td class="amt">≤10%</td><td>汽车零部件板块活口股(等D2进一步确认)</td></tr>
+    <tr><td>🐉 龙头主升浪</td><td class="amt">≤20%</td><td>等连板龙头确认后上车(目前仅赤峰黄金可轻仓试探)</td></tr>
+    <tr><td>⛔ 严禁操作</td><td class="amt" style="color:var(--red)">0%</td><td>追高首板、接盘跌停股(氟化工/半导体/面板)、退市股(国华退)</td></tr>
+  </table>
+
+  <div class="callout danger" style="margin-top:14px">
+    <strong>⚠️ 风险提示：</strong><br>
+    1. D1跌停仍有19家，若明日(D2)跌停反增→修复失败，立即放弃本次操作<br>
+    2. 昨日前龙头多氟多今日跌停补跌，说明高位股风险极大<br>
+    3. 汽车零部件首板多，次日淘汰率可能很高(炸板率32.5%偏高)<br>
+    4. 国华退(000004)是退市整理股，涨停9.76%为末日轮赌博，严禁参与<br>
+    5. 氟化工(三美/巨化/多氟多)、半导体(气派/立昂微)、面板(莱宝/彩虹/惠科)集体跌停→这些板块短期内不要碰
+  </div>
+</div>
+
+<div class="section section-alt">
+  <div class="conclusion-box">
+    <div class="conclusion-text">冰点D1修复进行中 · 等龙头确认再动手</div>
+    <div class="conclusion-sub">
+      昨天(07-02)D0冰点：半导体崩盘40+跌停 📉<br>
+      今天(07-03)D1修复：跌停减半至19家，涨停108家 📈<br>
+      汽车零部件20只涨停 → 冰点后首批反攻主线<br>
+      贵金属黄金联动 → 防御性配置方向<br><br>
+      <strong style="color:var(--amber)">策略：不追高，等明日(D2)跌停降至5家以下 + 龙头连板确认</strong><br>
+      仓位：冰点反抽≤10% / 龙头主升浪≤20%(待确认后)<br>
+      纪律：跌停反增→立即放弃 / 龙头未出→不强行上车
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  数据源：东方财富(AKShare) · 腾讯行情 · 新浪财经<br>
+  采集时间：2026-07-03 18:15 · 基于 deepseek-v4-pro<br>
+  <a href="https://eason-byte.github.io/daily-briefing/">🏠 返回首页</a> ·
+  <a href="https://eason-byte.github.io/daily-briefing/stock-picks/">📋 历史分析</a> ·
+  <a href="https://19930808.xyz">19930808.xyz</a><br>
+  ⚠️ 基于双战法纪律框架分析，仅供参考，不构成投资建议
+</div>
+
+</div>
+</body>
+</html>
