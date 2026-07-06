@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>跨境电商工具清单与实操流程</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0d1117;--surface:#161b22;--surface-alt:#1c2333;--border:#30363d;--border-light:#21262d;--text:#e6edf3;--text-secondary:#8b949e;--text-tertiary:#6e7681;--accent:#58a6ff;--accent-bg:#0d419d33;--green:#3fb950;--green-bg:#1b3a1f;--red:#f85149;--red-bg:#3d1416;--amber:#d29922;--amber-bg:#2d1f00;--purple:#a371f7;--purple-bg:#2a1a4a;--teal:#56d4dd;--teal-bg:#1d3b3d;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,.3),0 4px 12px rgba(0,0,0,.15);--font-sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+body{font-family:var(--font-sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.7}
+.container{max-width:800px;margin:0 auto;padding:24px 20px}
+.header{background:linear-gradient(135deg,#161b22 0%,#1c2333 50%,#111 100%);border-bottom:1px solid var(--border);padding:28px 22px;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-50%;left:-30%;width:160%;height:200%;background:radial-gradient(ellipse at 30% 50%,var(--accent-bg) 0%,transparent 50%),radial-gradient(ellipse at 70% 50%,var(--purple-bg) 0%,transparent 50%);opacity:.2;pointer-events:none}
+.h-title{font-size:24px;font-weight:800;letter-spacing:-.5px;position:relative;z-index:1}
+.h-meta{font-size:13px;color:var(--text-tertiary);margin-top:6px;position:relative;z-index:1}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;position:relative;z-index:1}
+.tag{font-size:11px;font-weight:500;padding:3px 12px;border-radius:20px;background:var(--accent-bg);color:var(--accent)}
+.tag.green{background:var(--green-bg);color:var(--green)}
+.tag.amber{background:var(--amber-bg);color:var(--amber)}
+h2{font-size:20px;font-weight:700;margin:32px 0 16px;color:var(--text);display:flex;align-items:center;gap:10px}
+h2::after{content:'';flex:1;height:1px;background:var(--border)}
+h3{font-size:16px;font-weight:600;margin:24px 0 12px;color:var(--accent)}
+p{font-size:14px;color:var(--text-secondary);margin:12px 0;line-height:1.8}
+.callout{padding:14px 18px;border-radius:var(--radius);margin:16px 0;font-size:13px;line-height:1.6}
+.callout.info{background:var(--accent-bg);border-left:3px solid var(--accent);color:var(--accent)}
+.callout.success{background:var(--green-bg);border-left:3px solid var(--green);color:var(--green)}
+.callout.warn{background:var(--amber-bg);border-left:3px solid var(--amber);color:var(--amber)}
+.callout.danger{background:var(--red-bg);border-left:3px solid var(--red);color:var(--red)}
+.callout.neutral{background:var(--surface-alt);border-left:3px solid var(--text-tertiary);color:var(--text-secondary)}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin:16px 0}
+th{text-align:left;padding:10px 14px;font-weight:600;color:var(--text-secondary);background:var(--surface-alt);border-bottom:1px solid var(--border);font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+th:first-child{border-radius:8px 0 0 0}
+th:last-child{border-radius:0 8px 0 0}
+td{padding:10px 14px;border-bottom:1px solid var(--border-light);color:var(--text)}
+tr:last-child td:first-child{border-radius:0 0 0 8px}
+tr:last-child td:last-child{border-radius:0 0 8px 0}
+tr:last-child td{border-bottom:none}
+.footer{border-top:1px solid var(--border-light);padding:20px 0;margin-top:40px;font-size:12px;color:var(--text-tertiary);text-align:center}
+.footer a{color:var(--accent);text-decoration:none}
+ul{list-style:none;padding:0}
+ul li{padding:8px 0 8px 24px;position:relative;font-size:13px;color:var(--text-secondary);border-bottom:1px solid var(--border-light)}
+ul li:last-child{border-bottom:none}
+ul li::before{content:'▸';position:absolute;left:4px;color:var(--accent);font-size:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin:16px 0;box-shadow:var(--shadow)}
+.card-title{font-size:15px;font-weight:700;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+.tool-card{padding:16px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)}
+.tool-card .tc-label{font-size:11px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.tool-card .tc-name{font-size:15px;font-weight:700;margin-bottom:4px}
+.tool-card .tc-desc{font-size:12px;color:var(--text-secondary);margin-bottom:6px}
+.tool-card .tc-status{font-size:11px;padding:2px 8px;border-radius:10px;display:inline-block}
+.tc-status.ok{background:var(--green-bg);color:var(--green)}
+.tc-status.warn{background:var(--amber-bg);color:var(--amber)}
+.tc-status.na{background:var(--red-bg);color:var(--red)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="h-title">跨境电商工具清单与实操流程</div>
+  <div class="h-meta">来源：博主经验分享 · 验证日期：2026-07-06 · 核心工具已核实</div>
+  <div class="tags">
+    <span class="tag">#跨境电商</span>
+    <span class="tag green">#工具清单</span>
+    <span class="tag">#选品工具</span>
+    <span class="tag">#卖家精灵</span>
+    <span class="tag">#虾皮</span>
+    <span class="tag amber">#新手入门</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="callout danger">
+    <strong>⚠️ 核心提醒：</strong>国内爆款 ≠ 海外爆款。不要从1688/拼多多找货直接上架，要用平台专用工具做选品调研。
+  </div>
+
+  <h2>新手常见错误</h2>
+
+  <table>
+    <tr><th>❌ 错误做法</th><th>✅ 正确做法</th></tr>
+    <tr><td>盲目开店、无脑铺货</td><td>先学习流程，利用工具调研后再动手</td></tr>
+    <tr><td>听信花哨宣传不做调研</td><td>用专业工具分析市场和选品</td></tr>
+    <tr><td>从1688/拼多多找货直接上</td><td>用平台专用选品工具找当地爆款</td></tr>
+  </table>
+
+  <h2>工具清单</h2>
+
+  <h3>📚 学习与资源整合网站</h3>
+
+  <div class="grid">
+    <div class="tool-card">
+      <div class="tc-label">美系市场（亚马逊等）</div>
+      <div class="tc-name">amg123.com</div>
+      <div class="tc-desc">整合各平台海外仓资源、运营流程和工具</div>
+      <span class="tc-status ok">✅ 已验证</span>
+    </div>
+    <div class="tool-card">
+      <div class="tc-label">东南亚（虾皮等）</div>
+      <div class="tc-name">dny123.com</div>
+      <div class="tc-desc">东南亚电商资源整合站</div>
+      <span class="tc-status ok">✅ 已验证</span>
+    </div>
+    <div class="tool-card">
+      <div class="tc-label">TikTok</div>
+      <div class="tc-name">t0123.com</div>
+      <div class="tc-desc">TikTok电商资源站</div>
+      <span class="tc-status warn">⚠️ SSL异常</span>
+    </div>
+  </div>
+
+  <h3>🎯 选品工具</h3>
+
+  <div class="grid">
+    <div class="tool-card">
+      <div class="tc-label">亚马逊</div>
+      <div class="tc-name">卖家精灵</div>
+      <div class="tc-desc">sellersprite.com - 亚马逊选品分析标杆工具</div>
+      <span class="tc-status ok">✅ 已验证</span>
+    </div>
+    <div class="tool-card">
+      <div class="tc-label">Shopee/虾皮</div>
+      <div class="tc-name">知虾</div>
+      <div class="tc-desc">zhixia.com - Shopee数据分析和选品</div>
+      <span class="tc-status warn">⚠️ 知名工具，SSL异常</span>
+    </div>
+    <div class="tool-card">
+      <div class="tc-label">Temu</div>
+      <div class="tc-name">选品助手</div>
+      <div class="tc-desc">Temu平台选品工具</div>
+      <span class="tc-status warn">⚠️ 待核实</span>
+    </div>
+    <div class="tool-card">
+      <div class="tc-label">TikTok</div>
+      <div class="tc-name">fastmouth</div>
+      <div class="tc-desc">TikTok选品工具</div>
+      <span class="tc-status na">❌ 未验证</span>
+    </div>
+  </div>
+
+  <h3>🛠️ 运营辅助工具</h3>
+
+  <div class="grid">
+    <div class="tool-card">
+      <div class="tc-label">产品上架</div>
+      <div class="tc-name">妙手</div>
+      <div class="tc-desc">批量上架管理工具（约80元/月）</div>
+      <span class="tc-status ok">✅ 前文已提及</span>
+    </div>
+    <div class="tool-card">
+      <div class="tc-label">图片优化</div>
+      <div class="tc-name">link Fox</div>
+      <div class="tc-desc">商品图片处理工具</div>
+      <span class="tc-status warn">⚠️ 待核实</span>
+    </div>
+    <div class="tool-card">
+      <div class="tc-label">网络环境</div>
+      <div class="tc-name">站斧浏览器</div>
+      <div class="tc-desc">防关联/多店铺管理浏览器</div>
+      <span class="tc-status ok">✅ 行业常见</span>
+    </div>
+  </div>
+
+  <h2>与已有文章的关系</h2>
+
+  <table>
+    <tr><th>已有文章</th><th>互补关系</th></tr>
+    <tr><td>启动成本解析</td><td>那篇说工具约80元/月，这篇给出了具体工具名和功能</td></tr>
+    <tr><td>全流程解析</td><td>那篇讲六步流程怎么走，这篇给出每一步用什么工具</td></tr>
+    <tr><td>IT男TK从0到1</td><td>那篇偏实操步骤，这篇偏工具推荐</td></tr>
+  </table>
+
+  <div class="callout info">
+    <strong>📌 综合建议：</strong>这篇文章最实用的部分是<strong>工具清单</strong>。建议把amg123/dny123收藏起来当作入门学习入口，选品阶段用卖家精灵（亚马逊）或知虾（虾皮）。妙手作为上架工具已有成本参考（~80元/月）。fastmouth和link Fox待你实际用到时再验证。
+  </div>
+
+  <h2>一句话总结</h2>
+
+  <div class="card">
+    <div class="card-title">💡 核心</div>
+    <p style="margin:0;font-size:14px;color:var(--text-secondary)">
+      个人做跨境电商关键在于<strong>系统化学习</strong>和<strong>利用专业工具</strong>。从市场调研到选品上架，都应使用平台专用工具，而不是凭感觉或照搬国内经验。
+    </p>
+  </div>
+
+</div>
+
+<div class="footer">
+  <p>来源：某博主跨境电商工具推荐与避坑分享（用户转发材料）</p>
+  <p>工具验证日期：2026-07-06 · 部分工具无法直接验证，标注了状态</p>
+  <p><a href="https://eason-byte.github.io/daily-briefing/">🏠 返回首页</a> · <a href="https://eason-byte.github.io/daily-briefing/learning/">📚 学习栏目</a></p>
+</div>
+
+</body>
+</html>
