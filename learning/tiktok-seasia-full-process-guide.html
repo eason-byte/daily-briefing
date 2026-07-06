@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TK跨境电商全流程解析</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0d1117;--surface:#161b22;--surface-alt:#1c2333;--border:#30363d;--border-light:#21262d;--text:#e6edf3;--text-secondary:#8b949e;--text-tertiary:#6e7681;--accent:#58a6ff;--accent-bg:#0d419d33;--green:#3fb950;--green-bg:#1b3a1f;--red:#f85149;--red-bg:#3d1416;--amber:#d29922;--amber-bg:#2d1f00;--purple:#a371f7;--purple-bg:#2a1a4a;--teal:#56d4dd;--teal-bg:#1d3b3d;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,.3),0 4px 12px rgba(0,0,0,.15);--font-sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+body{font-family:var(--font-sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.7}
+.container{max-width:800px;margin:0 auto;padding:24px 20px}
+.header{background:linear-gradient(135deg,#161b22 0%,#1c2333 50%,#111 100%);border-bottom:1px solid var(--border);padding:28px 22px;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-50%;left:-30%;width:160%;height:200%;background:radial-gradient(ellipse at 30% 50%,var(--accent-bg) 0%,transparent 50%),radial-gradient(ellipse at 70% 50%,var(--purple-bg) 0%,transparent 50%);opacity:.2;pointer-events:none}
+.h-title{font-size:24px;font-weight:800;letter-spacing:-.5px;position:relative;z-index:1}
+.h-meta{font-size:13px;color:var(--text-tertiary);margin-top:6px;position:relative;z-index:1}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;position:relative;z-index:1}
+.tag{font-size:11px;font-weight:500;padding:3px 12px;border-radius:20px;background:var(--accent-bg);color:var(--accent)}
+.tag.green{background:var(--green-bg);color:var(--green)}
+.tag.amber{background:var(--amber-bg);color:var(--amber)}
+h2{font-size:20px;font-weight:700;margin:32px 0 16px;color:var(--text);display:flex;align-items:center;gap:10px}
+h2::after{content:'';flex:1;height:1px;background:var(--border)}
+h3{font-size:16px;font-weight:600;margin:24px 0 12px;color:var(--accent)}
+p{font-size:14px;color:var(--text-secondary);margin:12px 0;line-height:1.8}
+.callout{padding:14px 18px;border-radius:var(--radius);margin:16px 0;font-size:13px;line-height:1.6}
+.callout.info{background:var(--accent-bg);border-left:3px solid var(--accent);color:var(--accent)}
+.callout.success{background:var(--green-bg);border-left:3px solid var(--green);color:var(--green)}
+.callout.warn{background:var(--amber-bg);border-left:3px solid var(--amber);color:var(--amber)}
+.callout.danger{background:var(--red-bg);border-left:3px solid var(--red);color:var(--red)}
+.callout.neutral{background:var(--surface-alt);border-left:3px solid var(--text-tertiary);color:var(--text-secondary)}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin:16px 0}
+th{text-align:left;padding:10px 14px;font-weight:600;color:var(--text-secondary);background:var(--surface-alt);border-bottom:1px solid var(--border);font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+th:first-child{border-radius:8px 0 0 0}
+th:last-child{border-radius:0 8px 0 0}
+td{padding:10px 14px;border-bottom:1px solid var(--border-light);color:var(--text)}
+tr:last-child td:first-child{border-radius:0 0 0 8px}
+tr:last-child td:last-child{border-radius:0 0 8px 0}
+tr:last-child td{border-bottom:none}
+.num{font-family:var(--font-mono);text-align:right;font-weight:600}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin:16px 0;box-shadow:var(--shadow)}
+.card-title{font-size:15px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.steps{display:flex;flex-direction:column;gap:8px;margin:16px 0}
+.step{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--accent-bg);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.step-body{flex:1}
+.step-title{font-size:14px;font-weight:600;margin-bottom:4px}
+.step-desc{font-size:12px;color:var(--text-secondary);line-height:1.5}
+.flow-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.flow-item{padding:16px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)}
+.flow-item .label{font-size:11px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.flow-item .value{font-size:22px;font-weight:800;margin-bottom:4px}
+.flow-item .note{font-size:12px;color:var(--text-secondary)}
+.footer{border-top:1px solid var(--border-light);padding:20px 0;margin-top:40px;font-size:12px;color:var(--text-tertiary);text-align:center}
+.footer a{color:var(--accent);text-decoration:none}
+ul{list-style:none;padding:0}
+ul li{padding:8px 0 8px 24px;position:relative;font-size:13px;color:var(--text-secondary);border-bottom:1px solid var(--border-light)}
+ul li:last-child{border-bottom:none}
+ul li::before{content:'▸';position:absolute;left:4px;color:var(--accent);font-size:12px}
+.rank{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.rank-item{padding:8px 14px;border-radius:20px;font-size:12px;font-weight:600}
+.rank-item:nth-child(1){background:var(--green-bg);color:var(--green)}
+.rank-item:nth-child(2){background:var(--accent-bg);color:var(--accent)}
+.rank-item:nth-child(3){background:var(--amber-bg);color:var(--amber)}
+.rank-item:nth-child(4),.rank-item:nth-child(5){background:var(--red-bg);color:var(--red)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="h-title">TikTok跨境电商全流程解析</div>
+  <div class="h-meta">来源：博主经验分享 · 验证日期：2026-07-06</div>
+  <div class="tags">
+    <span class="tag">#TikTok</span>
+    <span class="tag">#跨境电商</span>
+    <span class="tag green">#新手开店</span>
+    <span class="tag">#选品</span>
+    <span class="tag">#物流</span>
+    <span class="tag amber">#一件代发</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="callout info">
+    <strong>📌 本文定位：</strong>这是一篇TK跨境电商<strong>全流程框架</strong>文章，与已有文章（启动成本、封店风险）互补。建议三篇一起看，形成完整认知。
+  </div>
+
+  <h2>核心六步流程</h2>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">选地区</div>
+        <div class="step-desc">新手优先选择东南亚或日本，门槛低、竞争小</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">开店</div>
+        <div class="step-desc">办执照（东南亚个体户即可，其他地区要有限公司）→ 缴纳保证金</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">选品上架</div>
+        <div class="step-desc">铺货型（海量SKU碰概率）或精细化（聚焦少数品深度运营）</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">流量运营</div>
+        <div class="step-desc">新手优先走自然流量+官方活动，有内容能力再做短视频</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">物流发货</div>
+        <div class="step-desc">新手用国内直邮+一件代发，测出爆款后转海外仓</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <div class="step-title">收款回款</div>
+        <div class="step-desc">用乒乓/空中云汇等第三方支付，无需海外银行卡</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>市场选择</h2>
+
+  <div class="card">
+    <div class="card-title">🌍 新手适配度排名</div>
+    <div class="rank">
+      <span class="rank-item">1. 东南亚</span>
+      <span class="rank-item">2. 日本</span>
+      <span class="rank-item">3. 美区</span>
+      <span class="rank-item">4. 欧盟</span>
+      <span class="rank-item">5. 墨西哥</span>
+    </div>
+  </div>
+
+  <table>
+    <tr><th>市场</th><th>特点</th><th>适合谁</th></tr>
+    <tr><td>东南亚</td><td>用户基数大，入驻门槛低</td><td>新手小白首选</td></tr>
+    <tr><td>日本</td><td>竞争较小，文化差异小</td><td>想抢占东亚市场</td></tr>
+    <tr><td>美区</td><td>利润空间大，门槛高</td><td>有实力的卖家</td></tr>
+    <tr><td>欧盟</td><td>利润空间大，门槛高</td><td>有实力的卖家</td></tr>
+    <tr><td>墨西哥</td><td>平台全托管模式</td><td>有稳定货源的工厂</td></tr>
+  </table>
+
+  <div class="callout warn">
+    <strong>⚠️ 关于日本的提示：</strong>原文说日本竞争较小，但日本合规要求较高（进口手续、产品标识、消费税），实际门槛可能比文章描述的高。建议入局前专门调研日本市场的合规要求。
+  </div>
+
+  <h2>执照要求</h2>
+
+  <div class="flow-grid">
+    <div class="flow-item" style="border-color:var(--green)">
+      <div class="label">东南亚</div>
+      <div class="value" style="color:var(--green)">个体工商户</div>
+      <div class="note">注册满14天即可 ✅</div>
+    </div>
+    <div class="flow-item" style="border-color:var(--accent)">
+      <div class="label">美/欧/日/墨</div>
+      <div class="value" style="color:var(--accent)">有限公司</div>
+      <div class="note">一步到位，可同时申请多区域</div>
+    </div>
+  </div>
+
+  <div class="callout success">
+    <strong>💡 建议：</strong>直接办理有限公司执照，可同时申请多个区域店铺，互不影响。经营范围选全类目，避免后续受限。
+  </div>
+
+  <h2>选品与运营模式</h2>
+
+  <table>
+    <tr><th>维度</th><th>铺货型</th><th>精细化运营</th></tr>
+    <tr><td>核心逻辑</td><td>大力出奇迹，海量SKU碰概率</td><td>聚焦少数品，深度打造爆款</td></tr>
+    <tr><td>适合人群</td><td>新手首选</td><td>有供应链优势的卖家</td></tr>
+    <tr><td>风险</td><td>单价低但管理成本高</td><td>压库存但利润率高</td></tr>
+  </table>
+
+  <h2>流量来源</h2>
+
+  <table>
+    <tr><th>渠道</th><th>推荐度</th><th>操作方式</th></tr>
+    <tr><td>自然流量</td><td>⭐⭐⭐</td><td>平台新品自然曝光 + 官方活动 + 折扣</td></tr>
+    <tr><td>短视频</td><td>⭐⭐⭐⭐</td><td>自拍视频或找海外达人合作带货</td></tr>
+    <tr><td>直播</td><td>⭐</td><td>自己直播或组团队（门槛高）</td></tr>
+  </table>
+
+  <div class="callout warn">
+    <strong>📉 行业趋势：</strong>TikTok自然流量在减少，平台逐渐商业化。纯靠自然流量越来越难，建议同步布局短视频内容。
+  </div>
+
+  <h2>物流发货</h2>
+
+  <table>
+    <tr><th>模式</th><th>操作</th><th>优缺点</th></tr>
+    <tr><td>国内直邮</td><td>发货至TikTok国内官方中转站</td><td>简单低风险，新手用</td></tr>
+    <tr><td>海外仓</td><td>提前备货至海外，本地发货</td><td>时效快但有囤货风险</td></tr>
+    <tr><td>一件代发</td><td>先卖后发，零库存</td><td>无压力但利润薄</td></tr>
+  </table>
+
+  <h2>回款</h2>
+
+  <div class="card">
+    <div class="card-title">💰 无需海外银行卡</div>
+    <p style="font-size:13px;color:var(--text-secondary);margin:0">
+      使用TikTok官方合作的第三方支付服务商（如<strong>乒乓PingPong</strong>、<strong>空中云汇Airwallex</strong>等），绑定后即可按当日汇率将款项直接回款至国内账户。这是跨境电商正规回款路径，已在多个平台验证可行。
+    </p>
+  </div>
+
+  <h2>与已有文章的互补关系</h2>
+
+  <table>
+    <tr><th>文章</th><th>互补关系</th></tr>
+    <tr><td>TK东南亚启动成本解析</td><td>那篇讲多少钱能开张，这篇讲开张后怎么做</td></tr>
+    <tr><td>TK封店隐藏风险</td><td>那篇讲出了事怎么办，这篇讲正常流程怎么走</td></tr>
+    <tr><td>IT男TK从0到1</td><td>有重叠，但这篇更全面（市场选择+回款是新增内容）</td></tr>
+  </table>
+
+  <div class="callout info">
+    <strong>📌 综合建议：</strong>启动成本篇→知道要花多少钱 + 封店风险篇→知道要防什么坑 + 全流程篇→知道该怎么走。三篇一起看，形成完整认知。
+  </div>
+
+</div>
+
+<div class="footer">
+  <p>来源：某博主TK跨境电商全流程实操指南（用户转发材料）</p>
+  <p><a href="https://eason-byte.github.io/daily-briefing/">🏠 返回首页</a> · <a href="https://eason-byte.github.io/daily-briefing/learning/">📚 学习栏目</a></p>
+</div>
+
+</body>
+</html>
