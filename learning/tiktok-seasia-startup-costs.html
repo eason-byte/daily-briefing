@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TK东南亚启动成本解析</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0d1117;--surface:#161b22;--surface-alt:#1c2333;--border:#30363d;--border-light:#21262d;--text:#e6edf3;--text-secondary:#8b949e;--text-tertiary:#6e7681;--accent:#58a6ff;--accent-bg:#0d419d33;--green:#3fb950;--green-bg:#1b3a1f;--red:#f85149;--red-bg:#3d1416;--amber:#d29922;--amber-bg:#2d1f00;--purple:#a371f7;--purple-bg:#2a1a4a;--teal:#56d4dd;--teal-bg:#1d3b3d;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,.3),0 4px 12px rgba(0,0,0,.15);--font-sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+body{font-family:var(--font-sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.7}
+.container{max-width:800px;margin:0 auto;padding:24px 20px}
+.header{background:linear-gradient(135deg,#161b22 0%,#1c2333 50%,#111 100%);border-bottom:1px solid var(--border);padding:28px 22px;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-50%;left:-30%;width:160%;height:200%;background:radial-gradient(ellipse at 30% 50%,var(--accent-bg) 0%,transparent 50%),radial-gradient(ellipse at 70% 50%,var(--purple-bg) 0%,transparent 50%);opacity:.2;pointer-events:none}
+.h-title{font-size:24px;font-weight:800;letter-spacing:-.5px;position:relative;z-index:1}
+.h-meta{font-size:13px;color:var(--text-tertiary);margin-top:6px;position:relative;z-index:1}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;position:relative;z-index:1}
+.tag{font-size:11px;font-weight:500;padding:3px 12px;border-radius:20px;background:var(--accent-bg);color:var(--accent)}
+.tag.green{background:var(--green-bg);color:var(--green)}
+.tag.amber{background:var(--amber-bg);color:var(--amber)}
+h2{font-size:20px;font-weight:700;margin:32px 0 16px;color:var(--text);display:flex;align-items:center;gap:10px}
+h2::after{content:'';flex:1;height:1px;background:var(--border)}
+h3{font-size:16px;font-weight:600;margin:24px 0 12px;color:var(--accent)}
+p{font-size:14px;color:var(--text-secondary);margin:12px 0;line-height:1.8}
+.callout{padding:14px 18px;border-radius:var(--radius);margin:16px 0;font-size:13px;line-height:1.6}
+.callout.info{background:var(--accent-bg);border-left:3px solid var(--accent);color:var(--accent)}
+.callout.success{background:var(--green-bg);border-left:3px solid var(--green);color:var(--green)}
+.callout.warn{background:var(--amber-bg);border-left:3px solid var(--amber);color:var(--amber)}
+.callout.danger{background:var(--red-bg);border-left:3px solid var(--red);color:var(--red)}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin:16px 0}
+th{text-align:left;padding:10px 14px;font-weight:600;color:var(--text-secondary);background:var(--surface-alt);border-bottom:1px solid var(--border);font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+th:first-child{border-radius:8px 0 0 0}
+th:last-child{border-radius:0 8px 0 0}
+td{padding:10px 14px;border-bottom:1px solid var(--border-light);color:var(--text)}
+tr:last-child td:first-child{border-radius:0 0 0 8px}
+tr:last-child td:last-child{border-radius:0 0 8px 0}
+tr:last-child td{border-bottom:none}
+.num{font-family:var(--font-mono);text-align:right;font-weight:600}
+.highlight{background:var(--amber-bg);color:var(--amber);padding:1px 6px;border-radius:4px;font-weight:600}
+.highlight.red{background:var(--red-bg);color:var(--red)}
+.highlight.green{background:var(--green-bg);color:var(--green)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin:16px 0;box-shadow:var(--shadow)}
+.card-title{font-size:15px;font-weight:700;margin-bottom:10px}
+.footer{border-top:1px solid var(--border-light);padding:20px 0;margin-top:40px;font-size:12px;color:var(--text-tertiary);text-align:center}
+.footer a{color:var(--accent);text-decoration:none}
+ul{list-style:none;padding:0}
+ul li{padding:8px 0 8px 24px;position:relative;font-size:13px;color:var(--text-secondary);border-bottom:1px solid var(--border-light)}
+ul li:last-child{border-bottom:none}
+ul li::before{content:'▸';position:absolute;left:4px;color:var(--accent);font-size:12px}
+.scheme{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.scheme-item{padding:16px;border-radius:var(--radius);border:1px solid var(--border)}
+.scheme-item.high{background:var(--red-bg);border-color:var(--red)}
+.scheme-item.low{background:var(--green-bg);border-color:var(--green)}
+.scheme-item .label{font-size:11px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.5px}
+.scheme-item .amount{font-size:22px;font-weight:800;margin:6px 0}
+.scheme-item .note{font-size:12px;color:var(--text-secondary)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="h-title">TK东南亚启动成本解析</div>
+  <div class="h-meta">来源：博主经验分享 · 验证日期：2026-07-06 · 部分数据已核实/部分为推算</div>
+  <div class="tags">
+    <span class="tag">#TikTok</span>
+    <span class="tag">#东南亚电商</span>
+    <span class="tag green">#启动成本</span>
+    <span class="tag">#商品卡模式</span>
+    <span class="tag">#一件代发</span>
+    <span class="tag amber">#新手开店</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="callout danger">
+    <strong>⚠️ 批判性阅读提示：</strong>以下内容为一手博主经验分享，<strong>已经部分验证</strong>（90天免保证金政策、新商扶持政策）但也包含大量博主的个人推算（首月130元回款、T+8周期等），并非官方数据。入局前建议再查最新政策。
+  </div>
+
+  <h2>核心结论</h2>
+
+  <p>网上流传的"5000-1万启动"说法背后，是第一个月仅回款<span class="highlight red">130元</span>的残酷现实。真实启动成本取决于你已有多少设备：</p>
+
+  <div class="scheme">
+    <div class="scheme-item high">
+      <div class="label">方案A：从零开始</div>
+      <div class="amount" style="color:var(--red)">8,328元</div>
+      <div class="note">无执照、无电脑、无手机</div>
+    </div>
+    <div class="scheme-item low">
+      <div class="label">方案B：已有设备</div>
+      <div class="amount" style="color:var(--green)">3,118元</div>
+      <div class="note">有执照/电脑/手机 + 利用90天免保证金</div>
+    </div>
+  </div>
+
+  <h2>启动成本明细</h2>
+
+  <table>
+    <tr><th>项目</th><th>费用</th><th>备注</th></tr>
+    <tr><td>营业执照</td><td class="num">800元</td><td>推荐真实地址，非虚拟地址</td></tr>
+    <tr><td>保证金</td><td class="num">610元(90美金)</td><td>目前有90天免保证金政策 ✅ 已验证</td></tr>
+    <tr><td>电脑</td><td class="num">2,000-3,000元</td><td>可租用二手，有MacBook可省</td></tr>
+    <tr><td>手机</td><td class="num">500-800元</td><td>推荐二手iPhone8或谷歌Pixel</td></tr>
+    <tr><td>软件工具</td><td class="num">约80元/月</td><td>妙手、数据平台等</td></tr>
+    <tr><td>网络服务</td><td class="num">10-100元</td><td>魔法上网费用</td></tr>
+    <tr><td>广告预算</td><td class="num">678元(100美金)</td><td>前期可省，用于筛选潜力品</td></tr>
+    <tr><td>货款垫资</td><td class="num">1,600元</td><td>按首月160单预估</td></tr>
+    <tr><td>风险成本</td><td class="num">660元</td><td>退货10%+发错货等意外</td></tr>
+  </table>
+
+  <h2>最大的坑：回款周期</h2>
+
+  <div class="card">
+    <div class="card-title">📅 首月垫资与回款节奏</div>
+    <table>
+      <tr><th>阶段</th><th>预估订单</th><th>垫资成本</th></tr>
+      <tr><td>第1-10天（上品测品）</td><td>10单</td><td class="num">100元</td></tr>
+      <tr><td>第11-20天（初步转化）</td><td>50单</td><td class="num">500元</td></tr>
+      <tr><td>第21-30天（开始起量）</td><td>100单</td><td class="num">1,000元</td></tr>
+      <tr><td><strong>总计</strong></td><td><strong>160单</strong></td><td class="num"><strong>1,600元</strong></td></tr>
+    </table>
+    <div class="callout warn">
+      <strong>💡 T+8回款周期</strong>：第一个月结束时，你可能只能收到约<strong>130元</strong>的回款，其余资金将在第二个月陆续到账。这是新手最容易忽视的现金流陷阱。
+    </div>
+  </div>
+
+  <h2>两种模式的选择</h2>
+
+  <table>
+    <tr><th>模式</th><th>启动成本</th><th>优缺点</th></tr>
+    <tr>
+      <td><strong>纯商品卡模式</strong></td>
+      <td class="num">3,000-8,000元</td>
+      <td>门槛低，但2026年TK算法对商品卡流量分配在降低</td>
+    </tr>
+    <tr>
+      <td><strong>商品卡+短视频</strong></td>
+      <td class="num">6,000-16,000元</td>
+      <td>成本翻倍（样品费+寄样费+内容制作），但起量更快</td>
+    </tr>
+  </table>
+
+  <h2>验证结果</h2>
+
+  <div class="callout success">
+    <strong>✅ 已核实（多来源验证）：</strong><br>
+    • TikTok Shop东南亚确实有90天免保证金政策（亿邦动力网报道）<br>
+    • TikTok Shop东南亚推出新商扶持政策降低冷启动门槛<br>
+    • 商品卡模式 vs 短视频引流是真实存在的两种运营路径
+  </div>
+
+  <div class="callout warn">
+    <strong>⚠️ 推算数据（未独立验证）：</strong><br>
+    • 保证金90美金(约610元) — 具体金额未从官方渠道核实<br>
+    • T+8回款周期 — 回款慢是行业共识，具体周期可能因国家而异<br>
+    • 首月130元回款 — 基于"160单/月×10元利润"的假设推算<br>
+    • 每单利润10元 — 取决于选品和供应链，差异很大
+  </div>
+
+  <div class="callout danger">
+    <strong>❌ 需要警惕：</strong><br>
+    • 纯商品卡模式在2026年可能已不如2024年有效（TK算法变化）<br>
+    • 各国政策变化快（泰国2026年刚出新规）<br>
+    • 建议备4000-5000元流动资金（不只是启动成本）
+  </div>
+
+  <h2>给个人卖家的建议</h2>
+
+  <ul>
+    <li><strong>已有MacBook+手机</strong> — 方案B适用，启动成本约3000元</li>
+    <li><strong>首月预算至少备5000元</strong> — 3000启动+2000流动资金（垫货+退货+试错）</li>
+    <li><strong>选品比省钱重要</strong> — 最大成本不是启动费，是选错品浪费的时间和垫资</li>
+    <li><strong>先走通一个品再扩</strong> — 别一上来就做10个品，先1个品跑通回款流程</li>
+    <li><strong>入局前查最新政策</strong> — TK各国政策变化快，保证金、佣金、运费都在变</li>
+  </ul>
+
+  <div class="callout info">
+    <strong>📌 你的情况：</strong>已有MacBook、手机，技术背景学习能力强，远程工作时间灵活。方案B（约3000元）适合作为试水起点。但建议先做两周市场调研再投钱。
+  </div>
+
+</div>
+
+<div class="footer">
+  <p>来源：某博主TK东南亚电商启动成本分析（用户转发材料）</p>
+  <p>部分数据经多平台交叉验证，部分为原文作者推算，入局前请自行核实最新政策</p>
+  <p><a href="https://eason-byte.github.io/daily-briefing/">🏠 返回首页</a> · <a href="https://eason-byte.github.io/daily-briefing/learning/">📚 学习栏目</a></p>
+</div>
+
+</body>
+</html>
