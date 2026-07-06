@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>港股打新 · 2026年7月6日 每日IPO分析</title>
+<style>
+  :root {
+    --bg: #0f0f13;
+    --card: #1a1a24;
+    --card-hover: #222233;
+    --accent: #6c5ce7;
+    --accent2: #00cec9;
+    --gold: #fdcb6e;
+    --red: #e17055;
+    --green: #00b894;
+    --orange: #f39c12;
+    --text: #e0e0e8;
+    --text-muted: #888899;
+    --border: #2a2a3a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 60px 24px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(108,92,231,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 50%, rgba(0,206,201,0.06) 0%, transparent 50%);
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .hero h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); color: #fff; font-weight: 700; margin-bottom: 6px; }
+  .hero h1 span { color: var(--accent2); }
+  .hero .subtitle { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; }
+  .hero .budget { margin-top: 14px; display: inline-block; background: rgba(108,92,231,0.12); border: 1px solid rgba(108,92,231,0.25); padding: 6px 20px; border-radius: 20px; font-size: 0.85rem; color: var(--accent); }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 32px 20px 60px; }
+
+  .section-title { font-size: 1.1rem; font-weight: 700; color: #fff; margin: 36px 0 16px; display: flex; align-items: center; gap: 8px; }
+  .section-title .line { flex: 1; height: 1px; background: var(--border); }
+
+  .summary-bar {
+    display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;
+  }
+  .summary-chip {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 16px; font-size: 0.8rem; display: flex; align-items: center; gap: 8px;
+  }
+  .summary-chip .num { font-size: 1.3rem; font-weight: 700; }
+  .summary-chip .num.green { color: var(--green); }
+  .summary-chip .num.orange { color: var(--orange); }
+  .summary-chip .num.red { color: var(--red); }
+  .summary-chip .num.purple { color: var(--accent); }
+  .summary-chip .num.gold { color: var(--gold); }
+
+  /* Score Badge */
+  .score { display: inline-flex; align-items: center; gap: 4px; padding: 3px 12px; border-radius: 10px; font-size: 0.72rem; font-weight: 600; }
+  .score.s5 { background: rgba(0,184,148,0.15); color: var(--green); }
+  .score.s4 { background: rgba(0,206,201,0.12); color: var(--accent2); }
+  .score.s3 { background: rgba(253,203,110,0.12); color: var(--gold); }
+  .score.s2 { background: rgba(225,112,85,0.12); color: var(--red); }
+  .score.s1 { background: rgba(225,112,85,0.18); color: var(--red); font-weight: 700; }
+
+  /* IPO Card */
+  .ipo-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    transition: all 0.2s;
+  }
+  .ipo-card:hover { border-color: rgba(108,92,231,0.3); }
+  .ipo-card.danger { border-color: rgba(225,112,85,0.2); background: rgba(225,112,85,0.03); }
+  .ipo-card.closed { border-color: rgba(42,42,58,0.6); opacity: 0.85; }
+
+  .ipo-card .header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .ipo-card .header h2 { font-size: 1.05rem; color: #fff; font-weight: 600; }
+  .ipo-card .header .code { color: var(--text-muted); font-size: 0.78rem; font-weight: 400; }
+  .ipo-card .header .deadline { font-size: 0.72rem; padding: 2px 8px; border-radius: 6px; margin-left: auto; }
+  .deadline.urgent { background: rgba(255,107,107,0.15); color: #ff6b6b; font-weight: 600; }
+  .deadline.soon { background: rgba(243,156,18,0.15); color: var(--orange); font-weight: 600; }
+  .deadline.open { background: rgba(0,184,148,0.12); color: var(--green); }
+  .deadline.closed { background: rgba(136,136,153,0.12); color: var(--text-muted); }
+
+  .reason { font-size: 0.84rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.65; }
+  .reason strong { color: var(--text); }
+
+  .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 6px; margin-bottom: 12px; }
+  .info-item { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 6px 10px; }
+  .info-item .label { font-size: 0.62rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .info-item .value { font-size: 0.85rem; color: var(--text); font-weight: 500; }
+  .info-item .value.green { color: var(--green); }
+  .info-item .value.gold { color: var(--gold); }
+  .info-item .value.red { color: var(--red); }
+
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 500; margin-right: 4px; margin-bottom: 4px; }
+  .tag.green { background: rgba(0,184,148,0.12); color: var(--green); }
+  .tag.gold { background: rgba(253,203,110,0.12); color: var(--gold); }
+  .tag.red { background: rgba(225,112,85,0.12); color: var(--red); }
+  .tag.blue { background: rgba(108,92,231,0.12); color: var(--accent); }
+  .tag.teal { background: rgba(0,206,201,0.12); color: var(--accent2); }
+
+  /* Dim table */
+  .dim-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.78rem; }
+  .dim-table th { text-align: left; color: var(--text-muted); font-weight: 500; font-size: 0.7rem; padding: 4px 8px 4px 0; border-bottom: 1px solid var(--border); }
+  .dim-table td { padding: 4px 8px 4px 0; border-bottom: 1px solid rgba(42,42,58,0.4); }
+  .dim-table td.score-cell { font-weight: 600; }
+
+  .verdict-box {
+    margin-top: 10px; padding: 10px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 600;
+  }
+  .verdict-box.buy { background: rgba(0,184,148,0.08); border: 1px solid rgba(0,184,148,0.2); color: var(--green); }
+  .verdict-box.hold { background: rgba(253,203,110,0.08); border: 1px solid rgba(253,203,110,0.2); color: var(--gold); }
+  .verdict-box.skip { background: rgba(225,112,85,0.08); border: 1px solid rgba(225,112,85,0.2); color: var(--red); }
+  .verdict-box.info { background: rgba(108,92,231,0.06); border: 1px solid rgba(108,92,231,0.15); color: var(--accent); }
+
+  .divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+  .risk-note {
+    margin-top: 28px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(225,112,85,0.2);
+    background: rgba(225,112,85,0.04);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .risk-note strong { color: var(--red); }
+
+  .budget-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.82rem; }
+  .budget-table th { text-align: left; color: var(--text-muted); font-weight: 500; font-size: 0.7rem; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+  .budget-table td { padding: 6px 8px; border-bottom: 1px solid rgba(42,42,58,0.4); }
+  .budget-table td.total { font-weight: 700; color: var(--accent2); }
+
+  .footer { text-align: center; padding: 24px 0; font-size: 0.72rem; color: var(--text-muted); border-top: 1px solid var(--border); margin-top: 24px; }
+
+  @media (max-width: 600px) {
+    .ipo-card { padding: 16px; }
+    .info-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>港股打新 · <span>每日IPO分析</span></h1>
+    <p class="subtitle">2026年7月6日（周一）· 6只新股今日截止 · 打新决战日</p>
+    <div class="budget">🔥 今日6只IPO截止申购 · 晶合集成+濱化股份明日截止 · 永康控股后天截止</div>
+  </div>
+</section>
+
+<div class="container">
+
+  <!-- Summary -->
+  <div class="summary-bar">
+    <div class="summary-chip"><span class="num purple">9</span> 在申购中</div>
+    <div class="summary-chip"><span class="num red">6</span> 今日截止</div>
+    <div class="summary-chip"><span class="num gold">2</span> 明日截止</div>
+    <div class="summary-chip"><span class="num green">3</span> 强烈申购</div>
+    <div class="summary-chip"><span class="num orange">2</span> 建议申购</div>
+    <div class="summary-chip"><span class="num red">4</span> 建议跳过</div>
+  </div>
+
+  <!-- ============ STRONG BUY ============ -->
+  <div class="section-title">⭐ 强烈申购（30-35分） <span class="line"></span></div>
+
+  <!-- 三環集團 -->
+  <div class="ipo-card">
+    <div class="header">
+      <span class="score s5">⭐⭐⭐⭐⭐ 33分</span>
+      <h2>三環集團</h2>
+      <span class="code">06951.HK · A+H</span>
+      <span class="deadline urgent">⚠️ 今日截止</span>
+    </div>
+    <div class="reason">
+      <strong>本批最强配置：淡馬錫主權基金+騰訊+阿里+高盛+摩根大通5大頂級基石，共17家。</strong>中金+高盛聯合保薦（頂配）。A/H折價約49%，安全墊充足。孖展444億港元超購61倍，市場極度看好。電子陶瓷元件全球龍頭，穩定盈利。7月9日上市。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">10,131 HKD</div></div>
+      <div class="info-item"><div class="label">孖展认购</div><div class="value green">444亿/61倍</div></div>
+      <div class="info-item"><div class="label">A/H折价</div><div class="value green">~49%</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value green">✅ 有</div></div>
+      <div class="info-item"><div class="label">截止日</div><div class="value red">7月6日</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value" style="color:var(--accent2);">7月9日</div></div>
+    </div>
+    <table class="dim-table">
+      <tr><th>维度</th><th>得分</th><th>说明</th></tr>
+      <tr><td>🏛️ 基石</td><td class="score-cell" style="color:var(--green);">5/5</td><td>淡馬錫+2, 騰訊+1.5, 阿里+1.5, 高盛+摩根大通+1, 17家基石>50%+1 = 满分</td></tr>
+      <tr><td>🏦 保荐人</td><td class="score-cell" style="color:var(--green);">5/5</td><td>中金+高盛联合保荐，顶配组合</td></tr>
+      <tr><td>💰 估值</td><td class="score-cell" style="color:var(--green);">5/5</td><td>A/H折价49%，安全垫充足</td></tr>
+      <tr><td>🛡️ 绿鞋</td><td class="score-cell" style="color:var(--green);">5/5</td><td>有绿鞋，标准比例</td></tr>
+      <tr><td>🔥 热度</td><td class="score-cell" style="color:var(--green);">5/5</td><td>孖展444亿/超购61倍，极热</td></tr>
+      <tr><td>🚀 赛道</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>电子陶瓷元件全球龙头，优质赛道</td></tr>
+      <tr><td>📊 财务</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>稳定盈利，经营性现金流良好</td></tr>
+    </table>
+    <div>
+      <span class="tag green">淡馬錫</span>
+      <span class="tag green">騰訊</span>
+      <span class="tag green">阿里</span>
+      <span class="tag blue">高盛</span>
+      <span class="tag blue">摩根大通</span>
+      <span class="tag teal">电子陶瓷龙头</span>
+    </div>
+    <div class="verdict-box buy">✅ 强烈申购 · 建议打2-3手 · 可用融资 · 止盈目标首日+10%~+15% · 止损-3%</div>
+  </div>
+
+  <!-- 鼎泰高科 -->
+  <div class="ipo-card">
+    <div class="header">
+      <span class="score s5">⭐⭐⭐⭐⭐ 30分</span>
+      <h2>鼎泰高科</h2>
+      <span class="code">01377.HK · A+H</span>
+      <span class="deadline urgent">⚠️ 今日截止</span>
+    </div>
+    <div class="reason">
+      <strong>17名基石投资者认购2.54亿美元，勝宏科技+建滔等产业资本加持。</strong>PCB微型钻头/刀具龙头。孖展244亿港元超购50倍，热度极高。A+H上市，H股有一定折价空间。入场费38,383港元较高，资金门槛大。集資48億港元，规模较大。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">38,383 HKD</div></div>
+      <div class="info-item"><div class="label">孖展认购</div><div class="value green">244亿/50倍</div></div>
+      <div class="info-item"><div class="label">基石</div><div class="value green">17家/2.54亿$</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value green">✅ 有</div></div>
+      <div class="info-item"><div class="label">截止日</div><div class="value red">7月6日</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value" style="color:var(--accent2);">7月9日</div></div>
+    </div>
+    <table class="dim-table">
+      <tr><th>维度</th><th>得分</th><th>说明</th></tr>
+      <tr><td>🏛️ 基石</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>17家基石，产业资本为主，认购占比30-50%</td></tr>
+      <tr><td>🏦 保荐人</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>中资头部券商保荐</td></tr>
+      <tr><td>💰 估值</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>A+H股，H股有折价空间</td></tr>
+      <tr><td>🛡️ 绿鞋</td><td class="score-cell" style="color:var(--green);">5/5</td><td>有绿鞋</td></tr>
+      <tr><td>🔥 热度</td><td class="score-cell" style="color:var(--green);">5/5</td><td>孖展244亿/超购50倍，极热</td></tr>
+      <tr><td>🚀 赛道</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>PCB微型钻头/工业机械，中等赛道</td></tr>
+      <tr><td>📊 财务</td><td class="score-cell" style="color:var(--green);">4/5</td><td>PCB行业龙头，稳定盈利</td></tr>
+    </table>
+    <div>
+      <span class="tag green">勝宏科技</span>
+      <span class="tag green">建滔</span>
+      <span class="tag teal">PCB龙头</span>
+      <span class="tag gold">A+H</span>
+    </div>
+    <div class="verdict-box buy">✅ 强烈申购 · 入场费较高建议打1-2手 · 可融资 · 止盈目标首日+8%~+12%</div>
+  </div>
+
+  <!-- 立訊精密 -->
+  <div class="ipo-card">
+    <div class="header">
+      <span class="score s5">⭐⭐⭐⭐⭐ 31分</span>
+      <h2>立訊精密</h2>
+      <span class="code">02475.HK · A+H</span>
+      <span class="deadline urgent">⚠️ 今日截止</span>
+    </div>
+    <div class="reason">
+      <strong>26名基石投资人阵容豪华：ADIA阿布扎比主权基金+騰訊领衔。</strong>Apple果链三巨头之一，全球连接器龙头。集资242亿港元，本批最大IPO。孖展40亿已足额。中金+顶级外资联合保荐。A+H上市，H股发行价上限63.28港元。估值对标A股有折价空间。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">6,392 HKD</div></div>
+      <div class="info-item"><div class="label">孖展认购</div><div class="value green">40亿/足额</div></div>
+      <div class="info-item"><div class="label">基石</div><div class="value green">26家/ADIA+腾讯</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value green">✅ 有</div></div>
+      <div class="info-item"><div class="label">截止日</div><div class="value red">7月6日</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value" style="color:var(--accent2);">7月9日</div></div>
+    </div>
+    <table class="dim-table">
+      <tr><th>维度</th><th>得分</th><th>说明</th></tr>
+      <tr><td>🏛️ 基石</td><td class="score-cell" style="color:var(--green);">5/5</td><td>ADIA主权基金+2, 騰訊+1.5, 26家基石>50%+1</td></tr>
+      <tr><td>🏦 保荐人</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>中金+外资联合保荐，顶级组合</td></tr>
+      <tr><td>💰 估值</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>A+H折价预计25-35%，有安全垫</td></tr>
+      <tr><td>🛡️ 绿鞋</td><td class="score-cell" style="color:var(--green);">5/5</td><td>有绿鞋</td></tr>
+      <tr><td>🔥 热度</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>孖展40亿足额，预估超购15-30倍</td></tr>
+      <tr><td>🚀 赛道</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>消费电子/果链龙头，优质赛道</td></tr>
+      <tr><td>📊 财务</td><td class="score-cell" style="color:var(--green);">5/5</td><td>果链三巨头，持续高增长盈利</td></tr>
+    </table>
+    <div>
+      <span class="tag green">ADIA主权基金</span>
+      <span class="tag green">騰訊</span>
+      <span class="tag blue">果链龙头</span>
+      <span class="tag gold">242亿巨型IPO</span>
+    </div>
+    <div class="verdict-box buy">✅ 强烈申购 · 建议打2-3手 · 可用融资 · 止盈目标首日+8%~+15% · 止损-3%</div>
+  </div>
+
+  <!-- ============ RECOMMEND ============ -->
+  <div class="section-title">📊 建议申购（25-29分） <span class="line"></span></div>
+
+  <!-- 晶合集成 -->
+  <div class="ipo-card">
+    <div class="header">
+      <span class="score s4">⭐⭐⭐⭐ 28分</span>
+      <h2>晶合集成</h2>
+      <span class="code">02249.HK · A+H</span>
+      <span class="deadline soon">⏰ 明日截止</span>
+    </div>
+    <div class="reason">
+      <strong>20家基石：高瓴+高毅+奇瑞+思特威等明星阵容。</strong>12英寸纯晶圆代工企业，半导体核心赛道。A/H折价约54%，安全垫极大。中金独家保荐。但Q1净利润同比降63%，盈利下滑明显。零售认购偏冷（仅1.61倍），热度不足。上市日7月10日。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">3,263 HKD</div></div>
+      <div class="info-item"><div class="label">零售认购</div><div class="value">1.61倍</div></div>
+      <div class="info-item"><div class="label">A/H折价</div><div class="value green">~54%</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value green">✅ 有</div></div>
+      <div class="info-item"><div class="label">截止日</div><div class="value" style="color:var(--orange);">7月7日</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value" style="color:var(--accent2);">7月10日</div></div>
+    </div>
+    <table class="dim-table">
+      <tr><th>维度</th><th>得分</th><th>说明</th></tr>
+      <tr><td>🏛️ 基石</td><td class="score-cell" style="color:var(--green);">5/5</td><td>高瓴+高毅+产业资本，20家基石</td></tr>
+      <tr><td>🏦 保荐人</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>中金独家保荐，顶级中资</td></tr>
+      <tr><td>💰 估值</td><td class="score-cell" style="color:var(--green);">5/5</td><td>A/H折价54%，安全垫极大</td></tr>
+      <tr><td>🛡️ 绿鞋</td><td class="score-cell" style="color:var(--green);">5/5</td><td>有绿鞋</td></tr>
+      <tr><td>🔥 热度</td><td class="score-cell" style="color:var(--red);">2/5</td><td>零售仅1.61倍，偏冷</td></tr>
+      <tr><td>🚀 赛道</td><td class="score-cell" style="color:var(--green);">5/5</td><td>半导体晶圆代工，顶尖赛道</td></tr>
+      <tr><td>📊 财务</td><td class="score-cell" style="color:var(--red);">2/5</td><td>Q1净利润降63%，盈利下滑</td></tr>
+    </table>
+    <div>
+      <span class="tag green">高瓴</span>
+      <span class="tag green">高毅</span>
+      <span class="tag teal">晶圆代工</span>
+      <span class="tag gold">A/H 54%折价</span>
+      <span class="tag red">盈利下滑</span>
+    </div>
+    <div class="verdict-box hold">⚠️ 建议申购但控制仓位 · 现金打1手即可 · 热度偏冷是风险 · 中长期看A/H折价回归</div>
+  </div>
+
+  <!-- 珞石機器人 -->
+  <div class="ipo-card">
+    <div class="header">
+      <span class="score s4">⭐⭐⭐⭐ 27分</span>
+      <h2>珞石機器人</h2>
+      <span class="code">03752.HK</span>
+      <span class="deadline urgent">⚠️ 今日截止</span>
+    </div>
+    <div class="reason">
+      <strong>协作机器人/柔性机器人领先企业。</strong>孖展31.8亿港元超购35倍，热度中等偏高。集資8.8亿港元。先进硬件赛道，机器人概念受市场追捧。招股價38港元，入场费3,838港元适中。有绿鞋保护。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">3,838 HKD</div></div>
+      <div class="info-item"><div class="label">孖展认购</div><div class="value green">31.8亿/35倍</div></div>
+      <div class="info-item"><div class="label">招股价</div><div class="value">38.00</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value green">✅ 有</div></div>
+      <div class="info-item"><div class="label">截止日</div><div class="value red">7月6日</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value" style="color:var(--accent2);">7月9日</div></div>
+    </div>
+    <table class="dim-table">
+      <tr><th>维度</th><th>得分</th><th>说明</th></tr>
+      <tr><td>🏛️ 基石</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>有基石但非顶级阵容</td></tr>
+      <tr><td>🏦 保荐人</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>中资券商保荐</td></tr>
+      <tr><td>💰 估值</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>估值合理，非A+H</td></tr>
+      <tr><td>🛡️ 绿鞋</td><td class="score-cell" style="color:var(--green);">5/5</td><td>有绿鞋</td></tr>
+      <tr><td>🔥 热度</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>超购35倍，热门</td></tr>
+      <tr><td>🚀 赛道</td><td class="score-cell" style="color:var(--green);">5/5</td><td>协作机器人，顶尖赛道</td></tr>
+      <tr><td>📊 财务</td><td class="score-cell" style="color:var(--red);">2/5</td><td>机器人企业普遍亏损阶段</td></tr>
+    </table>
+    <div>
+      <span class="tag teal">协作机器人</span>
+      <span class="tag gold">超购35倍</span>
+      <span class="tag blue">先进制造</span>
+    </div>
+    <div class="verdict-box hold">⚠️ 建议申购 · 现金打1手 · 赛道好但财务亏损是风险 · 止盈首日+5%~+10%</div>
+  </div>
+
+  <!-- ============ SKIP ============ -->
+  <div class="section-title">❌ 建议跳过（<20分或有一票否决） <span class="line"></span></div>
+
+  <!-- 普源精電 -->
+  <div class="ipo-card">
+    <div class="header">
+      <span class="score s3">⭐⭐⭐ 22分</span>
+      <h2>普源精電</h2>
+      <span class="code">00537.HK · A+H</span>
+      <span class="deadline urgent">⚠️ 今日截止</span>
+    </div>
+    <div class="reason">
+      电子测量仪器公司，A+H上市。基石：HHLR Advisors（高瓴）+CPE Hemlock，阵容中等。集資最多11.4亿港元。仪器仪表赛道偏窄，市场热度一般。入场费4,644港元适中。有绿鞋。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">4,644 HKD</div></div>
+      <div class="info-item"><div class="label">基石</div><div class="value">HHLR+CPE</div></div>
+      <div class="info-item"><div class="label">招股价</div><div class="value">待定</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value green">✅ 有</div></div>
+      <div class="info-item"><div class="label">截止日</div><div class="value red">7月6日</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value" style="color:var(--accent2);">7月9日</div></div>
+    </div>
+    <table class="dim-table">
+      <tr><th>维度</th><th>得分</th><th>说明</th></tr>
+      <tr><td>🏛️ 基石</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>高瓴+CPE，阵容中等</td></tr>
+      <tr><td>🏦 保荐人</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>中资券商，中等水平</td></tr>
+      <tr><td>💰 估值</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>A+H有小幅折价</td></tr>
+      <tr><td>🛡️ 绿鞋</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>有绿鞋</td></tr>
+      <tr><td>🔥 热度</td><td class="score-cell" style="color:var(--red);">2/5</td><td>热度中等偏低</td></tr>
+      <tr><td>🚀 赛道</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>电子测量仪器，赛道偏窄</td></tr>
+      <tr><td>📊 财务</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>稳定经营，增速一般</td></tr>
+    </table>
+    <div>
+      <span class="tag blue">高瓴</span>
+      <span class="tag teal">仪器仪表</span>
+      <span class="tag gold">A+H</span>
+    </div>
+    <div class="verdict-box skip">⚠️ 可申可不申 · 现金打1手或不打 · 热度偏低+赛道窄 · 优先资金留给三环/立讯/鼎泰</div>
+  </div>
+
+  <!-- 濱化股份 -->
+  <div class="ipo-card">
+    <div class="header">
+      <span class="score s2">⭐⭐ 19分→降⭐</span>
+      <h2>濱化股份</h2>
+      <span class="code">06745.HK · A+H</span>
+      <span class="deadline soon">⏰ 明日截止</span>
+    </div>
+    <div class="reason">
+      综合型化工集团，A+H上市。招股價3.05-3.59港元，集資最多12.6亿港元。入场费3,626港元。化工为传统周期行业，赛道弱势。周期回暖下利润修复但可持续性存疑。基石投资者阵容一般。有绿鞋。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">3,626 HKD</div></div>
+      <div class="info-item"><div class="label">招股价</div><div class="value">3.05-3.59</div></div>
+      <div class="info-item"><div class="label">集资</div><div class="value">~12.6亿</div></div>
+      <div class="info-item"><div class="label">绿鞋</div><div class="value green">✅ 有</div></div>
+      <div class="info-item"><div class="label">截止日</div><div class="value" style="color:var(--orange);">7月7日</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value" style="color:var(--accent2);">7月10日</div></div>
+    </div>
+    <table class="dim-table">
+      <tr><th>维度</th><th>得分</th><th>说明</th></tr>
+      <tr><td>🏛️ 基石</td><td class="score-cell" style="color:var(--red);">2/5</td><td>基石阵容偏弱，产业资本为主</td></tr>
+      <tr><td>🏦 保荐人</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>中资券商，中等</td></tr>
+      <tr><td>💰 估值</td><td class="score-cell" style="color:var(--red);">2/5</td><td>化工周期股，A/H折价有限</td></tr>
+      <tr><td>🛡️ 绿鞋</td><td class="score-cell" style="color:var(--accent2);">4/5</td><td>有绿鞋</td></tr>
+      <tr><td>🔥 热度</td><td class="score-cell" style="color:var(--red);">2/5</td><td>市场关注度低</td></tr>
+      <tr><td>🚀 赛道</td><td class="score-cell" style="color:var(--red);">2/5</td><td>传统化工，弱势赛道</td></tr>
+      <tr><td>📊 财务</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>周期回暖利润修复，但可持续性存疑</td></tr>
+    </table>
+    <div>
+      <span class="tag red">化工周期</span>
+      <span class="tag gold">A+H</span>
+      <span class="tag red">弱势赛道</span>
+    </div>
+    <div class="verdict-box skip">❌ 建议跳过 · 化工周期股+赛道弱势+估值无吸引力 · 资金留给更好标的</div>
+  </div>
+
+  <!-- 齊雲山食品 - NO CORNERSTONE -->
+  <div class="ipo-card danger">
+    <div class="header">
+      <span class="score s1">⭐ 14分→降⭐</span>
+      <h2>齊雲山食品</h2>
+      <span class="code">02797.HK</span>
+      <span class="deadline urgent">⚠️ 今日截止</span>
+    </div>
+    <div class="reason">
+      <strong>⚠️ 无基石投资者（重大预警）！触发一票否决机制。</strong>南酸枣零食品牌，集資仅2亿港元，小型IPO。招股價5-8港元，入场费4,040港元。包装食品赛道中等偏下，品牌知名度有限。无基石+小盘股双重风险。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">4,040 HKD</div></div>
+      <div class="info-item"><div class="label">招股价</div><div class="value">5.00-8.00</div></div>
+      <div class="info-item"><div class="label">集资</div><div class="value red">~2亿（小）</div></div>
+      <div class="info-item"><div class="label">基石</div><div class="value red">❌ 无</div></div>
+      <div class="info-item"><div class="label">截止日</div><div class="value red">7月6日</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value" style="color:var(--accent2);">7月9日</div></div>
+    </div>
+    <table class="dim-table">
+      <tr><th>维度</th><th>得分</th><th>说明</th></tr>
+      <tr><td>🏛️ 基石</td><td class="score-cell" style="color:var(--red);">1/5</td><td>❌ 无基石投资者，一票否决！</td></tr>
+      <tr><td>🏦 保荐人</td><td class="score-cell" style="color:var(--red);">2/5</td><td>中小券商，历史项目少</td></tr>
+      <tr><td>💰 估值</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>小型IPO估值参考有限</td></tr>
+      <tr><td>🛡️ 绿鞋</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>可能有绿鞋但发行人资质弱</td></tr>
+      <tr><td>🔥 热度</td><td class="score-cell" style="color:var(--red);">1/5</td><td>极低关注度，认购不足风险</td></tr>
+      <tr><td>🚀 赛道</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>零食/包装食品，中等赛道</td></tr>
+      <tr><td>📊 财务</td><td class="score-cell" style="color:var(--red);">1/5</td><td>小品牌，规模效应不足</td></tr>
+    </table>
+    <div>
+      <span class="tag red">无基石！</span>
+      <span class="tag red">小盘股</span>
+      <span class="tag red">一票否决</span>
+    </div>
+    <div class="verdict-box skip">❌ 强烈跳过 · 无基石+无机构背书+小盘股 · 一票否决触发 · 不参与</div>
+  </div>
+
+  <!-- 永康控股 - NO CORNERSTONE -->
+  <div class="ipo-card danger">
+    <div class="header">
+      <span class="score s1">⭐ 12分→降⭐</span>
+      <h2>永康控股</h2>
+      <span class="code">02523.HK</span>
+      <span class="deadline open">📅 后天截止</span>
+    </div>
+    <div class="reason">
+      <strong>⚠️ 无基石投资者！触发一票否决。</strong>新加坡集装箱堆场运营商，集資仅1.4亿港元，极小型IPO。招股價2.2-2.68港元，入场费5,414港元。工商服务赛道弱势，无差异化竞争优势。无基石+新加坡地域风险。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value gold">5,414 HKD</div></div>
+      <div class="info-item"><div class="label">招股价</div><div class="value">2.20-2.68</div></div>
+      <div class="info-item"><div class="label">集资</div><div class="value red">~1.4亿（极小）</div></div>
+      <div class="info-item"><div class="label">基石</div><div class="value red">❌ 无</div></div>
+      <div class="info-item"><div class="label">截止日</div><div class="value" style="color:var(--orange);">7月8日</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value" style="color:var(--accent2);">7月13日</div></div>
+    </div>
+    <table class="dim-table">
+      <tr><th>维度</th><th>得分</th><th>说明</th></tr>
+      <tr><td>🏛️ 基石</td><td class="score-cell" style="color:var(--red);">1/5</td><td>❌ 无基石投资者，一票否决！</td></tr>
+      <tr><td>🏦 保荐人</td><td class="score-cell" style="color:var(--red);">2/5</td><td>中小券商</td></tr>
+      <tr><td>💰 估值</td><td class="score-cell" style="color:var(--red);">2/5</td><td>新加坡小公司，估值参考有限</td></tr>
+      <tr><td>🛡️ 绿鞋</td><td class="score-cell" style="color:var(--gold);">3/5</td><td>发行人资质弱</td></tr>
+      <tr><td>🔥 热度</td><td class="score-cell" style="color:var(--red);">1/5</td><td>极低关注度</td></tr>
+      <tr><td>🚀 赛道</td><td class="score-cell" style="color:var(--red);">2/5</td><td>集装箱堆场，弱势赛道</td></tr>
+      <tr><td>📊 财务</td><td class="score-cell" style="color:var(--red);">1/5</td><td>小规模运营，财务数据有限</td></tr>
+    </table>
+    <div>
+      <span class="tag red">无基石！</span>
+      <span class="tag red">微型IPO</span>
+      <span class="tag red">新加坡</span>
+      <span class="tag red">一票否决</span>
+    </div>
+    <div class="verdict-box skip">❌ 强烈跳过 · 无基石+微型IPO+弱势赛道 · 一票否决触发 · 完全不参与</div>
+  </div>
+
+  <!-- ============ UPCOMING LISTINGS ============ -->
+  <div class="section-title">📋 已截止IPO · 上市倒计时 <span class="line"></span></div>
+
+  <!-- 同仁堂醫養 -->
+  <div class="ipo-card closed">
+    <div class="header">
+      <span class="score s4">⭐⭐⭐⭐ 25分</span>
+      <h2>同仁堂醫養</h2>
+      <span class="code">02667.HK</span>
+      <span class="deadline closed">已截止 (7/2)</span>
+    </div>
+    <div class="reason">
+      百年老字号同仁堂旗下中医连锁。基石占比46.79%。中金独家保荐。孖展超购159倍极度火爆！有绿鞋。但营收增长停滞，估值偏贵。暗盘7月6日16:15。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value">~3,136 HKD</div></div>
+      <div class="info-item"><div class="label">最终认购</div><div class="value green">159倍+</div></div>
+      <div class="info-item"><div class="label">暗盘</div><div class="value" style="color:var(--orange);">7/6 16:15</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value" style="color:var(--accent2);">7月7日</div></div>
+    </div>
+    <div>
+      <span class="tag blue">同仁堂</span>
+      <span class="tag gold">老字号</span>
+      <span class="tag gold">极热</span>
+    </div>
+    <div class="verdict-box hold">⚠️ 今日暗盘 · 关注暗盘表现 · 上市后若高开建议观望，警惕获利回吐</div>
+  </div>
+
+  <!-- MOMENTA -->
+  <div class="ipo-card closed">
+    <div class="header">
+      <span class="score s4">⭐⭐⭐⭐ 28分</span>
+      <h2>MOMENTA</h2>
+      <span class="code">06880.HK</span>
+      <span class="deadline closed">已截止 (7/3)</span>
+    </div>
+    <div class="reason">
+      14家全明星基石：GIC主权基金+富达+BlackRock+奔驰+Oaktree。中金+德意志银行联合保荐。自动驾驶龙头。超购295.6倍！暗盘7月7日。上市7月8日。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value">5,972 HKD</div></div>
+      <div class="info-item"><div class="label">最终认购</div><div class="value green">295.6倍</div></div>
+      <div class="info-item"><div class="label">暗盘</div><div class="value">7/7 16:15</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value" style="color:var(--accent2);">7月8日</div></div>
+    </div>
+    <div>
+      <span class="tag green">GIC</span>
+      <span class="tag green">富达</span>
+      <span class="tag green">BlackRock</span>
+      <span class="tag teal">自动驾驶</span>
+    </div>
+    <div class="verdict-box buy">✅ 已申购 · 关注7/7暗盘 · 止盈首日+10%~+15%，止损-3%</div>
+  </div>
+
+  <!-- 易控智駕 -->
+  <div class="ipo-card closed">
+    <div class="header">
+      <span class="score s4">⭐⭐⭐⭐ 26分</span>
+      <h2>易控智駕</h2>
+      <span class="code">07687.HK</span>
+      <span class="deadline closed">已截止 (7/3)</span>
+    </div>
+    <div class="reason">
+      顶级基石：紫金矿业+徐工集团+富达+摩根大通+霸菱。全球最大矿区无人驾驶方案商。超购17倍。暗盘7月7日。上市7月8日。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">入场费</div><div class="value">4,440 HKD</div></div>
+      <div class="info-item"><div class="label">最终认购</div><div class="value green">17倍</div></div>
+      <div class="info-item"><div class="label">暗盘</div><div class="value">7/7 16:15</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value" style="color:var(--accent2);">7月8日</div></div>
+    </div>
+    <div>
+      <span class="tag green">紫金矿业</span>
+      <span class="tag green">富达</span>
+      <span class="tag green">摩根大通</span>
+      <span class="tag teal">无人驾驶</span>
+    </div>
+    <div class="verdict-box buy">✅ 已申购 · 关注7/7暗盘 · 止盈首日+8%~+12%，止损-3%</div>
+  </div>
+
+  <!-- 瑞為技術 -->
+  <div class="ipo-card closed">
+    <div class="header">
+      <span class="score s3">⭐⭐⭐ 23分</span>
+      <h2>瑞為技術</h2>
+      <span class="code">07656.HK</span>
+      <span class="deadline closed">已截止</span>
+    </div>
+    <div class="reason">
+      AI视觉/先进硬件。最终超购21.66倍。无基石投资者。暗盘7月7日。上市7月8日。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">最终认购</div><div class="value">21.66倍</div></div>
+      <div class="info-item"><div class="label">基石</div><div class="value red">无</div></div>
+      <div class="info-item"><div class="label">暗盘</div><div class="value">7/7 16:15</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value" style="color:var(--accent2);">7月8日</div></div>
+    </div>
+    <div class="verdict-box skip">❌ 已跳过 · 无基石AI股 · 上市后关注但不追高</div>
+  </div>
+
+  <!-- 東方科脈 -->
+  <div class="ipo-card closed">
+    <div class="header">
+      <span class="score s3">⭐⭐⭐ 21分</span>
+      <h2>東方科脈</h2>
+      <span class="code">01770.HK</span>
+      <span class="deadline closed">已截止</span>
+    </div>
+    <div class="reason">
+      电子纸显示器龙头，有盈利。无基石投资者。暗盘7月7日。上市7月8日。
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="label">基石</div><div class="value red">无</div></div>
+      <div class="info-item"><div class="label">暗盘</div><div class="value">7/7 16:15</div></div>
+      <div class="info-item"><div class="label">上市日</div><div class="value" style="color:var(--accent2);">7月8日</div></div>
+    </div>
+    <div class="verdict-box skip">❌ 已跳过 · 无基石+高价 · 上市后关注但不参与</div>
+  </div>
+
+  <!-- ============ TIMELINE ============ -->
+  <div class="divider"></div>
+  <div class="section-title">📅 本周IPO时间线 <span class="line"></span></div>
+
+  <table class="budget-table">
+    <tr><th>日期</th><th>事件</th><th>影响</th></tr>
+    <tr><td>7/6（一）</td><td>6只新股今日截止申购 · 同仁堂醫養暗盘16:15</td><td style="color:var(--red);">⚠️ 打新决战日</td></tr>
+    <tr><td>7/7（二）</td><td>晶合集成+濱化股份截止 · 同仁堂醫養上市 · MOMENTA/易控/瑞为/东方科脉暗盘</td><td style="color:var(--orange);">密集暗盘+上市</td></tr>
+    <tr><td>7/8（三）</td><td>永康控股截止申购 · MOMENTA/易控/瑞为/东方科脉上市</td><td style="color:var(--accent2);">4只新股齐上市</td></tr>
+    <tr><td>7/9（四）</td><td>三环/鼎泰/立讯/普源/珞石/齐云山 上市</td><td style="color:var(--accent2);">6只新股上市</td></tr>
+    <tr><td>7/10（五）</td><td>晶合集成+濱化股份上市</td><td style="color:var(--accent2);">最后2只</td></tr>
+    <tr><td>7/13（日）</td><td>永康控股上市</td><td>尾单</td></tr>
+  </table>
+
+  <!-- ============ BUDGET ============ -->
+  <div class="divider"></div>
+  <div class="section-title">💰 申购预算方案（建议总预算：5-6万HKD） <span class="line"></span></div>
+
+  <table class="budget-table">
+    <tr><th>优先级</th><th>IPO</th><th>手数</th><th>金额(HKD)</th><th>方式</th></tr>
+    <tr><td style="color:var(--green);">🥇 必打</td><td>三環集團 06951</td><td>1-2手</td><td>10,131 - 20,262</td><td>现金1手+融资1手</td></tr>
+    <tr><td style="color:var(--green);">🥈 必打</td><td>立訊精密 02475</td><td>1-2手</td><td>6,392 - 12,784</td><td>现金1手+融资1手</td></tr>
+    <tr><td style="color:var(--accent2);">🥉 推荐</td><td>鼎泰高科 01377</td><td>1手</td><td>38,383</td><td>融资打（入场费高）</td></tr>
+    <tr><td style="color:var(--gold);">可选</td><td>晶合集成 02249</td><td>1手</td><td>3,263</td><td>现金打（明日截止）</td></tr>
+    <tr><td style="color:var(--gold);">可选</td><td>珞石機器人 03752</td><td>1手</td><td>3,838</td><td>现金打</td></tr>
+    <tr class="total"><td colspan="2">合计（如全打）</td><td>5-7手</td><td>~62,000</td><td>现金+融资混合</td></tr>
+    <tr class="total" style="color:var(--accent);"><td colspan="2">精简方案（仅必打3只）</td><td>3-5手</td><td>~55,000</td><td>融资为主</td></tr>
+  </table>
+
+  <!-- ============ RISK ============ -->
+  <div class="risk-note">
+    <strong>⚠️ 风险提示：</strong>本分析仅供参考，不构成投资建议。港股打新有破发风险，过往表现不代表未来收益。<br><br>
+    <strong>今日特别提醒：</strong><br>
+    • 今日6只IPO同时截止申购，需提前安排资金，避免因资金冻结冲突错过心仪标的<br>
+    • 鼎泰高科入场费38,383港元较高，建议使用融资打新降低资金占用<br>
+    • 三環集團和立訊精密为今日最强标的，建议优先保证这两只的申购资金<br>
+    • 齊雲山食品和永康控股均无基石投资者，触发一票否决机制，坚决跳过<br>
+    • 同仁堂醫養今日暗盘，关注暗盘走势判断明日上市首日策略
+  </div>
+
+</div>
+
+<div class="footer">
+  <p>📊 港股打新 · 七维度量化评分模型 · 2026年7月6日更新</p>
+  <p style="margin-top:4px;">免责声明：本分析基于公开信息和量化模型，不构成投资建议。投资有风险，入市需谨慎。</p>
+</div>
+
+</body>
+</html>
